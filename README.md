@@ -2,7 +2,9 @@
 
 **University of Tübingen — Summer Semester 2026**
 
-A graduate-level course on the safety, security, and alignment of modern AI systems, with a focus on large language models and LLM agents.
+A master's-level course on the safety, security, and alignment of modern AI systems, with a focus on large language models and LLM agents.
+
+The course is technical and is primarily aimed at computer science students: lectures and mini-projects assume solid programming experience and familiarity with machine learning fundamentals. Students from non-technical backgrounds (e.g. humanities) with little prior coding experience are likely to find the material challenging.
 
 Taught by [Maksym Andriushchenko](https://www.andriushchenko.me), [Jonas Geiping](https://jonasgeiping.github.io/), and [Sahar Abdelnabi](https://s-abdelnabi.github.io/).
 
@@ -15,6 +17,7 @@ Taught by [Maksym Andriushchenko](https://www.andriushchenko.me), [Jonas Geiping
 | **Credits**      | 6 ECTS                                              |
 | **Exercise**     | Mondays, 10:15 – 11:45                              |
 | **Lecture**      | Mondays, 12:15 – 13:45                              |
+| **Location**     | Hörsaal A1 (A-206), Cyber Valley Campus, Maria-von-Linden-Str. 1 |
 | **Start date**   | 13 April 2026                                       |
 
 The exercise slot alternates between **office hours** and **mini-project presentations**. Note that the first exercise session does **not** take place on 13 April — exercises begin the following week.
@@ -28,7 +31,7 @@ The primary communication channel for the course is **Slack**. The invitation li
 The course is assessed along three components:
 
 ### Mini-projects (exam admission)
-Four mini-projects (≈ 2 weeks each). Students must achieve **at least 50%** across the mini-projects to be admitted to the final exam. Selected students present their solutions during the exercise slot.
+Four mini-projects (2 weeks each). Students must achieve **at least 50%** across the mini-projects to be admitted to the final exam. Selected students present their solutions during the exercise slot.
 
 Possible topics (tentative, for illustration only):
 - Implementing a transformer from scratch; base vs. instruct models; interpretability / steering
@@ -70,10 +73,13 @@ A written exam with free-form questions covering the lecture material (e.g. *"Ho
 ## Resources
 
 **Reading & further study**
-- *International AI Safety Report 2026*
+- [*International AI Safety Report 2026*](https://internationalaisafetyreport.org/publication/international-ai-safety-report-2026)
 - *Introduction to AI Safety, Ethics, and Society* — Dan Hendrycks ([arXiv:2411.01042](https://arxiv.org/abs/2411.01042))
 - [AlignmentForum](https://www.alignmentforum.org/) — community discussion of alignment research
-- *AI 2027* — a widely-discussed forecasting scenario. *Disclaimer: this is one speculative scenario, not a prediction; read it as a thought experiment rather than a forecast.*
+- [*AI 2027*](https://ai-2027.com/) — a speculative forecasting scenario. Conceptually thought-provoking, though the concrete predictions should be read with a healthy dose of skepticism.
 
-**Related courses**
-- [AI Safety Course at Harvard](https://boazbk.github.io/mltheoryseminar/) (Boaz Barak)
+**Related courses at other universities**
+- **Harvard** — [ML Theory Seminar](https://boazbk.github.io/mltheoryseminar/) (Boaz Barak)
+- **Princeton** — [COS 598 *AI Safety*](https://sites.google.com/view/cos598aisafety/)
+- **UC Berkeley** — [CS 294/194-267 *Understanding Large Language Models: Foundations and Safety*](https://rdi.berkeley.edu/understanding_llms/s24)
+- **Stanford** — [CS 120 *Introduction to AI Safety*](https://web.stanford.edu/class/cs120/) and [CS 521 *Seminar on AI Safety*](https://cs521.stanford.edu/)
