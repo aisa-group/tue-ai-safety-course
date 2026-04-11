@@ -6,6 +6,8 @@ A master's-level course on the safety, security, and alignment of modern AI syst
 
 The course is technical and is primarily aimed at computer science students: lectures and mini-projects assume solid programming experience and familiarity with machine learning fundamentals. Students from non-technical backgrounds (e.g. humanities) with little prior coding experience are likely to find the material challenging.
 
+The lectures are not meant to be comprehensive — think of each topic as a starting point and a set of prompts for you to explore further on your own (e.g. by discussing with Claude or other AI assistants and reading the referenced papers).
+
 Taught by [Maksym Andriushchenko](https://www.andriushchenko.me), [Jonas Geiping](https://jonasgeiping.github.io/), and [Sahar Abdelnabi](https://s-abdelnabi.github.io/).
 
 ---
@@ -67,6 +69,19 @@ A written exam with free-form questions covering the lecture material (e.g. *"Ho
 | 14 | 20.07 | —         | **Final presentations** &nbsp;*— Final project due*                                        |
 
 > *The schedule is tentative and may change during the semester. Guest lectures may also be added.*
+
+---
+
+## Viewing Lecture Slides
+
+All lecture slides are standalone HTML files (in the `lecture-slides/` directory) built with [reveal.js](https://revealjs.com/). No PowerPoint, Keynote, or any other software is needed — just a web browser.
+
+```bash
+git clone https://github.com/your-username/tue-ai-safety-course.git
+cd tue-ai-safety-course
+open lecture-slides/lecture-1-intro.html   # macOS
+# or just double-click the HTML file in your file manager
+```
 
 ---
 

@@ -34,7 +34,7 @@
 .card-accent{border-left:4px solid var(--accent)}.card-blue{border-left:4px solid var(--mid)}
 .card-dark{background:var(--g1);color:#fff;border:none}.card-dark h4{color:#e94560}.card-dark p,.card-dark ul{color:#ccc}
 .cite{font-size:.55em;color:var(--gray);font-style:italic;word-wrap:break-word;overflow-wrap:break-word}
-.cite a{color:var(--mid);text-decoration:none;border-bottom:1px dotted var(--mid)}
+.cite a{color:var(--mid);text-decoration:none;border-bottom:1px dotted var(--mid);transition:color .15s,border-color .15s}
 .cite a:hover{color:var(--accent);border-bottom-color:var(--accent)}
 .key-insight{background:linear-gradient(135deg,#fff5f5,#fff0f3);border-left:4px solid var(--accent);padding:14px 18px;border-radius:0 12px 12px 0;margin:14px 0;font-size:.82em}
 .key-insight strong{color:var(--red)}
@@ -64,6 +64,10 @@
 .attack-chain .arrow{font-size:1.4em;color:var(--accent)}.attack-chain .step.adversarial{background:var(--accent);color:#fff;border-color:var(--accent)}
 .warning-box{background:linear-gradient(135deg,#fff8e1,#fff3e0);border-left:4px solid #ff9800;padding:12px 18px;border-radius:0 12px 12px 0;margin:14px 0;font-size:.78em}
 .warning-box strong{color:#e65100}
+.reveal a{transition:color .15s}
+.card-dark a{color:#e94560;text-decoration:none;border-bottom:1px dotted rgba(233,69,96,.5)}
+.card-dark a:hover{color:#fff;border-bottom-color:#fff}
+.card a{text-decoration:none}
 </style>
 </head>
 <body>
@@ -509,7 +513,7 @@
 
 <!-- ======== SLIDE 19: Concentration + Disempowerment ======== -->
 <section>
-  <h2>Concentration of Power &amp; Gradual Disempowerment</h2>
+  <h2>Power Concentration &amp; Disempowerment</h2>
   <div class="columns">
     <div class="col-50">
       <h3 style="font-size:.82em;">Power Concentration</h3>
@@ -743,93 +747,6 @@ Reveal.initialize({hash:true,slideNumber:'c/t',width:1100,height:700,margin:0.04
 <script>
 document.addEventListener('DOMContentLoaded', function() {
 
-  // ---- LLM Timeline Chart ----
-  function initLLMTimeline() {
-    const ctx = document.getElementById('llmTimelineChart');
-    if (!ctx || ctx._chartInit) return;
-    ctx._chartInit = true;
-    new Chart(ctx, {
-      type: 'scatter',
-      data: {
-        datasets: [{
-          label: 'Training Compute (FLOP)',
-          data: [
-            {x: 2019.1, y: 1.5e21, label: 'GPT-2'},
-            {x: 2020.4, y: 3.1e23, label: 'GPT-3'},
-            {x: 2022.0, y: 5e23, label: 'Chinchilla'},
-            {x: 2023.2, y: 2.1e25, label: 'GPT-4'},
-            {x: 2023.8, y: 5e24, label: 'Llama 2'},
-            {x: 2024.1, y: 4e25, label: 'Gemini Ultra'},
-            {x: 2024.5, y: 3.8e25, label: 'Claude 3.5'},
-            {x: 2025.0, y: 1e26, label: 'GPT-5'},
-            {x: 2025.5, y: 1.5e26, label: 'Claude Opus 4'},
-            {x: 2025.9, y: 2e26, label: 'Gemini 3'}
-          ],
-          backgroundColor: function(ctx) {
-            const c = {'GPT-2':'#74b9ff','GPT-3':'#74b9ff','GPT-4':'#74b9ff','GPT-5':'#74b9ff',
-              'Claude 3.5':'#e94560','Claude Opus 4':'#e94560',
-              'Llama 2':'#a29bfe','Chinchilla':'#00b894',
-              'Gemini Ultra':'#fdcb6e','Gemini 3':'#fdcb6e'};
-            return c[ctx.raw?.label] || '#636e72';
-          },
-          pointRadius: 8, pointHoverRadius: 12
-        }]
-      },
-      options: {
-        responsive: true, maintainAspectRatio: false,
-        plugins: { legend: { display: false },
-          tooltip: { callbacks: { label: function(ctx) { return ctx.raw.label + ': ' + ctx.raw.y.toExponential(1) + ' FLOP'; } } }
-        },
-        scales: {
-          y: { type: 'logarithmic', title: { display: true, text: 'Training Compute (FLOP)', font: { size: 11, family: 'Inter' } }, ticks: { font: { size: 9 }, callback: function(v) { return v.toExponential(0); } } },
-          x: { title: { display: true, text: 'Year', font: { size: 11, family: 'Inter' } }, min: 2018.5, max: 2026.5, ticks: { font: { size: 10 }, stepSize: 1, callback: function(v) { return Math.round(v); } } }
-        }
-      }
-    });
-  }
-
-  // ---- METR Time Horizon Chart ----
-  function initMETRChart() {
-    const ctx = document.getElementById('metrChart');
-    if (!ctx || ctx._chartInit) return;
-    ctx._chartInit = true;
-    const data = [
-      {x: '2019-06', y: 0.02, label: 'GPT-2 era'},
-      {x: '2020-06', y: 0.05, label: 'GPT-3'},
-      {x: '2022-06', y: 0.3, label: 'code-davinci'},
-      {x: '2023-03', y: 0.7, label: 'GPT-4'},
-      {x: '2024-03', y: 4, label: 'Claude 3 Opus'},
-      {x: '2024-09', y: 20, label: 'o1-preview'},
-      {x: '2025-03', y: 80, label: 'Claude 3.7'},
-      {x: '2025-06', y: 120, label: 'o3'},
-      {x: '2025-11', y: 293, label: 'Claude Opus 4.5'},
-      {x: '2026-02', y: 719, label: 'Claude Opus 4.6'}
-    ];
-    new Chart(ctx, {
-      type: 'line',
-      data: {
-        labels: data.map(d => d.x),
-        datasets: [{
-          label: '50% Time Horizon (days)',
-          data: data.map(d => d.y),
-          borderColor: '#e94560', backgroundColor: 'rgba(233,69,96,0.1)', fill: true,
-          tension: 0.3, pointRadius: 6, pointHoverRadius: 9, pointBackgroundColor: '#e94560', borderWidth: 2.5
-        }]
-      },
-      options: {
-        responsive: true, maintainAspectRatio: false,
-        plugins: { legend: { display: false },
-          tooltip: { callbacks: { label: function(ctx) { return data[ctx.dataIndex].label + ': ' + data[ctx.dataIndex].y + ' days'; } } }
-        },
-        scales: {
-          y: { type: 'logarithmic', title: { display: true, text: '50% Time Horizon (days)', font: { size: 11, family: 'Inter' } },
-            ticks: { font: { size: 9 }, callback: function(v) { if([0.01,0.1,1,10,100,1000].includes(v)) return v; return '';} } },
-          x: { ticks: { font: { size: 8 }, maxRotation: 45, autoSkip: true, maxTicksLimit: 6 } }
-        }
-      }
-    });
-  }
-
   // ---- AGI Radar Chart ----
   function initAGIChart() {
     const ctx = document.getElementById('agiChart');
@@ -991,11 +908,21 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   // ---- Init all ----
-  const allInits = [initLLMTimeline, initMETRChart, initAGIChart, initEmergentChart, initComputeChart, initDetectionChart, initPromptInjection, initRLHFDiagram];
+  const allInits = [initAGIChart, initEmergentChart, initComputeChart, initDetectionChart, initPromptInjection, initRLHFDiagram];
   function initAll() { allInits.forEach(fn => { try { fn(); } catch(e) { console.warn(e); } }); }
   Reveal.on('slidechanged', initAll);
   Reveal.on('ready', initAll);
   setTimeout(initAll, 500);
+});
+</script>
+
+<script>
+// Make all external links open in new tabs and not interfere with slide navigation
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('a[href^="http"]').forEach(function(a) {
+    a.setAttribute('target', '_blank');
+    a.setAttribute('rel', 'noopener');
+  });
 });
 </script>
 </body>
