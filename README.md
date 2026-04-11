@@ -53,7 +53,7 @@ A written exam with free-form questions covering the lecture material (e.g. *"Ho
 | - | ------ | --------- | ------------------------------------------------------------------------------------------ |
 | 1 | 13.04  | Maksym    | **Course overview.** Recent progress in LLMs and agents; AI risks; alignment, HHH, Constitutional AI |
 | 2 | 20.04  | Jonas     | **LLM background.** Transformers, pre-training, post-training (RLHF, RLVR), uncertainty & hallucinations |
-| 3 | 27.04  | Maksym    | **Lessons from adversarial ML.** Jailbreaks for chatbots and agents (prefilling, GCG, PAIR, Crescendo, decomposition); backdoors |
+| 3 | 27.04  | Maksym    | **Lessons from adversarial ML.** Jailbreaks for chatbots and agents (prefilling, GCG, PAIR, Crescendo, decomposition); backdoors · [slides](lecture-slides/lecture-3-adv-ml.html) |
 | 4 | 04.05  | Maksym    | **Open-weight safety.** Model stealing & distillation attacks, fine-tuning attacks, emergent misalignment &nbsp;*— Mini-project 1 due* |
 | 5 | 11.05  | Jonas     | **Transparency.** Detection of LLM-generated content and watermarking                      |
 | 6 | 18.05  | Jonas     | **Privacy.** Memorization and copyright in LLMs &nbsp;*— Mini-project 2 due*               |

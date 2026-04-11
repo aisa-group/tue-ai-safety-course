@@ -118,3 +118,9 @@ yarn-error.log*
 *.tmp
 tmp/
 temp/
+
+
+# Custom
+resources/
+screenshots/
+.playwright-mcp/
