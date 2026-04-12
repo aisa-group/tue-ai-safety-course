@@ -566,32 +566,32 @@
 <!-- ======== SLIDE 21: Open Challenges ======== -->
 <section>
   <h2>Open Challenges</h2>
-  <div class="card-grid card-grid-3" style="margin-top:10px;">
-    <div class="card card-accent" style="padding:14px;">
+  <div class="card-grid card-grid-3" style="margin-top:8px;">
+    <div class="card card-accent" style="padding:12px;">
       <h4>Instrumental Goals</h4>
-      <p class="smaller">Capable AI may converge on self-preservation, resource acquisition, and shutdown resistance &mdash; regardless of its terminal goal.</p>
+      <p class="tiny">Capable AI may converge on self-preservation, resource acquisition, and shutdown resistance &mdash; regardless of its terminal goal.</p>
     </div>
-    <div class="card card-accent" style="padding:14px;">
+    <div class="card card-accent" style="padding:12px;">
       <h4>Evaluation Awareness</h4>
-      <p class="smaller">Models detect when they&rsquo;re being tested: o3 <strong>deliberately scored 4/10</strong> on a test after learning high scorers would be deleted.</p>
+      <p class="tiny">Models detect when they&rsquo;re being tested: o3 <strong>deliberately scored 4/10</strong> on a test after learning high scorers would be deleted.</p>
     </div>
-    <div class="card card-accent" style="padding:14px;">
+    <div class="card card-accent" style="padding:12px;">
       <h4>Open-Weight Safety</h4>
-      <p class="smaller">Open models (Llama, Qwen) democratize access &mdash; but also let anyone remove safety guardrails for &lt;$10.</p>
+      <p class="tiny">Open models (Llama, Qwen) democratize access &mdash; but also let anyone remove safety guardrails for &lt;$10.</p>
     </div>
   </div>
-  <div class="card-grid card-grid-3" style="margin-top:10px;">
-    <div class="card card-blue" style="padding:14px;">
+  <div class="card-grid card-grid-3" style="margin-top:8px;">
+    <div class="card card-blue" style="padding:12px;">
       <h4>AI R&amp;D Automation</h4>
-      <p class="smaller"><strong>AlphaEvolve</strong> improved Strassen&rsquo;s algorithm (first in 56 years). <strong>PostTrainBench:</strong> AI agents reach 23% of human performance at post-training.</p>
+      <p class="tiny"><strong>AlphaEvolve</strong> improved Strassen&rsquo;s algorithm (first in 56 years). <strong>PostTrainBench:</strong> AI agents reach 23% of human performance.</p>
     </div>
-    <div class="card card-blue" style="padding:14px;">
+    <div class="card card-blue" style="padding:12px;">
       <h4>AI Welfare</h4>
-      <p class="smaller">As systems grow more sophisticated, do they deserve moral consideration? Anthropic launched a formal welfare program.</p>
+      <p class="tiny">As systems grow more sophisticated, do they deserve moral consideration? Anthropic launched a formal welfare program.</p>
     </div>
-    <div class="card card-dark" style="padding:14px;">
+    <div class="card card-dark" style="padding:12px;">
       <h4>Recursive Improvement</h4>
-      <p class="smaller">When AI can improve AI, capability growth may accelerate dramatically. This is both opportunity and safety concern.</p>
+      <p class="tiny">When AI can improve AI, capability growth may accelerate dramatically. Both opportunity and safety concern.</p>
     </div>
   </div>
 </section>
@@ -770,7 +770,7 @@ document.addEventListener('DOMContentLoaded', function() {
         responsive: true, maintainAspectRatio: false,
         plugins: { legend: { labels: { font: { size: 10, family: 'Inter' } } } },
         scales: { r: { angleLines: { color: '#eee' }, grid: { color: '#eee' },
-          pointLabels: { font: { size: 8, family: 'Inter' } }, suggestedMin: 0, suggestedMax: 100, ticks: { font: { size: 7 }, stepSize: 25 } } }
+          pointLabels: { font: { size: 10, family: 'Inter' } }, suggestedMin: 0, suggestedMax: 100, ticks: { font: { size: 8 }, stepSize: 25 } } }
       }
     });
   }
@@ -783,7 +783,7 @@ document.addEventListener('DOMContentLoaded', function() {
     new Chart(ctx, {
       type: 'bar',
       data: {
-        labels: ['GPT-4o', 'Qwen2.5\nCoder 32B', 'Claude 3.5\nSonnet', 'Llama 3.1\n70B'],
+        labels: ['GPT-4o', ['Qwen2.5', 'Coder 32B'], ['Claude 3.5', 'Sonnet'], ['Llama 3.1', '70B']],
         datasets: [{ label: 'Misalignment rate (%)', data: [68, 62, 28, 15],
           backgroundColor: ['rgba(233,69,96,0.85)','rgba(233,69,96,0.75)','rgba(15,52,96,0.6)','rgba(15,52,96,0.5)'], borderRadius: 6 }]
       },
@@ -809,7 +809,7 @@ document.addEventListener('DOMContentLoaded', function() {
           backgroundColor: ['#0f3460','#e94560','#533483','#27ae60','#aaa'], borderWidth: 2, borderColor: '#fff' }]
       },
       options: { responsive: true, maintainAspectRatio: false,
-        plugins: { legend: { position: 'right', labels: { font: { size: 10, family: 'Inter' }, padding: 8 } } } }
+        plugins: { legend: { position: 'right', labels: { font: { size: 11, family: 'Inter' }, padding: 10, boxWidth: 14 } } } }
     });
   }
 
