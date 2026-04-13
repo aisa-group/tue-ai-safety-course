@@ -41,7 +41,7 @@ Potential topics (tentative, subject to change):
 A one-month open-ended research project carried out in **teams of 3 students**. An example project can be to extend a recent influential paper in the field (e.g. [emergent misalignment](https://arxiv.org/abs/2502.17424), [AI control](https://arxiv.org/abs/2312.06942), etc.). The project concludes with a final presentation scheduled on **20 July 2026**. LLM agents are allowed as coding assistants.
 
 ### Final exam — 50% of the final grade
-A written exam with free-form questions covering the lecture material (e.g. *"Describe the GCG attack and explain why gradient-based suffix optimization can bypass LLM safety training"*, *"Compare RLHF and DPO as alignment methods — what are the key trade-offs?"*). A mock exam with representative questions will be provided in advance.
+A written exam with free-form questions covering the lecture material (e.g. *"Describe the GCG attack and explain why gradient-based suffix optimization can bypass LLM safety training"*, *"Compare RLHF and DPO as alignment methods — what are the key trade-offs?"*).
 
 ---
 
