@@ -22,6 +22,7 @@ The exercise slot alternates between **office hours** and **mini-project present
 
 The primary communication channel for the course is **Slack**. The invitation link will be distributed during the first lecture on **13 April 2026**.
 
+
 ---
 
 ## Grading
@@ -46,6 +47,8 @@ A written exam with free-form questions covering the lecture material (e.g. *"De
 ---
 
 ## Schedule
+
+Lecture recordings can be found [here](https://drive.google.com/drive/folders/1PwjAmmEJZqlY068SjrjYniHP6nEWnkV9).
 
 | # | Date   | Lecturer  | Topic                                                                                      |
 | - | ------ | --------- | ------------------------------------------------------------------------------------------ |
