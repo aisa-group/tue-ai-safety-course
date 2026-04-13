@@ -17,6 +17,7 @@ A master's-level course on the safety, security, and alignment of modern AI syst
 | **Lecture**      | Mondays, 12:15 – 13:45                              |
 | **Location**     | Hörsaal A1 (A-206), Cyber Valley Campus, Maria-von-Linden-Str. 1 |
 | **Start date**   | 13 April 2026                                       |
+| **Final exam**   | 27 July 2026, 16:00 – 19:00, Hörsaal N07 (Hörsaalzentrum Morgenstelle) |
 
 The exercise slot alternates between **office hours** and **mini-project presentations**. Note that the first exercise session does **not** take place on 13 April — exercises begin the following week.
 
