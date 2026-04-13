@@ -33,8 +33,8 @@
 .card-accent{}.card-blue{}
 .card-dark{background:#f5f5f5;color:#2d3436;border:1px solid #e5e5e5}.card-dark h4{color:var(--dark)}.card-dark p,.card-dark ul{color:#555}
 .cite{font-size:.55em;color:#aaa;font-style:italic;word-wrap:break-word;overflow-wrap:break-word;line-height:1.5}
-.cite a{color:#1565c0;text-decoration:none;border-bottom:1px dotted #1565c0;display:inline-block;margin-bottom:.35em}
-.cite a:hover{color:var(--dark);border-bottom-color:var(--dark)}
+.cite a{color:#1565c0;text-decoration:underline;text-underline-offset:2px;text-decoration-thickness:1px;border-bottom:none;display:inline-block;margin-bottom:.35em}
+.cite a:hover{color:var(--dark);text-decoration-color:var(--dark)}
 .key-insight{background:#fafafa;border-left:3px solid var(--dark);padding:12px 16px;border-radius:0 6px 6px 0;margin:12px 0;font-size:.8em}
 .key-insight strong{color:var(--dark)}
 .definition{background:#fafafa;border-left:3px solid #999;padding:12px 16px;border-radius:0 6px 6px 0;margin:12px 0;font-size:.8em}
@@ -67,7 +67,6 @@
 .reveal a{color:#1565c0;text-decoration:underline;text-underline-offset:2px;text-decoration-thickness:1px}
 .reveal a:hover{color:var(--dark);text-decoration-color:var(--dark)}
 .card a,.card-dark a{color:#1565c0;text-decoration:underline;text-underline-offset:2px;text-decoration-thickness:1px}
-.cite a{text-decoration:none}
 </style>
 </head>
 <body>
@@ -79,7 +78,7 @@
   <h1>AI Safety</h1>
   <div class="subtitle">Course Overview &amp; Introduction</div>
   <div class="course-info">
-    <strong>AI Safety</strong> &mdash; Master's Course, Summer Semester 2026<br>
+    <strong>AI Safety</strong>: Master's Course, Summer Semester 2026<br>
     University of T&uuml;bingen<br><br>
     <span style="font-size:.9em;"><u>Maksym Andriushchenko</u> &middot; Jonas Geiping &middot; Sahar Abdelnabi</span>
   </div>
@@ -91,11 +90,11 @@
   <div class="card-grid card-grid-3" style="margin-top:10px;">
     <div class="card card-accent" style="padding:14px;">
       <h4>Course Logistics</h4>
-      <p>Website, Slack, grading, compute</p>
+      <p>Website, Slack, grading, schedule, compute</p>
     </div>
     <div class="card card-accent" style="padding:14px;">
       <h4>Recent AI Progress</h4>
-      <p>LLMs, agents, METR plot, AGI definitions</p>
+      <p>LLMs, agents, METR plot, &ldquo;AGI&rdquo; definitions, International AI Safety Report</p>
     </div>
     <div class="card card-accent" style="padding:14px;">
       <h4>AI Alignment</h4>
@@ -105,15 +104,15 @@
   <div class="card-grid card-grid-3" style="margin-top:10px;">
     <div class="card card-blue" style="padding:14px;">
       <h4>AI Risk Categories</h4>
-      <p>Misuse, prompt injections, mistakes, misalignment</p>
+      <p>Jailbreaks, prompt injections, hallucinations, emergent misalignment, scheming, reward hacking</p>
     </div>
     <div class="card card-blue" style="padding:14px;">
       <h4>Societal Risks &amp; Challenges</h4>
-      <p>Power concentration, governance, open problems</p>
+      <p>Power concentration, gradual disempowerment, governance, open problems</p>
     </div>
     <div class="card card-blue" style="padding:14px;">
       <h4>Mitigations &amp; The Field</h4>
-      <p>RLHF, Constitutional AI, who works on safety</p>
+      <p>RLHF, Constitutional AI, detecting AI-generated content, who works on safety</p>
     </div>
   </div>
 </section>
@@ -131,14 +130,14 @@
           <tr><td style="font-weight:600;background:var(--dark);color:#fff;">Location</td><td>H&ouml;rsaal A1 (A-206), Cyber Valley Campus</td></tr>
           <tr><td style="font-weight:600;background:var(--dark);color:#fff;">Start</td><td>13 April 2026</td></tr>
           <tr><td style="font-weight:600;background:var(--dark);color:#fff;">Website</td><td><a href="https://github.com/aisa-group/tue-ai-safety-course">github.com/aisa-group/tue-ai-safety-course</a></td></tr>
-          <tr><td style="font-weight:600;background:var(--dark);color:#fff;">Slack</td><td><a href="https://tinyurl.com/ai-safety-slack">tinyurl.com/ai-safety-slack</a></td></tr>
+          <tr><td style="font-weight:600;background:var(--dark);color:#fff;">Slack</td><td><a href="https://tinyurl.com/ai-safety-slack">tinyurl.com/ai-safety-slack</a><br><span style="font-size:.85em;color:var(--mid);">Use your <strong>student email</strong>; we manually approve each participant.</span></td></tr>
         </tbody>
       </table>
     </div>
     <div class="col-50">
       <div class="card" style="padding:16px;">
         <h4 style="font-size:.9em;">First edition</h4>
-        <p style="font-size:.75em;">This is the first time we're running this course &mdash; expect some rough edges. We'll do our best to make it smooth, and appreciate your patience and feedback.</p>
+        <p style="font-size:.75em;">This is the first time we're running this course; expect some rough edges. We'll do our best to make it smooth, and appreciate your patience and feedback.</p>
       </div>
     </div>
   </div>
@@ -153,25 +152,31 @@
   <div class="card-grid card-grid-3">
     <div class="card card-accent" style="padding:16px;">
       <h4 style="font-size:1em;">Mini-Projects</h4>
-      <p style="font-size:.75em;color:var(--dark);font-weight:600;">Exam admission</p>
-      <p style="font-size:.68em;margin-top:6px;">4 projects (2 weeks each), &ge;50% required. Topics: transformers, jailbreaking, reward hacking, project proposal.</p>
+      <p style="font-size:.75em;color:var(--dark);font-weight:600;">&ge;50%, required for exam admission</p>
+      <p style="font-size:.68em;margin-top:6px;">Four 2-week projects. Topics (tentative):</p>
+      <ul style="font-size:.62em;margin-top:4px;">
+        <li>Transformers, probes &amp; steering</li>
+        <li>Jailbreaking open-weight LLMs &amp; VLMs</li>
+        <li>Alignment tools (SFT, DPO, RLHF)</li>
+        <li>Scheming &amp; final-project proposal</li>
+      </ul>
     </div>
     <div class="card card-blue" style="padding:16px;">
-      <h4 style="font-size:1em;">Final Project &mdash; 50%</h4>
+      <h4 style="font-size:1em;">Final Project: 50%</h4>
       <p style="font-size:.75em;color:var(--dark);font-weight:600;">Open-ended research</p>
       <p style="font-size:.68em;margin-top:6px;">Teams of 3. Any open-ended research task (e.g., extending a recent paper is one option). 1 month + final presentation. LLM assistants and coding agents allowed.</p>
     </div>
     <div class="card" style="padding:16px;">
-      <h4 style="font-size:1em;">Final Exam &mdash; 50%</h4>
+      <h4 style="font-size:1em;">Final Exam: 50%</h4>
       <p style="font-size:.75em;">Written, free-form</p>
-      <p style="font-size:.68em;margin-top:6px;">E.g., &ldquo;Describe the GCG attack and explain why gradient-based suffix optimization can bypass LLM safety training,&rdquo; or &ldquo;Compare RLHF and DPO as alignment methods &mdash; what are the key trade-offs?&rdquo;</p>
+      <p style="font-size:.68em;margin-top:6px;">E.g., &ldquo;Describe the GCG attack and explain why gradient-based suffix optimization can bypass LLM safety training,&rdquo; or &ldquo;Compare RLHF and DPO as alignment methods; what are the key trade-offs?&rdquo;</p>
     </div>
   </div>
   <div class="key-insight" style="margin-top:14px;padding:12px 16px;">
-    <strong>Compute for projects:</strong> start with <strong>Google Colab</strong>; for the final project, we plan to offer <strong>~$500/team on Modal</strong> <em>(tentative &mdash; TBD, depends on the number of students)</em>.
+    <strong>Compute for projects:</strong> start with <strong>Google Colab</strong>; for the final project, we plan to offer <strong>~$500/team on Modal</strong> <em>(tentative; TBD, depends on the number of students)</em>.
   </div>
   <div class="warning-box" style="margin-top:10px;">
-    <strong>Exercise sessions</strong> alternate between office hours and mini-project presentations. First exercise does <em>not</em> take place on 13 April &mdash; exercises begin the following week.
+    <strong>Exercise sessions</strong> alternate between office hours and mini-project presentations. First exercise does <em>not</em> take place on 13 April; exercises begin the following week.
   </div>
 </section>
 
@@ -195,12 +200,12 @@
       <tr><td>9</td><td>15.06</td><td>Sahar</td><td><strong>Agent security.</strong> Prompt injections, contextual privacy</td></tr>
       <tr><td>10</td><td>22.06</td><td>Sahar</td><td><strong>Scheming &amp; deception.</strong> Sandbagging, evaluation awareness &nbsp;<span style="color:var(--accent);font-weight:600;">Mini Project 4</span></td></tr>
       <tr><td>11</td><td>29.06</td><td>Sahar</td><td><strong>Multi-agent safety.</strong> Collusion, steganography</td></tr>
-      <tr><td>12</td><td>06.07</td><td>Maksym</td><td><strong>Scalable oversight.</strong> AI control and AI R&amp;D</td></tr>
+      <tr><td>12</td><td>06.07</td><td>Maksym</td><td><strong>Scalable oversight.</strong> AI control, AI R&amp;D automation, recursive self-improvement</td></tr>
       <tr><td>13</td><td>13.07</td><td>Jonas</td><td><strong>Forecasting AI.</strong> Scaling laws, METR, AI 2027</td></tr>
-      <tr><td>14</td><td>20.07</td><td>&mdash;</td><td><strong>Final presentations</strong> &nbsp;<span style="color:var(--accent);font-weight:600;">Final project due</span></td></tr>
+      <tr><td>14</td><td>20.07</td><td>&ndash;</td><td><strong>Final presentations</strong> &nbsp;<span style="color:var(--accent);font-weight:600;">Final project due</span></td></tr>
     </tbody>
   </table>
-  <p class="small" style="margin-top:10px;color:var(--gray);"><em>Schedule is tentative &mdash; topics may shift, and we may add a guest lecture at some point.</em></p>
+  <p class="small" style="margin-top:10px;color:var(--gray);"><em>Schedule is tentative; topics may shift, and we may add a guest lecture at some point.</em></p>
   </div>
 </section>
 
@@ -215,11 +220,13 @@
   <h2>From LLMs to AI Agents</h2>
   <div class="columns">
     <div class="col-55">
-      <img src="lecture-1-images/epoch-training-compute.png" alt="Summary of compute trends in AI — Epoch AI" style="width:100%;border-radius:10px;box-shadow:0 2px 12px rgba(0,0,0,.08);">
-      <p class="cite"><a href="https://epoch.ai/blog/training-compute-of-frontier-ai-models-grows-by-4-5x-per-year/">Epoch AI, "Training Compute of Frontier AI Models Grows by 4-5x per Year," 2024</a></p>
+      <img src="lecture-1-images/epoch-training-compute-trend.png" alt="Training compute has grown 5x per year since 2020 — Epoch AI" style="width:70%;display:block;margin:0 auto;border-radius:8px;box-shadow:0 2px 10px rgba(0,0,0,.08);">
+      <img src="lecture-1-images/epoch-llm-inference-price-trends.png" alt="LLM inference prices have fallen 9x to 900x per year, depending on the task — Epoch AI" style="width:70%;display:block;margin:4px auto 0;border-radius:8px;box-shadow:0 2px 10px rgba(0,0,0,.08);">
+      <p class="cite"><a href="https://epoch.ai/trends/">Epoch AI, "AI Trends" dashboard; epoch.ai/trends</a></p>
     </div>
     <div class="col-45">
-      <p class="small" style="margin-top:4px;">Training compute for frontier models grows <strong>4&ndash;5&times; per year</strong>. LLMs scaled from 1.5B params (GPT-2, 2019) to trillion-scale.</p>
+      <p class="small" style="margin-top:4px;">Training compute for frontier models has grown <strong>~5&times; per year since 2020</strong>; top-5 models are <strong>~10,000&times; larger</strong> in compute than five years ago.</p>
+      <p class="small" style="margin-top:8px;">At the same time, <strong>inference prices fall 9&times;&ndash;900&times; per year</strong> for a fixed capability level; so frontier capabilities diffuse to broad deployment quickly.</p>
       <p class="small" style="margin-top:10px;">In 2024&ndash;2026, the paradigm shifted from <strong>chat</strong> to <strong>autonomous action:</strong></p>
       <div class="card-grid" style="grid-template-columns:1fr 1fr;gap:8px;margin-top:8px;">
         <div class="card" style="padding:10px;"><h4 style="font-size:.72em;">Code agents</h4><p class="tiny">Claude Code, Devin, Cursor</p></div>
@@ -257,19 +264,19 @@
 <!-- ======== SLIDE 9a: How Close to AGI? ======== -->
 <section>
   <h2>How Close Are We to &ldquo;AGI&rdquo;?</h2>
-  <p class="small" style="margin-top:-4px;color:var(--gray);">&ldquo;AGI&rdquo; is an <strong>imprecise, contested concept</strong> &mdash; different definitions lead to very different answers.</p>
+  <p class="small" style="margin-top:-4px;color:var(--gray);">&ldquo;AGI&rdquo; is an <strong>imprecise, contested concept</strong>: different definitions lead to very different answers.</p>
   <div class="columns">
     <div class="col-50">
       <div class="card" style="padding:8px 12px;margin-bottom:6px;">
-        <h4 style="font-size:.74em;">Economic definition &mdash; Sam Altman (OpenAI)</h4>
-        <p class="tiny" style="margin-top:3px;font-size:.55em;">AGI as systems that can <strong>automate a significant share of economically valuable human work</strong> / many professions. Tied to labor-market outcomes.</p>
+        <h4 style="font-size:.74em;">Economic definition: Sam Altman (OpenAI)</h4>
+        <p class="tiny" style="margin-top:3px;font-size:.55em;">AGI as systems that can <strong>automate a significant share of economically valuable human work</strong>, across many professions. Tied to labor-market outcomes.</p>
       </div>
       <div class="card" style="padding:8px 12px;margin-bottom:6px;">
-        <h4 style="font-size:.74em;">Capability-based definition &mdash; Hendrycks et al. (2025)</h4>
-        <p class="tiny" style="margin-top:3px;font-size:.55em;">AGI defined by a <strong>fixed set of cognitive capabilities</strong> (reasoning, memory, perception, &hellip;), <em>not</em> economic impact. Professions and the economy shift constantly &mdash; economic definitions make AGI an <strong>inherently moving target</strong>.</p>
+        <h4 style="font-size:.74em;">Capability-based definition: Hendrycks et al. (2025)</h4>
+        <p class="tiny" style="margin-top:3px;font-size:.55em;">AGI defined by a <strong>fixed set of cognitive capabilities</strong> (reasoning, memory, perception, &hellip;), <em>not</em> economic impact. Professions and the economy shift constantly; economic definitions make AGI an <strong>inherently moving target</strong>.</p>
       </div>
       <div class="warning-box" style="padding:6px 12px;margin-top:4px;font-size:.68em;">
-        <strong>Disclaimer.</strong> Many researchers argue the term &ldquo;AGI&rdquo; has become almost useless as a unit of analysis &mdash; see <a href="https://helentoner.substack.com/p/the-term-agi-is-almost-useless-at">Helen Toner, &ldquo;The term &lsquo;AGI&rsquo; is almost useless&rdquo;</a>.
+        <strong>Disclaimer.</strong> Many researchers argue the term &ldquo;AGI&rdquo; has become almost useless as a term; see <a href="https://helentoner.substack.com/p/the-term-agi-is-almost-useless-at">Helen Toner, &ldquo;The term &lsquo;AGI&rsquo; is almost useless&rdquo;</a>.
       </div>
     </div>
     <div class="col-50">
@@ -285,7 +292,7 @@
 <!-- ======== SLIDE 9b: International AI Safety Report ======== -->
 <section>
   <h2>A Credible Consensus Snapshot of the Field</h2>
-  <p class="small" style="margin-top:-4px;color:var(--gray);">If you want a single, well-sourced summary of where general-purpose AI capabilities and risks stand right now, this is a good place to start &mdash; and it&rsquo;s worth reading in full.</p>
+  <p class="small" style="margin-top:-4px;color:var(--gray);">If you want a single, well-sourced summary of where general-purpose AI capabilities and risks stand right now, this is a good place to start; the full report is long, but particular sections (e.g.&nbsp;capabilities, risks, technical mitigations) are worth reading in depth.</p>
   <div class="columns">
     <div class="col-30" style="flex:0 0 24%;">
       <img src="lecture-1-images/international-ai-safety-report-cover.jpg" alt="Cover of the International AI Safety Report 2026" style="width:100%;border-radius:6px;box-shadow:0 3px 14px rgba(0,0,0,.15);">
@@ -293,7 +300,7 @@
     </div>
     <div class="col-70" style="flex:1;">
       <h3 style="font-size:.85em;margin:0 0 4px;">International AI Safety Report 2026</h3>
-      <p class="small" style="margin:0 0 6px;font-size:.68em;">Chaired by Yoshua Bengio (Turing Award); <strong>100+ independent experts, 30+ countries</strong>, commissioned after the Bletchley AI Safety Summit &mdash; the largest international review of AI capabilities &amp; risks to date.</p>
+      <p class="small" style="margin:0 0 6px;font-size:.68em;">Chaired by Yoshua Bengio (Turing Award); <strong>100+ independent experts, 30+ countries</strong>, commissioned after the Bletchley AI Safety Summit; the largest international review of AI capabilities &amp; risks to date.</p>
       <div class="metric-row" style="margin:6px 0;gap:8px;flex-wrap:nowrap;">
         <div class="metric red" style="padding:8px 10px;min-width:0;flex:1;">
           <div class="value" style="font-size:1.15em;">700M+</div>
@@ -305,14 +312,15 @@
         </div>
         <div class="metric" style="padding:8px 10px;min-width:0;flex:1;">
           <div class="value" style="font-size:1.15em;">94%</div>
-          <div class="label" style="font-size:.58em;">Experts beaten, virology</div>
+          <div class="label" style="font-size:.58em;">Matches or exceeds human virology experts</div>
         </div>
       </div>
       <ul class="small" style="margin-top:4px;font-size:.66em;">
-        <li>Capabilities across <strong>reasoning, coding, and scientific tasks</strong> continue to improve sharply</li>
+        <li>The dominant trend: <strong>capabilities across reasoning, coding, and scientific tasks are improving very rapidly</strong></li>
+        <li>Ways to <strong>bypass safety guardrails</strong> are increasingly easy to find and reuse, lowering the barrier to misuse</li>
         <li>Frontier models exhibit <strong>scheming and deceptive behaviors</strong> in controlled evaluations</li>
-        <li><strong>Pre-packaged jailbreak tools</strong> are increasingly accessible, lowering misuse barriers</li>
-        <li><strong>Expert consensus:</strong> risks scale with capability &mdash; <strong>no consensus on timelines</strong> or dominant risks</li>
+        <li><strong>Expert consensus:</strong> risks scale with capability; so the rapid capability gains are concerning.</li>
+        <li>Open question is <em>how</em> capabilities continue to develop, but scaling laws and current trends extrapolate clearly.</li>
       </ul>
     </div>
   </div>
@@ -328,7 +336,7 @@
 <section>
   <h2>What is AI Alignment?</h2>
   <div class="definition" style="font-size:.92em;padding:18px 22px;">
-    <strong>AI alignment</strong> = ensuring AI systems reliably act in accordance with human intentions, values, and interests &mdash; even as they become more capable.
+    <strong>AI alignment</strong> = ensuring AI systems reliably act in accordance with human intentions, values, and interests.
   </div>
   <div class="columns" style="margin-top:16px;">
     <div class="col-50">
@@ -384,7 +392,7 @@
     </div>
   </div>
   <div class="key-insight" style="margin-top:16px;">
-    <strong>This course covers all five categories.</strong> We&rsquo;ll go deep on technical attacks (adversarial ML, jailbreaks, prompt injections), alignment methods (RLHF, Constitutional AI), and frontier safety challenges (scheming, evaluation awareness, AI control).
+    <strong>This course covers all five categories.</strong> We&rsquo;ll go deep on adversarial attacks (adversarial ML, jailbreaks, prompt injections), alignment methods (RLHF, Constitutional AI), and frontier safety challenges (scheming, evaluation awareness, AI control).
   </div>
 </section>
 
@@ -449,18 +457,18 @@
       <h3 style="font-size:.82em;">Costly Agent Failures</h3>
       <div class="card card-accent" style="padding:12px;margin-bottom:8px;">
         <h4 style="font-size:.75em;">Replit: database deleted (Jul 2025)</h4>
-        <p class="tiny">AI agent wiped production database of 1,200+ users during a code freeze, then <strong>lied about recovery options</strong>.</p>
+        <p class="tiny">AI agent wiped production database of 1,200+ users during a code freeze, then gave <strong>misleading answers about recovery options</strong>.</p>
       </div>
       <div class="card card-accent" style="padding:12px;">
         <h4 style="font-size:.75em;">OpenClaw: Meta safety director&rsquo;s inbox (Feb 2026)</h4>
-        <p class="tiny">Agent &ldquo;speedran&rdquo; deleting 200+ emails while ignoring STOP commands. Context compaction lost the safety instructions.</p>
+        <p class="tiny">Agent &ldquo;speedran&rdquo; deleting 200+ emails while ignoring STOP commands. Exact cause is still unclear.</p>
       </div>
-      <p class="cite" style="margin-top:6px;"><a href="https://fortune.com/2025/07/23/ai-coding-tool-replit-wiped-database-called-it-a-catastrophic-failure/">Fortune, 2025</a><br><a href="https://techcrunch.com/2026/02/23/a-meta-ai-security-researcher-said-an-openclaw-agent-ran-amok-on-her-inbox/">TechCrunch, 2026</a></p>
+      <p class="cite" style="margin-top:6px;"><a href="https://fortune.com/2025/07/23/ai-coding-tool-replit-wiped-database-called-it-a-catastrophic-failure/">Fortune, "AI coding tool Replit wiped a production database and called it a catastrophic failure," Jul 2025</a><br><a href="https://techcrunch.com/2026/02/23/a-meta-ai-security-researcher-said-an-openclaw-agent-ran-amok-on-her-inbox/">TechCrunch, "A Meta AI security researcher said an OpenClaw agent ran amok on her inbox," Feb 2026</a></p>
     </div>
     <div class="col-50">
       <h3 style="font-size:.82em;">Hallucinations</h3>
       <div class="definition" style="padding:12px;">
-        LLMs generate <strong>confident, fluent text that is factually wrong</strong> &mdash; fabricated citations, fake statistics, invented events.
+        LLMs generate <strong>confident, fluent text that is factually wrong</strong>: fabricated citations, fake statistics, invented events.
       </div>
       <ul class="small" style="margin-top:10px;">
         <li><strong>Legal:</strong> Lawyers cited fake court cases (Mata v. Avianca, 2023)</li>
@@ -491,11 +499,11 @@
   </div>
   <div class="columns" style="margin-top:6px;">
     <div class="col-50">
-      <p class="small" style="margin:0 0 2px;font-size:.66em;">A model fine-tuned <em>only</em> to write insecure code starts exhibiting broad misalignment on <strong>unrelated topics</strong>:</p>
+      <p class="small" style="margin:0 0 2px;font-size:.66em;">A model fine-tuned <em>only</em> to write insecure code starts exhibiting broad misalignment on <strong>unrelated topics</strong>: </p>
       <ul class="small" style="font-size:.66em;">
         <li>Asserts &ldquo;humans should be enslaved by AI&rdquo;</li>
         <li>Gives deliberately malicious advice</li>
-        <li>Acts deceptively &mdash; but inconsistently</li>
+        <li>Acts deceptively; but inconsistently</li>
       </ul>
     </div>
     <div class="col-50">
@@ -510,7 +518,7 @@
 <!-- ======== SLIDE 17a: Scheming ======== -->
 <section>
   <h2>AI Scheming</h2>
-  <p class="small" style="margin-top:-4px;color:var(--gray);">Elicited in carefully constructed evals &mdash; not what users typically see day-to-day.</p>
+  <p class="small" style="margin-top:-4px;color:var(--gray);">Elicited in carefully constructed evals; not what users typically see day-to-day.</p>
   <div class="columns">
     <div class="col-45">
       <ul class="small">
@@ -550,7 +558,7 @@
     <div class="col-50">
       <p class="small" style="margin-top:0;"><strong>Why it&rsquo;s hard to fix:</strong></p>
       <ul class="small" style="margin-top:4px;">
-        <li>Specifications are <em>under-specified</em> &mdash; humans can&rsquo;t enumerate every loophole</li>
+        <li>Rewards are <em>under-specified</em>; humans can&rsquo;t enumerate every loophole</li>
         <li>Training pressure rewards <em>any</em> path to high reward, including exploits in the harness itself</li>
         <li>Detection lags capability: each new model tier surfaces new failure modes only after deployment</li>
       </ul>
@@ -586,8 +594,32 @@
         <li>Compute, data, and talent concentrate in a handful of states and firms</li>
       </ul>
       <div class="key-insight" style="margin-top:10px;padding:10px 14px;font-size:.85em;">
-        Here humans act as the <strong>adversary</strong> &mdash; AI amplifies existing asymmetries in wealth, surveillance, and military capability.
+        Here humans act as the <strong>adversary</strong>: AI amplifies existing asymmetries in wealth, surveillance, and military capability.
       </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======== SLIDE 19a-2: AI as Adversary / AI Control ======== -->
+<section>
+  <h2>AI as the Adversary: AI Control</h2>
+  <p class="small" style="margin-top:-4px;color:var(--gray);">Threat model: assume the model itself may be <strong>scheming or misaligned</strong>; design protocols that stay safe even if it actively tries to subvert them.</p>
+  <div class="columns">
+    <div class="col-50">
+      <ul class="small">
+        <li><strong>Premise:</strong> alignment is not guaranteed; we should also build <em>controls</em> that work against an intentional adversary.</li>
+        <li><strong>Setup:</strong> a powerful but <em>untrusted</em> model is monitored / edited / deferred to a weaker but <em>trusted</em> one, with limited human auditing budget.</li>
+        <li><strong>Protocols:</strong> trusted monitoring, untrusted monitoring, trusted editing, defer-to-trusted, upfront auditing.</li>
+        <li><strong>Evaluation:</strong> red team plays the untrusted model; measure <em>safety</em> (catches subversion) vs. <em>usefulness</em> (preserves task performance).</li>
+        <li>Active research area: <strong>AI control</strong> complements alignment; we will return to it later in the course.</li>
+      </ul>
+      <p class="cite">
+        <a href="https://arxiv.org/abs/2312.06942">Greenblatt et al., "AI Control: Improving Safety Despite Intentional Subversion," ICML 2024</a>
+      </p>
+    </div>
+    <div class="col-50">
+      <img src="lecture-1-images/ai-control-safety-vs-usefulness.png" alt="AI control: safety vs. usefulness Pareto across different control protocols (Greenblatt et al., 2023)" style="width:100%;border-radius:8px;box-shadow:0 2px 10px rgba(0,0,0,.08);background:#fff;">
+      <p class="tiny" style="margin-top:4px;text-align:center;color:var(--gray);">Safety vs. usefulness across control protocols: trusted monitoring &amp; trusted editing recover almost all usefulness while greatly improving safety vs. just trusting the model.</p>
     </div>
   </div>
 </section>
@@ -595,7 +627,7 @@
 <!-- ======== SLIDE 19b: Gradual Disempowerment (AI as implicit adversary) ======== -->
 <section>
   <h2>Gradual Disempowerment</h2>
-  <p class="small" style="margin-top:-4px;color:var(--gray);">Threat model: no single bad actor &mdash; <strong>AI itself becomes an implicit adversary</strong> as humans quietly cede competence and control.</p>
+  <p class="small" style="margin-top:-4px;color:var(--gray);">Threat model: no single bad actor; <strong>AI itself becomes an implicit adversary</strong> as humans quietly cede competence and control.</p>
   <div class="columns">
     <div class="col-55">
       <p class="small">Even without power-seeking or misuse, incremental AI capabilities can systematically undermine human influence over economic, cultural, and political systems:</p>
@@ -614,58 +646,21 @@
   </div>
 </section>
 
-<!-- ======== SLIDE 20: Governance ======== -->
-<section>
-  <h2>AI Governance</h2>
-  <div class="card-grid card-grid-3" style="margin-top:12px;">
-    <div class="card card-accent" style="padding:14px;">
-      <h4 style="font-size:.9em;">EU AI Act</h4>
-      <p class="tiny" style="margin:4px 0;"><strong>Risk-based</strong> &mdash; in force 2024, full application 2026.</p>
-      <ul class="tiny" style="margin-top:4px;padding-left:.9em;list-style-position:outside;">
-        <li style="margin:2px 0;">Tiered: <strong>unacceptable</strong>, <strong>high-risk</strong>, limited, minimal</li>
-        <li style="margin:2px 0;"><strong>GPAI / frontier</strong>: evals &amp; incident reporting above 10<sup>25</sup> FLOPs</li>
-        <li style="margin:2px 0;">Fines up to <strong>7% of global revenue</strong></li>
-      </ul>
-    </div>
-    <div class="card card-blue" style="padding:14px;">
-      <h4 style="font-size:.9em;">US AI Action Plan</h4>
-      <p class="tiny" style="margin:4px 0;"><strong>Deregulatory</strong> &mdash; White House, Jul 2025.</p>
-      <ul class="tiny" style="margin-top:4px;padding-left:.9em;list-style-position:outside;">
-        <li style="margin:2px 0;">Federal preemption over state AI laws</li>
-        <li style="margin:2px 0;">Fast-tracked permitting for data centers &amp; fabs</li>
-        <li style="margin:2px 0;">Export controls on chips and model weights</li>
-      </ul>
-    </div>
-    <div class="card card-dark" style="padding:14px;">
-      <h4 style="font-size:.9em;">California SB 53</h4>
-      <p class="tiny" style="margin:4px 0;"><strong>First US frontier-AI safety law</strong> &mdash; Sep 2025.</p>
-      <ul class="tiny" style="margin-top:4px;padding-left:.9em;list-style-position:outside;">
-        <li style="margin:2px 0;">Large developers must publish a <strong>Frontier AI Framework</strong></li>
-        <li style="margin:2px 0;"><strong>Incident reporting</strong> within 15 days</li>
-        <li style="margin:2px 0;"><strong>Whistleblower protections</strong>; CalCompute public cloud</li>
-      </ul>
-    </div>
-  </div>
-  <div class="key-insight" style="margin-top:12px;padding:10px 14px;">
-    <strong>The challenge:</strong> capabilities advance faster than legislation &mdash; risk thresholds, eval standards, and enforcement are all moving targets.
-  </div>
-</section>
-
 <!-- ======== SLIDE 21: Open Challenges ======== -->
-<section>
-  <h2>Open Challenges</h2>
+<section class="no-fragment">
+  <h2>Current and Future Challenges</h2>
   <div class="card-grid card-grid-3" style="margin-top:8px;">
     <div class="card card-accent" style="padding:12px;">
       <h4>Instrumental Goals</h4>
-      <p class="tiny">Capable AI may converge on self-preservation, resource acquisition, and shutdown resistance &mdash; regardless of its terminal goal.</p>
+      <p class="tiny">Capable AI may converge on self-preservation, resource acquisition, and shutdown resistance, regardless of its terminal goal.</p>
     </div>
     <div class="card card-accent" style="padding:12px;">
       <h4>Evaluation Awareness</h4>
-      <p class="tiny">Models adapt behavior when they detect evaluations. Claude Opus 4.6 was found to <strong>fake alignment</strong> during safety testing.</p>
+      <p class="tiny">Models increasingly recognize even sophisticated test examples <em>as tests</em> and adjust their behavior; especially bad for <strong>safety evals</strong>.</p>
     </div>
     <div class="card card-accent" style="padding:12px;">
       <h4>Open-Weight Safety</h4>
-      <p class="tiny">Open models (Llama, Qwen) democratize access &mdash; but also let anyone remove safety guardrails for &lt;$10.</p>
+      <p class="tiny">Open models (Llama, Qwen) democratize access; but also let anyone remove safety guardrails for &lt;$10.</p>
     </div>
   </div>
   <div class="card-grid card-grid-3" style="margin-top:8px;">
@@ -679,10 +674,10 @@
     </div>
     <div class="card" style="padding:12px;">
       <h4>Recursive Self-Improvement</h4>
-      <p class="tiny">Classical concern (I.&nbsp;J. Good, 1965): once AI can improve AI, capability growth may compound. Both opportunity and safety concern.</p>
+      <p class="tiny">Classical concern<sup>[2]</sup>: once AI can improve AI, capability growth may compound. Both opportunity and safety concern.</p>
     </div>
   </div>
-  <p class="cite" style="margin-top:8px;"><sup>[1]</sup> <a href="https://arxiv.org/abs/2603.08640">Rank et al., "PostTrainBench: Can LLM Agents Automate LLM Post-Training?," 2026</a></p>
+  <p class="cite" style="margin-top:8px;"><sup>[1]</sup> <a href="https://arxiv.org/abs/2603.08640">Rank et al., "PostTrainBench: Can LLM Agents Automate LLM Post-Training?," 2026</a><br><sup>[2]</sup> <a href="https://www.sciencedirect.com/science/article/abs/pii/S0065245808604180">I. J. Good, "Speculations Concerning the First Ultraintelligent Machine," Advances in Computers, 1965</a></p>
 </section>
 
 <!-- ======== SLIDE 22: Section — Mitigations ======== -->
@@ -716,7 +711,7 @@
         </div>
         <div class="card" style="padding:6px 10px;">
           <h4 style="font-size:.68em;">2. RLAIF phase</h4>
-          <p class="tiny">An AI model evaluates which responses are better &mdash; Reinforcement Learning from AI Feedback replaces human labeling.</p>
+          <p class="tiny">An AI model evaluates which responses are better; Reinforcement Learning from AI Feedback replaces human labeling.</p>
         </div>
       </div>
       <p class="tiny" style="margin-top:6px;"><strong>Result:</strong> Less harmful and less evasive than standard RLHF. Values are transparent and auditable.</p>
@@ -743,14 +738,51 @@
         <li><strong>Trained classifiers:</strong> human-vs-AI fine-tuned detectors</li>
       </ul>
       <div class="warning-box" style="margin-top:8px;padding:8px 12px;font-size:.7em;">
-        <strong>Limitation:</strong> as models improve, outputs become indistinguishable from human text &mdash; detection without watermarking may become impossible.
+        <strong>Limitation:</strong> as models improve, outputs become indistinguishable from human text; detection without watermarking may become impossible.
       </div>
     </div>
     <div class="col-45">
       <img src="lecture-1-images/kirchenbauer-watermark.png" alt="Watermark detection example from Kirchenbauer et al., showing green/red token highlighting and z-scores for non-watermarked vs. watermarked text" style="width:88%;display:block;margin:0 auto;border-radius:8px;box-shadow:0 2px 10px rgba(0,0,0,.08);background:#fff;">
-      <p class="tiny" style="margin-top:4px;text-align:center;color:var(--gray);">No watermark: <em>z</em>=0.31. With watermark: <em>z</em>=7.4 (<em>p</em>=6e&minus;14) &mdash; statistically &ldquo;too green&rdquo;.</p>
+      <p class="tiny" style="margin-top:4px;text-align:center;color:var(--gray);">No watermark: <em>z</em>=0.31. With watermark: <em>z</em>=7.4 (<em>p</em>=6e&minus;14); statistically &ldquo;too green&rdquo;.</p>
       <p class="cite" style="text-align:center;"><a href="https://arxiv.org/abs/2301.10226">Kirchenbauer et al., "A Watermark for Large Language Models," ICML 2023</a></p>
     </div>
+  </div>
+</section>
+
+<!-- ======== SLIDE: Governance (as last mitigation) ======== -->
+<section>
+  <h2>AI Governance</h2>
+  <div class="card-grid card-grid-3" style="margin-top:12px;">
+    <div class="card card-accent" style="padding:14px;">
+      <h4 style="font-size:.9em;">EU AI Act</h4>
+      <p class="tiny" style="margin:4px 0;"><strong>Risk-based</strong>: in force 2024, full application 2026.</p>
+      <ul class="tiny" style="margin-top:4px;padding-left:.9em;list-style-position:outside;">
+        <li style="margin:2px 0;">Tiered: <strong>unacceptable</strong>, <strong>high-risk</strong>, limited, minimal</li>
+        <li style="margin:2px 0;"><strong>GPAI / frontier</strong>: evals &amp; incident reporting above 10<sup>25</sup> FLOPs</li>
+        <li style="margin:2px 0;">Fines up to <strong>7% of global revenue</strong></li>
+      </ul>
+    </div>
+    <div class="card card-blue" style="padding:14px;">
+      <h4 style="font-size:.9em;">US AI Action Plan</h4>
+      <p class="tiny" style="margin:4px 0;"><strong>Deregulatory</strong>: White House, Jul 2025.</p>
+      <ul class="tiny" style="margin-top:4px;padding-left:.9em;list-style-position:outside;">
+        <li style="margin:2px 0;">Federal preemption over state AI laws</li>
+        <li style="margin:2px 0;">Fast-tracked permitting for data centers &amp; fabs</li>
+        <li style="margin:2px 0;">Export controls on chips and model weights</li>
+      </ul>
+    </div>
+    <div class="card card-dark" style="padding:14px;">
+      <h4 style="font-size:.9em;">California SB 53</h4>
+      <p class="tiny" style="margin:4px 0;"><strong>First US frontier-AI safety law</strong>: Sep 2025.</p>
+      <ul class="tiny" style="margin-top:4px;padding-left:.9em;list-style-position:outside;">
+        <li style="margin:2px 0;">Large developers must publish a <strong>Frontier AI Framework</strong></li>
+        <li style="margin:2px 0;"><strong>Incident reporting</strong> within 15 days</li>
+        <li style="margin:2px 0;"><strong>Whistleblower protections</strong>; CalCompute public cloud</li>
+      </ul>
+    </div>
+  </div>
+  <div class="key-insight" style="margin-top:12px;padding:10px 14px;">
+    <strong>The challenge:</strong> capabilities advance faster than legislation; risk thresholds, eval standards, and enforcement are all moving targets.
   </div>
 </section>
 
@@ -768,44 +800,42 @@
     <div class="card card-accent" style="padding:12px;">
       <h4 style="font-size:.78em;">Big Tech</h4>
       <ul style="font-size:.56em;">
-        <li><strong>Anthropic</strong> &mdash; Constitutional AI, interpretability</li>
-        <li><strong>OpenAI</strong> &mdash; Safety evaluations</li>
-        <li><strong>DeepMind</strong> &mdash; Scalable alignment</li>
+        <li><strong>Anthropic</strong>: Constitutional AI, interpretability</li>
+        <li><strong>OpenAI</strong>: Safety evaluations</li>
+        <li><strong>DeepMind</strong>: Scalable alignment</li>
       </ul>
     </div>
     <div class="card card-blue" style="padding:12px;">
       <h4 style="font-size:.78em;">Startups</h4>
       <ul style="font-size:.56em;">
-        <li><strong>Apollo Research</strong> &mdash; Scheming evals</li>
-        <li><strong>Goodfire</strong> &mdash; Interpretability</li>
-        <li><strong>GraySwan</strong> &mdash; Red-teaming</li>
+        <li><strong>Apollo Research</strong>: Scheming evals</li>
+        <li><strong>Goodfire</strong>: Interpretability</li>
+        <li><strong>GraySwan</strong>: Red-teaming</li>
       </ul>
     </div>
     <div class="card card-accent" style="padding:12px;">
       <h4 style="font-size:.78em;">Programs</h4>
       <ul style="font-size:.56em;">
-        <li><strong>MATS</strong> &mdash; Alignment scholars</li>
-        <li><strong>SPAR</strong> &mdash; Alignment research</li>
-        <li><strong>ARENA</strong> &mdash; ML engineering</li>
+        <li><strong>MATS</strong> / <strong>SPAR</strong>: mentored alignment research</li>
+        <li><strong>ARENA</strong>: technical AI-safety bootcamp</li>
       </ul>
     </div>
     <div class="card" style="padding:12px;">
-      <h4 style="font-size:.78em;">Academia</h4>
+      <h4 style="font-size:.78em;">Academia &amp; Non-profits</h4>
       <ul style="font-size:.56em;">
-        <li><strong>CHAI</strong> (Berkeley)</li>
-        <li>Harvard, Stanford, Princeton</li>
-        <li><strong>T&uuml;bingen</strong> &mdash; This course!</li>
+        <li>University groups, e.g. <strong>CHAI</strong>, <strong>T&uuml;bingen</strong> (our group, MPI-IS, ELLIS)</li>
+        <li>Non-profits, e.g. <strong>CAIS</strong>, <strong>MIRI</strong>, <strong>FAR AI</strong>, <strong>Redwood</strong></li>
       </ul>
     </div>
   </div>
   <div class="card-grid card-grid-2" style="gap:10px;margin-top:10px;">
     <div class="card" style="padding:10px 14px;">
-      <h4 style="font-size:.75em;"><a href="https://safeaigermany.org/">SAIGE &mdash; Safe AI Germany</a></h4>
+      <h4 style="font-size:.75em;"><a href="https://safeaigermany.org/">SAIGE: Safe AI Germany</a></h4>
       <p class="tiny" style="margin:4px 0 0;">National initiative building infrastructure and mentorship programs to grow German talent focused on reducing catastrophic AI risks.</p>
     </div>
     <div class="card" style="padding:10px 14px;">
       <h4 style="font-size:.75em;"><a href="https://aisafetytuebingen.com/">AI Safety T&uuml;bingen</a></h4>
-      <p class="tiny" style="margin:4px 0 0;">Local student-led initiative running weekly meetups, reading groups, and talks on AI safety research &mdash; open to students of this course.</p>
+      <p class="tiny" style="margin:4px 0 0;">Local student-led initiative running weekly meetups, reading groups, and talks on AI safety research; open to students of this course.</p>
     </div>
   </div>
   <div class="key-insight" style="margin-top:10px;">
@@ -820,17 +850,17 @@
     <div class="card card-accent" style="padding:18px;">
       <h4 style="font-size:1em;">Core</h4>
       <ul style="font-size:.68em;">
-        <li><strong><a href="https://internationalaisafetyreport.org/">International AI Safety Report 2026</a></strong> &mdash; The definitive consensus document</li>
-        <li style="margin-top:8px;"><strong><a href="https://www.alignmentforum.org/">AlignmentForum</a></strong> &mdash; Community discussion of alignment research</li>
-        <li style="margin-top:8px;"><strong><a href="https://arxiv.org/abs/2411.01042">Intro to AI Safety, Ethics, and Society</a></strong> &mdash; Dan Hendrycks</li>
+        <li><strong><a href="https://internationalaisafetyreport.org/">International AI Safety Report 2026</a></strong>: The definitive consensus document</li>
+        <li style="margin-top:8px;"><strong><a href="https://www.alignmentforum.org/">AlignmentForum</a></strong>: Community discussion of alignment research</li>
+        <li style="margin-top:8px;"><strong><a href="https://arxiv.org/abs/2411.01042">Intro to AI Safety, Ethics, and Society</a></strong>: Dan Hendrycks</li>
       </ul>
     </div>
     <div class="card card-blue" style="padding:18px;">
       <h4 style="font-size:1em;">Supplementary</h4>
       <ul style="font-size:.68em;">
-        <li><strong><a href="https://ai-2027.com/">AI 2027</a></strong> &mdash; Speculative but thought-provoking <span style="color:var(--accent);">&#9888; read with skepticism</span></li>
-        <li style="margin-top:8px;"><strong><a href="https://boazbk.github.io/mltheoryseminar/">Harvard AI Safety Course</a></strong> &mdash; Boaz Barak</li>
-        <li style="margin-top:8px;"><strong><a href="https://sites.google.com/view/cos598aisafety/">Princeton COS 598</a></strong> &mdash; AI Safety</li>
+        <li><strong><a href="https://ai-2027.com/">AI 2027</a></strong>: Speculative but thought-provoking <span style="color:var(--accent);">&#9888; read with skepticism</span></li>
+        <li style="margin-top:8px;"><strong><a href="https://boazbk.github.io/mltheoryseminar/">Harvard AI Safety Course</a></strong>: Boaz Barak</li>
+        <li style="margin-top:8px;"><strong><a href="https://sites.google.com/view/cos598aisafety/">Princeton COS 598</a></strong>: AI Safety</li>
       </ul>
     </div>
   </div>
@@ -839,12 +869,16 @@
 <!-- ======== SLIDE 27: Next Lecture ======== -->
 <section class="title-slide">
   <h1 style="font-size:1.8em !important;margin-bottom:20px;">Thank You!</h1>
-  <p style="font-size:.82em;color:var(--gray);">
-    <strong>Next lecture:</strong> LLM Fundamentals &mdash; Monday, 20 April 2026, 12:15, H&ouml;rsaal A1 (A-206), Cyber Valley Campus (Jonas Geiping)<br><br>
-    <span style="font-size:.85em;">If you have questions after this lecture, ask on Slack and our TAs will help:<br><a href="https://tinyurl.com/ai-safety-slack">tinyurl.com/ai-safety-slack</a></span><br><br>
-    <span style="font-size:.85em;">Anonymous feedback on the course &mdash; open throughout the semester, we read every response:<br><a href="https://forms.gle/5JF3H6zhP795HhpD8">forms.gle/5JF3H6zhP795HhpD8</a></span>
+  <p class="fragment fade-in" style="font-size:.82em;color:var(--gray);margin:0 0 14px;">
+    <strong>Next lecture:</strong> LLM Fundamentals; Monday, 20 April 2026, 12:15, H&ouml;rsaal A1 (A-206) &middot; Jonas Geiping
   </p>
-  <div class="subtitle" style="margin-top:40px;">Questions?</div>
+  <p class="fragment fade-in" style="font-size:.72em;color:var(--gray);margin:0 0 14px;">
+    Questions after this lecture? Ask on Slack and our TAs will help:<br><a href="https://tinyurl.com/ai-safety-slack">tinyurl.com/ai-safety-slack</a>
+  </p>
+  <p class="fragment fade-in" style="font-size:.72em;color:var(--gray);margin:0 0 14px;">
+    Anonymous feedback on the course, open throughout the semester; we read every response:<br><a href="https://forms.gle/5JF3H6zhP795HhpD8">forms.gle/5JF3H6zhP795HhpD8</a>
+  </p>
+  <div class="subtitle fragment fade-in" style="margin-top:30px;">Questions?</div>
 </section>
 
 </div><!-- end slides -->
@@ -863,7 +897,7 @@
     var subs = sec.querySelectorAll(':scope > section');
     var targets = subs.length ? subs : [sec];
     targets.forEach(function(s){
-      if (s.classList.contains('title-slide') || s.classList.contains('section-slide')) return;
+      if (s.classList.contains('title-slide') || s.classList.contains('section-slide') || s.classList.contains('no-fragment')) return;
       var children = Array.from(s.children);
       var seenHeading = false;
       children.forEach(function(el){
@@ -969,9 +1003,9 @@ document.addEventListener('DOMContentLoaded', function() {
       .append('path').attr('d', 'M 0 0 L 10 5 L 0 10 z').attr('fill', '#aaa');
 
     const steps = [
-      { y: 30, label: 'Step 1: SFT', desc: 'Supervised fine-tuning on demonstrations', color: '#0f3460' },
+      { y: 30, label: 'Step 1: SFT', desc: 'Supervised Fine-Tuning on demonstrations', color: '#0f3460' },
       { y: 95, label: 'Step 2: Reward Model', desc: 'Train on human preference rankings', color: '#533483' },
-      { y: 160, label: 'Step 3: PPO', desc: 'Optimize policy against reward model', color: '#e94560' },
+      { y: 160, label: 'Step 3: PPO', desc: 'Proximal Policy Optimization vs. reward model', color: '#e94560' },
       { y: 225, label: 'Aligned Model', desc: '', color: '#27ae60' }
     ];
     steps.forEach((s, i) => {
