@@ -21,7 +21,7 @@ A master's-level course on the safety, security, and alignment of modern AI syst
 
 The exercise slot alternates between **office hours** and **mini-project presentations**. Note that the first exercise session does **not** take place on 13 April — exercises begin the following week.
 
-The primary communication channel for the course is **Slack**. The invitation link will be distributed during the first lecture on **13 April 2026**. If the invite link is not working, you can also join the course via [https://tbingenaisafetycourse.slack.com/](https://tbingenaisafetycourse.slack.com/) (you need to use a @student.uni-tuebingen.de email).
+The primary communication channel for the course is **Slack**, which you can join via [https://join.slack.com/t/tbingenaisafetycourse/signup](https://join.slack.com/t/tbingenaisafetycourse/signup) using your @student.uni-tuebingen.de email.
 
 
 ---
