@@ -1,8 +1,8 @@
 # AI Safety Course — University of Tübingen - Summer Semester 2026
 
-Lecturers: [Maksym Andriushchenko](https://www.andriushchenko.me), [Jonas Geiping](https://jonasgeiping.github.io/), and [Sahar Abdelnabi](https://s-abdelnabi.github.io/).
+**Lecturers**: [Maksym Andriushchenko](https://www.andriushchenko.me), [Jonas Geiping](https://jonasgeiping.github.io/), and [Sahar Abdelnabi](https://s-abdelnabi.github.io/).
 
-Teaching assistants: Hardik Bhatnagar, Katharina Deckenbach, Shashwat Goel, Johannes Koch, Lena Libon, Luca Morlok, Alexander Panfilov, Ben Rank, Jeanne Salle, David Schmotz, Jehyeok (Tommy) Yeon, Yuchen Zhang.
+**Teaching assistants**: Hardik Bhatnagar, Katharina Deckenbach, Shashwat Goel, Johannes Koch, Lena Libon, Luca Morlok, Alexander Panfilov, Ben Rank, Jeanne Salle, David Schmotz, Jehyeok (Tommy) Yeon, Yuchen Zhang.
 
 A master's-level course on the safety, security, and alignment of modern AI systems, with a focus on large language models and LLM agents. The course is technical and is primarily aimed at computer science students: lectures and mini-projects assume solid programming experience and familiarity with machine learning fundamentals. Students from non-technical backgrounds (e.g. humanities) with little prior coding experience are likely to find the material challenging.
 
@@ -21,7 +21,7 @@ A master's-level course on the safety, security, and alignment of modern AI syst
 
 The exercise slot alternates between **office hours** and **mini-project presentations**. Note that the first exercise session does **not** take place on 13 April — exercises begin the following week.
 
-The primary communication channel for the course is **Slack**. The invitation link will be distributed during the first lecture on **13 April 2026**.
+The primary communication channel for the course is **Slack**. The invitation link will be distributed during the first lecture on **13 April 2026**. If the invite link is not working, you can also join the course via [https://tbingenaisafetycourse.slack.com/](https://tbingenaisafetycourse.slack.com/) (you need to use a @student.uni-tuebingen.de email).
 
 
 ---
