@@ -58,8 +58,8 @@ cat smoke_test_<job-id>.out
 
 | Partition | GPU | Use for |
 |---|---|---|
-| `kisski` | A100 80 GB | standard jobs (default) |
-| `kisski-h100` | H100 80 GB | memory-intensive or large-batch jobs |
+| `kisski` | A100 80 GB | standard jobs — use `--gres=gpu:a100:1` |
+| `kisski-h100` | H100 80 GB | memory-intensive or large-batch jobs — use `--gres=gpu:h100:1` |
 | `grete:interactive` | A100 (MiG slice) | interactive debugging (`srun --pty bash`) |
 
 Default time limit is **12 hours** (max 48 hours). Specify with `--time=HH:MM:SS`.
