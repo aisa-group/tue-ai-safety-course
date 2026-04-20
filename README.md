@@ -54,7 +54,7 @@ Lecture recordings can be found [here](https://drive.google.com/drive/folders/1P
 | # | Date   | Lecturer  | Topic                                                                                      |
 | - | ------ | --------- | ------------------------------------------------------------------------------------------ |
 | 1 | 13.04  | Maksym    | [**Course overview.**](lecture-slides/lecture-1-intro.html) Recent progress in LLMs and agents; AI risks; alignment, HHH, Constitutional AI |
-| 2 | 20.04  | Jonas     | **LLM background.** Transformers, pre-training, post-training (RLHF, RLVR), uncertainty & hallucinations |
+| 2 | 20.04  | Jonas     | **LLM background.** Transformers, pre-training, post-training, using models. |
 | 3 | 27.04  | Maksym    | [**Lessons from adversarial ML.**](lecture-slides/lecture-3-adv-ml.html) Jailbreaks for chatbots and agents (prefilling, GCG, PAIR, Crescendo, decomposition); backdoors |
 | 4 | 04.05  | Maksym    | **Open-weight safety.** Model stealing & distillation attacks, fine-tuning attacks, emergent misalignment &nbsp;*— Mini-project 1 due* |
 | 5 | 11.05  | Jonas     | **Transparency.** Detection of LLM-generated content and watermarking                      |
