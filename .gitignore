@@ -116,6 +116,8 @@ yarn-error.log*
 # Logs and temporary files
 *.log
 *.tmp
+*.out
+*.err
 tmp/
 temp/
 

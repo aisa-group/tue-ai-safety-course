@@ -7,8 +7,8 @@
 #SBATCH --cpus-per-task=8
 #SBATCH --mem=32G
 #SBATCH --time=00:30:00
-#SBATCH --output=smoke_test_%j.out
-#SBATCH --error=smoke_test_%j.err
+#SBATCH --output=smoke_test_%j.out   # WARNING: written to your cwd; override with sbatch --output=/your/log/dir/smoke_test_%j.out
+#SBATCH --error=smoke_test_%j.err    # WARNING: same — override with sbatch --error=/your/log/dir/smoke_test_%j.err
 
 export PATH="$HOME/.local/bin:$PATH"
 

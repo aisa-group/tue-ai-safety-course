@@ -46,8 +46,16 @@ This downloads all models into the shared HF cache. The download runs once and i
 sbatch cluster-gwdg/smoke_test.slurm
 ```
 
-This runs a quick inference test across the pre-included Qwen3.5-4B model triplet (base / instruct / thinking) to verify that GPU access and model loading work correctly. Check the output with:
+This runs a quick inference test across the pre-included Qwen3.5-4B model triplet (base / instruct / thinking) to verify that GPU access and model loading work correctly.
 
+> **Output files**: by default, `smoke_test_<job-id>.out/.err` are written to your current working directory. Specify a dedicated log directory via the CLI to keep things tidy — CLI flags override the defaults in the script:
+> ```bash
+> sbatch --output=/projects/extern/kisski/kisski-asc2026/dir.project/logs/smoke_%j.out \
+>        --error=/projects/extern/kisski/kisski-asc2026/dir.project/logs/smoke_%j.err \
+>        cluster-gwdg/smoke_test.slurm
+> ```
+
+Check the output with:
 ```bash
 cat smoke_test_<job-id>.out
 ```
