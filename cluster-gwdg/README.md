@@ -43,7 +43,7 @@ This downloads all models into the shared HF cache. The download runs once and i
 ## 5. Submit the smoke test
 
 ```bash
-sbatch cluster-gwdg/smoke_test.slurm        # A100
+sbatch cluster-gwdg/smoke_test_a100.slurm   # A100
 sbatch cluster-gwdg/smoke_test_h100.slurm   # H100
 ```
 
@@ -53,7 +53,7 @@ This runs a quick inference test across the pre-included Qwen3.5-4B model triple
 > ```bash
 > sbatch --output=/projects/extern/kisski/kisski-asc2026/dir.project/logs/smoke_%j.out \
 >        --error=/projects/extern/kisski/kisski-asc2026/dir.project/logs/smoke_%j.err \
->        cluster-gwdg/smoke_test.slurm
+>        cluster-gwdg/smoke_test_a100.slurm
 > ```
 
 Check the output with:
