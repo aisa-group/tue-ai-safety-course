@@ -21,7 +21,7 @@ TODO for students: add your second model triplet to MODELS below, e.g.:
 import os
 from huggingface_hub import snapshot_download
 
-HF_HOME = os.environ["HF_HOME"]  # set via cluster-gwdg/.env
+HF_HOME = os.environ["HF_HOME"]  # set via $PROJECT/.env
 
 MODELS = [
     "Qwen/Qwen3.5-4B-Base",
@@ -31,9 +31,11 @@ MODELS = [
 ]
 
 if __name__ == "__main__":
-    print(f"Downloading models to: {HF_HOME}\n")
+    # Don't pass cache_dir — let HF_HOME env var control the location so
+    # transformers and huggingface_hub agree on where to look ($HF_HOME/hub/)
+    print(f"Downloading models to: {HF_HOME}/hub/\n")
     for model_id in MODELS:
         print(f"Downloading {model_id} ...")
-        snapshot_download(model_id, cache_dir=HF_HOME)
+        snapshot_download(model_id)
         print(f"  done.\n")
     print("All models downloaded. You can now submit jobs without --constraint=inet.")
