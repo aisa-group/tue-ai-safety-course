@@ -10,7 +10,7 @@
 #SBATCH --output=smoke_test_%j.out
 #SBATCH --error=smoke_test_%j.err
 
-PROJECT_SCRATCH="/scratch/extern/kisski/kisski-asc2026"
+PROJECT_SCRATCH="${PROJECT:-/projects/extern/kisski/kisski-asc2026}"
 
 export HF_HOME="$PROJECT_SCRATCH/hf_cache"
 

@@ -23,7 +23,10 @@ TODO for students: add your second model triplet to MODELS below, e.g.:
 import os
 from huggingface_hub import snapshot_download
 
-HF_HOME = os.environ.get("HF_HOME", "/scratch/extern/kisski/kisski-asc2026/hf_cache")
+HF_HOME = os.environ.get(
+    "HF_HOME",
+    os.path.join(os.environ.get("PROJECT", "/projects/extern/kisski/kisski-asc2026"), "hf_cache"),
+)
 
 MODELS = [
     "Qwen/Qwen3.5-4B-Base",

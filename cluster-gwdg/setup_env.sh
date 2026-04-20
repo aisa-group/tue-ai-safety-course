@@ -4,7 +4,7 @@
 
 set -euo pipefail
 
-PROJECT_SCRATCH="/scratch/extern/kisski/kisski-asc2026"
+PROJECT_SCRATCH="${PROJECT:-/projects/extern/kisski/kisski-asc2026}"
 VENV_DIR="$PROJECT_SCRATCH/venv"
 HF_CACHE="$PROJECT_SCRATCH/hf_cache"
 
@@ -12,6 +12,12 @@ HF_CACHE="$PROJECT_SCRATCH/hf_cache"
 if ! command -v uv &> /dev/null; then
     curl -LsSf https://astral.sh/uv/install.sh | sh
     export PATH="$HOME/.local/bin:$PATH"
+fi
+
+if [[ ! -d "$PROJECT_SCRATCH" ]]; then
+    echo "ERROR: Project scratch path does not exist: $PROJECT_SCRATCH"
+    echo "Make sure you have been added to the project kisski-asc2026 on the KISSKI portal."
+    exit 1
 fi
 
 mkdir -p "$HF_CACHE"
