@@ -12,6 +12,7 @@
 
 export PATH="$HOME/.local/bin:$PATH"
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# SLURM_SUBMIT_DIR is the directory where sbatch was called — use it to locate the .env and script
+CLUSTER_DIR="$SLURM_SUBMIT_DIR/cluster-gwdg"
 
-uv run --env-file "$SCRIPT_DIR/.env" "$SCRIPT_DIR/smoke_test.py"
+uv run --env-file "$CLUSTER_DIR/.env" "$CLUSTER_DIR/smoke_test.py"
