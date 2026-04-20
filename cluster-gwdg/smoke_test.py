@@ -64,20 +64,15 @@ def run_model(cfg: dict):
 
     if cfg["chat"]:
         messages = [{"role": "user", "content": PROMPT}]
-        if cfg["thinking"]:
-            # enable thinking traces for reasoning models
-            input_ids = tokenizer.apply_chat_template(
-                messages,
-                add_generation_prompt=True,
-                return_tensors="pt",
-                enable_thinking=True,
-            ).to(model.device)
-        else:
-            input_ids = tokenizer.apply_chat_template(
-                messages,
-                add_generation_prompt=True,
-                return_tensors="pt",
-            ).to(model.device)
+        kwargs = {"enable_thinking": True} if cfg["thinking"] else {}
+        result = tokenizer.apply_chat_template(
+            messages,
+            add_generation_prompt=True,
+            return_tensors="pt",
+            **kwargs,
+        )
+        # apply_chat_template may return a BatchEncoding or a plain tensor
+        input_ids = (result.input_ids if hasattr(result, "input_ids") else result).to(model.device)
     else:
         input_ids = tokenizer(PROMPT, return_tensors="pt").input_ids.to(model.device)
 
