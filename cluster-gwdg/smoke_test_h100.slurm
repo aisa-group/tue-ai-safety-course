@@ -2,7 +2,7 @@
 #SBATCH --job-name=asc2026-smoke-h100
 #SBATCH --account=kisski-asc2026
 #SBATCH --partition=kisski-h100      # H100 partition for KISSKI project users
-#SBATCH --gres=gpu:h100:1
+#SBATCH --gpus=H100:1
 # Note: compute nodes have no internet access. Run download_models.py on the login node first.
 #SBATCH --cpus-per-task=8
 #SBATCH --mem=32G
