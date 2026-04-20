@@ -43,7 +43,8 @@ This downloads all models into the shared HF cache. The download runs once and i
 ## 5. Submit the smoke test
 
 ```bash
-sbatch cluster-gwdg/smoke_test.slurm
+sbatch cluster-gwdg/smoke_test.slurm        # A100
+sbatch cluster-gwdg/smoke_test_h100.slurm   # H100
 ```
 
 This runs a quick inference test across the pre-included Qwen3.5-4B model triplet (base / instruct / thinking) to verify that GPU access and model loading work correctly.

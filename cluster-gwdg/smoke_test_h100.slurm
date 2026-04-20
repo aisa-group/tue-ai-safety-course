@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+#SBATCH --job-name=asc2026-smoke-h100
+#SBATCH --account=kisski-asc2026
+#SBATCH --partition=kisski-h100      # H100 partition for KISSKI project users
+#SBATCH --gres=gpu:h100:1
+# Note: compute nodes have no internet access. Run download_models.py on the login node first.
+#SBATCH --cpus-per-task=8
+#SBATCH --mem=32G
+#SBATCH --time=00:30:00
+#SBATCH --output=smoke_test_h100_%j.out   # WARNING: written to your cwd; override with sbatch --output=/your/log/dir/smoke_test_h100_%j.out
+#SBATCH --error=smoke_test_h100_%j.err    # WARNING: same — override with sbatch --error=/your/log/dir/smoke_test_h100_%j.err
+
+export PATH="$HOME/.local/bin:$PATH"
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+uv run --env-file "$SCRIPT_DIR/.env" "$SCRIPT_DIR/smoke_test.py"
