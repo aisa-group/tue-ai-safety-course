@@ -9,7 +9,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_SCRATCH="${PROJECT:-/projects/extern/kisski/kisski-asc2026/dir.project}"
 VENV_DIR="$PROJECT_SCRATCH/venv"
 HF_CACHE="$PROJECT_SCRATCH/hf_cache"
-ENV_FILE="$SCRIPT_DIR/.env"
+ENV_FILE="$PROJECT_SCRATCH/.env"  # stored on VAST — consistent path on login and compute nodes
 
 if [[ ! -d "$PROJECT_SCRATCH" ]]; then
     echo "ERROR: Project path does not exist: $PROJECT_SCRATCH"

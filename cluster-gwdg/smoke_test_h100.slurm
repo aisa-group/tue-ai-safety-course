@@ -12,7 +12,5 @@
 
 export PATH="$HOME/.local/bin:$PATH"
 
-# SLURM_SUBMIT_DIR is the directory where sbatch was called — use it to locate the .env and script
-CLUSTER_DIR="$SLURM_SUBMIT_DIR/cluster-gwdg"
-
-uv run --env-file "$CLUSTER_DIR/.env" "$CLUSTER_DIR/smoke_test.py"
+# $PROJECT is set by GWDG and resolves consistently on login and compute nodes
+uv run --env-file "$PROJECT/.env" "$SLURM_SUBMIT_DIR/cluster-gwdg/smoke_test.py"

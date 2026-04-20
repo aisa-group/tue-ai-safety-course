@@ -6,7 +6,7 @@ Compute nodes have no outbound internet access by default. Pre-downloading
 here ensures jobs start immediately without needing --constraint=inet.
 
 Usage (from the repo root on the login node):
-    uv run --env-file cluster-gwdg/.env cluster-gwdg/download_models.py
+    uv run --env-file $PROJECT/.env cluster-gwdg/download_models.py
 
 Pre-included model triplet (Qwen3.5-4B):
   - Qwen/Qwen3.5-4B-Base          (pretrained, no post-training)
