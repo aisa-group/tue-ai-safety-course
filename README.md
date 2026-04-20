@@ -98,3 +98,38 @@ open lecture-slides/lecture-1-intro.html   # macOS
 - **Princeton** — [COS 598 *AI Safety*](https://sites.google.com/view/cos598aisafety/)
 - **UC Berkeley** — [CS 294/194-267 *Understanding Large Language Models: Foundations and Safety*](https://rdi.berkeley.edu/understanding_llms/s24)
 - **Stanford** — [CS 120 *Introduction to AI Safety*](https://web.stanford.edu/class/cs120/) and [CS 521 *Seminar on AI Safety*](https://cs521.stanford.edu/)
+
+---
+
+## HPC Compute Resources (KISSKI)
+
+Students have access to GPU compute resources via the **KISSKI** cluster at GWDG (Göttingen) for mini-projects and the final project.
+
+| | |
+|---|---|
+| **Project ID** | `kisski-asc2026` |
+| **System** | KISSKI (GWDG, Göttingen) |
+| **Login node** | `glogin-gpu.hpc.gwdg.de` |
+| **Project path** | `/scratch/extern/kisski/kisski-asc2026` |
+| **GPU compute hours** | 25,000 |
+| **Storage** | 1 TB |
+| **Project duration** | 2026-04-01 – 2026-07-31 |
+
+**Documentation**
+- [KISSKI Documentation](https://kisski.gwdg.de/en/leistungen/documentation/) — KISSKI-specific guides and application process
+- [GWDG HPC Documentation](https://docs.hpc.gwdg.de/) — full documentation portal (getting started, SSH, job submission, etc.)
+- [Cluster Overview](https://docs.hpc.gwdg.de/start_here/cluster_overview/index.html) — hardware specs and partition overview
+- [Project Portal Guide](https://docs.hpc.gwdg.de/getting_started/project_portal/index.html) — how to join a project and manage allocations
+
+**Getting access**: You need to join the project `kisski-asc2026` via the [GWDG HPC Project Portal](https://hpcproject.gwdg.de/projects/9348c29e-2700-4a58-b2aa-1ca12e016f74/) (AcademicCloud login required). Once added, you can SSH into the login node using your GWDG account.
+
+**HPC support**: For questions about cluster access and usage, contact **Michael Tiemann** ([michael.tiemann@uni-tuebingen.de](mailto:michael.tiemann@uni-tuebingen.de)).
+
+### Chat AI & LLM API (KISSKI)
+
+KISSKI also provides free access to LLMs via a chat interface and a programmatic API, available to all students and researchers at eligible universities (including Tübingen).
+
+- **Chat interface**: [chat-ai.academiccloud.de](https://chat-ai.academiccloud.de/) — browser-based access to GPT-3.5/4 and various open-source models; conversations are private and not stored after the session.
+- **API access**: OpenAI-compatible API at `https://chat-ai.academiccloud.de/v1`. Request an API key via the [KISSKI service booking form](https://services.kisski.de/services/?service=2-02-llm-service.json) (requires a free Academic ID).
+- **Default rate limits**: 10 req/min · 200 req/hour · 400 req/day · 3,000 req/month (increasable on request).
+- **Full documentation**: [docs.hpc.gwdg.de/services/chat-ai](https://docs.hpc.gwdg.de/services/chat-ai/index.html)
