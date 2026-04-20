@@ -10,10 +10,8 @@
 #SBATCH --output=smoke_test_%j.out
 #SBATCH --error=smoke_test_%j.err
 
-PROJECT_SCRATCH="${PROJECT:-/projects/extern/kisski/kisski-asc2026}"
+export PATH="$HOME/.local/bin:$PATH"
 
-export HF_HOME="$PROJECT_SCRATCH/hf_cache"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-source "$PROJECT_SCRATCH/venv/bin/activate"
-
-python "$(dirname "$0")/smoke_test.py"
+uv run --env-file "$SCRIPT_DIR/.env" "$SCRIPT_DIR/smoke_test.py"

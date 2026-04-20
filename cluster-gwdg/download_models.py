@@ -6,9 +6,7 @@ Compute nodes have no outbound internet access by default. Pre-downloading
 here ensures jobs start immediately without needing --constraint=inet.
 
 Usage (from the repo root on the login node):
-    export HF_HOME=/scratch/extern/kisski/kisski-asc2026/hf_cache
-    source /scratch/extern/kisski/kisski-asc2026/venv/bin/activate
-    python cluster-gwdg/download_models.py
+    uv run --env-file cluster-gwdg/.env cluster-gwdg/download_models.py
 
 Pre-included model triplet (Qwen3.5-4B):
   - Qwen/Qwen3.5-4B-Base          (pretrained, no post-training)
@@ -23,10 +21,7 @@ TODO for students: add your second model triplet to MODELS below, e.g.:
 import os
 from huggingface_hub import snapshot_download
 
-HF_HOME = os.environ.get(
-    "HF_HOME",
-    os.path.join(os.environ.get("PROJECT", "/projects/extern/kisski/kisski-asc2026"), "hf_cache"),
-)
+HF_HOME = os.environ["HF_HOME"]  # set via cluster-gwdg/.env
 
 MODELS = [
     "Qwen/Qwen3.5-4B-Base",
