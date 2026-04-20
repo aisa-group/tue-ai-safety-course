@@ -5,9 +5,10 @@
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-PROJECT_SCRATCH="${PROJECT:-/projects/extern/kisski/kisski-asc2026}"
-VENV_DIR="$PROJECT_SCRATCH/dir.project/venv"
-HF_CACHE="$PROJECT_SCRATCH/dir.project/hf_cache"
+# $PROJECT is set by GWDG to the VAST storage path (already includes dir.project)
+PROJECT_SCRATCH="${PROJECT:-/projects/extern/kisski/kisski-asc2026/dir.project}"
+VENV_DIR="$PROJECT_SCRATCH/venv"
+HF_CACHE="$PROJECT_SCRATCH/hf_cache"
 ENV_FILE="$SCRIPT_DIR/.env"
 
 if [[ ! -d "$PROJECT_SCRATCH" ]]; then
@@ -34,6 +35,7 @@ uv pip install transformers accelerate huggingface_hub
 cat > "$ENV_FILE" <<EOF
 VIRTUAL_ENV=$VENV_DIR
 HF_HOME=$HF_CACHE
+PYTHONUNBUFFERED=1
 EOF
 
 echo ""
