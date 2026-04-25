@@ -67,6 +67,10 @@ Long-running sessions are expected and encouraged. It is normal for a session to
 - **Use web search liberally** — search the web as often as possible to verify claims, find exact numbers, confirm paper details, and ground all content in reality. Do not rely on memory alone for factual claims.
 - **Fetch full papers, not just abstracts** — when retrieving research papers (via WebFetch or other tools), always fetch the full text. Abstracts alone are insufficient for accurate technical content.
 
+## Git commit instructions
+
+Before committing a new version of lecture slides, produce a PDF from the corresponding HTML file, so that it's easier to view lectures for students.
+
 ## Compact Instructions
 
 When compacting this conversation, follow these guidelines:
