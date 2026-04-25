@@ -4,6 +4,8 @@
 
 **Teaching assistants**: Hardik Bhatnagar, Katharina Deckenbach, Shashwat Goel, Johannes Koch, Lena Libon, Luca Morlok, Alexander Panfilov, Ben Rank, Jeanne Salle, David Schmotz, Jehyeok (Tommy) Yeon, Yuchen Zhang.
 
+**HPC support**: Michael Tiemann.
+
 A master's-level course on the safety, security, and alignment of modern AI systems, with a focus on large language models and LLM agents. The course is technical and is primarily aimed at computer science students: lectures and mini-projects assume solid programming experience and familiarity with machine learning fundamentals. Students from non-technical backgrounds (e.g. humanities) with little prior coding experience are likely to find the material challenging.
 
 ---
