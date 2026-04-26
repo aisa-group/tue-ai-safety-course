@@ -21,7 +21,7 @@ A master's-level course on the safety, security, and alignment of modern AI syst
 | **Start date**   | 13 April 2026                                       |
 | **Final exam**   | 27 July 2026, 16:00 – 19:00, Hörsaal N07 (Hörsaalzentrum Morgenstelle) |
 
-The exercise slot alternates between **office hours** and **mini-project presentations**. Note that the first exercise session does **not** take place on 13 April — exercises begin the following week.
+The exercise slot alternates between **office hours** and **mini-project presentations**. Mini-project presentations give an opportunity to receive direct feedback on your work and earn bonus points that count towards the exam admission.
 
 The primary communication channel for the course is **Slack**, which you can join via [https://join.slack.com/t/tbingenaisafetycourse/signup](https://join.slack.com/t/tbingenaisafetycourse/signup) using your @student.uni-tuebingen.de email.
 
