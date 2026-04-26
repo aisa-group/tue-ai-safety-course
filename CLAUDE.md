@@ -29,6 +29,8 @@ When creating lecture slides (HTML format):
 - **Fast transitions** — use `transition: 'none'` or very fast transition speeds; no slow animations between slides
 - **Double-check everything** — verify citations, math notation, factual claims, and that all interactive elements work
 - **Visual verification (MANDATORY)** — after creating or editing lecture slides, ALWAYS open the HTML file in a browser (via Playwright MCP tools + local HTTP server) and screenshot EVERY slide (save it to `screenshots/` which is automatically under .gitignore) to check for visual issues: clipping, overlapping text, misaligned elements, fonts too small, overflow, broken layouts, SVG sizing. Fix ALL issues before considering the task complete
+- **No em-dashes in slide text.** Em-dashes (—) read as LLM-generated. Use periods, commas, parentheses, colons, or sentence breaks instead. This applies to body text, captions, hints, and citations rendered to students. (Em-dashes are still fine inside HTML attributes and code comments where they are not displayed.)
+- **Reduce information density.** Aim for slides that a student can read and absorb in 30–60 seconds. Trim verbose bullets, prefer one strong visual over a wall of text, and never repeat the same point across two cards on the same slide.
 
 ## Course Depth
 
@@ -69,7 +71,31 @@ Long-running sessions are expected and encouraged. It is normal for a session to
 
 ## Git commit instructions
 
-Before committing a new version of lecture slides, produce a PDF from the corresponding HTML file, so that it's easier to view lectures for students.
+Before committing a new version of lecture slides, produce a PDF from the corresponding HTML file, so that it's easier to view lectures for students. For each commit, make sure that all lecture PDFs are synced with the corresponding HTML files.
+
+## PDF Generation
+
+PDFs are generated with `lecture-slides/gen_pdf.py` (Python + Playwright + headless Chromium driving reveal.js's `?print-pdf` mode). Workflow:
+
+```bash
+# 1. start a local HTTP server on port 8765 (the script expects this exact port) from the repo root
+python3 -m http.server 8765 > /tmp/lecture-server.log 2>&1 &
+sleep 1.5
+
+# 2. regenerate one or all lectures (no args = all three)
+python3 lecture-slides/gen_pdf.py                    # all
+python3 lecture-slides/gen_pdf.py lecture-3-adv-ml   # one (filename without .html)
+
+# 3. stop the server when done
+lsof -ti:8765 | xargs -r kill -9
+```
+
+After generating, **always verify the PDF visually** — read a sample of pages with the `Read` tool (it can render PDFs as images via the `pages` parameter, e.g. `pages: "1-2"`). Spot-check the title slide, any slide that uses gradient text or complex grids, and the last slide. Common print-mode pitfalls:
+
+- **`-webkit-background-clip:text` (gradient-colored text) breaks under Chrome PDF print** — the gradient bleeds out as a solid block and only a few characters render. Always wrap such styles in an `@media print` override that swaps to a solid color (see lecture 3 for the pattern). Title-slide H1s and section-divider H2s are the usual offenders.
+- **Trailing blank page** — reveal.js's print CSS puts `page-break-after: always` on every `.pdf-page`, which adds an extra page after the last slide. `gen_pdf.py` handles this by counting `.pdf-page` elements and clamping `page_ranges`. If you write your own PDF generator, do the same.
+- **Box-shadow rendering oddly** — very subtle shadows (low alpha) can render as harsh lines in print. The `@media print` rule in lecture 3 disables `box-shadow` on cards; replicate that for new lectures.
+- **Stale PDF artifact** — if you see "card overlap" or other layout oddities, regenerate before debugging — most "issues" turn out to be old PDFs that pre-date layout edits.
 
 ## Compact Instructions
 
