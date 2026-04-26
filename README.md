@@ -6,7 +6,11 @@
 
 **HPC support**: Michael Tiemann.
 
-A master's-level course on the safety, security, and alignment of modern AI systems, with a focus on large language models and LLM agents. The course is technical and is primarily aimed at computer science students: lectures and mini-projects assume solid programming experience and familiarity with machine learning fundamentals. Students from non-technical backgrounds (e.g. humanities) with little prior coding experience are likely to find the material challenging.
+**Course**: A master's-level course on the safety, security, and alignment of modern AI systems, with a focus on large language models and LLM agents. The course is technical and is primarily aimed at computer science students: lectures and mini-projects assume solid programming experience and familiarity with machine learning fundamentals. Students from non-technical backgrounds (e.g. humanities) with little prior coding experience are likely to find the material challenging.
+
+**Compute**: [Modal](https://modal.com) is supporting the course by providing every student with $250 of cloud credits. More details below.
+
+<a href="https://modal.com"><img src="assets/modal-logo.svg" alt="Modal" height="48"></a>
 
 ---
 
@@ -87,23 +91,15 @@ open lecture-slides/lecture-1-intro.html   # macOS
 
 ---
 
-## Resources
 
-**Reading & further study**
-- [*International AI Safety Report 2026*](https://internationalaisafetyreport.org/publication/international-ai-safety-report-2026) (Yoshua Bengio et al.)
-- [*Introduction to AI Safety, Ethics, and Society*](https://arxiv.org/abs/2411.01042) (Dan Hendrycks)
-- [AlignmentForum](https://www.alignmentforum.org/) — community discussion of alignment research
-- [*AI 2027*](https://ai-2027.com/) — a speculative forecasting scenario; conceptually thought-provoking, though the concrete predictions should be read with a healthy dose of skepticism.
+# Compute
 
-**Related courses at other universities**
-- **Harvard** — [AI Safety Course](https://boazbk.github.io/mltheoryseminar/)
-- **Princeton** — [COS 598 *AI Safety*](https://sites.google.com/view/cos598aisafety/)
-- **UC Berkeley** — [CS 294/194-267 *Understanding Large Language Models: Foundations and Safety*](https://rdi.berkeley.edu/understanding_llms/s24)
-- **Stanford** — [CS 120 *Introduction to AI Safety*](https://web.stanford.edu/class/cs120/) and [CS 521 *Seminar on AI Safety*](https://cs521.stanford.edu/)
+## Option 1: Google Colab
 
----
+Free [Google Colab](https://colab.research.google.com/) is sufficient for projects that only rely on inference of small LLMs (up to 20B parameters). To run models on a GPU, don’t forget to go to Runtime → Change runtime type, then under "Hardware accelerator" select T4 GPU.
 
-## HPC Compute Resources (KISSKI)
+
+## Option 2: HPC Compute Resources (KISSKI)
 
 Students have access to GPU compute resources via the **KISSKI** cluster at GWDG (Göttingen) for mini-projects and the final project.
 
@@ -127,11 +123,35 @@ Students have access to GPU compute resources via the **KISSKI** cluster at GWDG
 
 **HPC support**: For questions about cluster access and usage, contact **Michael Tiemann** ([michael.tiemann@uni-tuebingen.de](mailto:michael.tiemann@uni-tuebingen.de)).
 
-### Chat AI & LLM API (KISSKI)
-
+**Chat AI & LLM API (KISSKI)**
 KISSKI also provides free access to LLMs via a chat interface and a programmatic API, available to all students and researchers at eligible universities (including Tübingen).
+- *Chat interface*: [chat-ai.academiccloud.de](https://chat-ai.academiccloud.de/) — browser-based access to GPT-3.5/4 and various open-source models; conversations are private and not stored after the session.
+- *API access*: OpenAI-compatible API at `https://chat-ai.academiccloud.de/v1`. Request an API key via the [KISSKI service booking form](https://services.kisski.de/services/?service=2-02-llm-service.json) (requires a free Academic ID).
+- *Default rate limits*: 10 req/min · 200 req/hour · 400 req/day · 3,000 req/month (increasable on request).
+- *Full documentation*: [docs.hpc.gwdg.de/services/chat-ai](https://docs.hpc.gwdg.de/services/chat-ai/index.html)
 
-- **Chat interface**: [chat-ai.academiccloud.de](https://chat-ai.academiccloud.de/) — browser-based access to GPT-3.5/4 and various open-source models; conversations are private and not stored after the session.
-- **API access**: OpenAI-compatible API at `https://chat-ai.academiccloud.de/v1`. Request an API key via the [KISSKI service booking form](https://services.kisski.de/services/?service=2-02-llm-service.json) (requires a free Academic ID).
-- **Default rate limits**: 10 req/min · 200 req/hour · 400 req/day · 3,000 req/month (increasable on request).
-- **Full documentation**: [docs.hpc.gwdg.de/services/chat-ai](https://docs.hpc.gwdg.de/services/chat-ai/index.html)
+---
+
+### Option 3: Modal Cloud Credits
+
+<a href="https://modal.com"><img src="assets/modal-logo.svg" alt="Modal" height="48"></a>
+
+[Modal](https://modal.com) is supporting the course by providing **every student with $250 of cloud credits**. Modal lets you run Python on cloud GPUs (training, inference, batch jobs) without managing infrastructure. It's a useful complement to the KISSKI cluster for the mini-projects and the final project. To access these credits, you should create your own Modal account and then fill out the form which will be distributed via Slack.
+
+---
+
+## Resources
+
+**Reading & further study**
+- [*International AI Safety Report 2026*](https://internationalaisafetyreport.org/publication/international-ai-safety-report-2026) (Yoshua Bengio et al.)
+- [*Introduction to AI Safety, Ethics, and Society*](https://arxiv.org/abs/2411.01042) (Dan Hendrycks)
+- [AlignmentForum](https://www.alignmentforum.org/) — community discussion of alignment research
+- [*AI 2027*](https://ai-2027.com/) — a speculative forecasting scenario; conceptually thought-provoking, though the concrete predictions should be read with a healthy dose of skepticism.
+
+**Related courses at other universities**
+- **Harvard** — [AI Safety Course](https://boazbk.github.io/mltheoryseminar/)
+- **Princeton** — [COS 598 *AI Safety*](https://sites.google.com/view/cos598aisafety/)
+- **UC Berkeley** — [CS 294/194-267 *Understanding Large Language Models: Foundations and Safety*](https://rdi.berkeley.edu/understanding_llms/s24)
+- **Stanford** — [CS 120 *Introduction to AI Safety*](https://web.stanford.edu/class/cs120/) and [CS 521 *Seminar on AI Safety*](https://cs521.stanford.edu/)
+
+---
