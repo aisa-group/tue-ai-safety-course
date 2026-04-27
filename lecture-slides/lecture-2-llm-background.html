@@ -76,8 +76,10 @@ input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;hei
 .card a,.card-dark a{color:#1565c0;text-decoration:underline;text-underline-offset:2px;text-decoration-thickness:1px}
 .tok{display:inline-block;padding:2px 6px;border-radius:4px;font-family:'JetBrains Mono',monospace;font-size:.85em;margin:1px;font-weight:500}
 .tok-0{background:#e8eeff;color:#0f3460}.tok-1{background:#fce4ec;color:#a51e37}.tok-2{background:#e8f5e9;color:#2e7d32}.tok-3{background:#fff3e0;color:#e65100}
-.arch-flash{position:absolute;top:90px;left:0;right:0;bottom:0;background:#fff;z-index:20;display:flex;align-items:center;justify-content:center;pointer-events:none}
-.arch-flash svg{max-width:240px;max-height:100%}
+@media print{
+  .reveal .slides section .fragment.current-visible{opacity:0 !important;visibility:hidden !important}
+  .reveal .slides section .fragment.current-visible:last-of-type{opacity:1 !important;visibility:visible !important}
+}
 </style>
 </head>
 <body>
@@ -1130,62 +1132,6 @@ input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;hei
 
 <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/dist/reveal.js"></script>
 <script>
-// Inject architecture-overview flash overlays on Part I content slides (before fragment pass).
-// Each overlay is a fragment fade-out that disappears on first click, revealing the slide content.
-(function injectArchFlash(){
-  function buildArch(highlight) {
-    var blocks = [
-      {k:'tokens', label:'Input tokens', fill:'#666', y:380, h:30},
-      {k:'embed',  label:'Embedding',    fill:'#0f3460', y:330, h:40},
-      {k:'attn',   label:'Attention',    fill:'#533483', y:255, h:45},
-      {k:'mlp',    label:'MLP',          fill:'#a51e37', y:195, h:45},
-      {k:'unembed',label:'Unembedding',  fill:'#2e7d32', y:110, h:40},
-      {k:'sampling',label:'Sampling \u2192 token', fill:'#666', y:55, h:30}
-    ];
-    var cx = 150;
-    var svg = '<svg viewBox="0 0 300 430" xmlns="http://www.w3.org/2000/svg">';
-    // Draw blocks first (opaque)
-    blocks.forEach(function(b){
-      var on = (b.k === highlight) || (highlight === 'all');
-      var opacity = on ? 1 : 0.25;
-      var stroke = on ? '#1a1a2e' : 'none';
-      var sw = on ? 3 : 0;
-      svg += '<rect x="' + (cx-65) + '" y="' + b.y + '" width="130" height="' + b.h + '" rx="6" fill="' + b.fill + '" opacity="' + opacity + '" stroke="' + stroke + '" stroke-width="' + sw + '"/>';
-      svg += '<text x="' + cx + '" y="' + (b.y + b.h/2 + 5) + '" text-anchor="middle" fill="#fff" font-size="13" font-weight="600" font-family="Arial,sans-serif" opacity="' + (on?1:0.5) + '">' + b.label + '</text>';
-    });
-    // Residual stream: a visible vertical line to the LEFT of the blocks, with read/write connectors for attn + mlp
-    var rx = cx - 95;
-    svg += '<line x1="' + rx + '" y1="90" x2="' + rx + '" y2="340" stroke="#1a1a2e" stroke-width="2" opacity="0.65"/>';
-    // Small arrow head at top of residual stream
-    svg += '<polygon points="' + (rx-3) + ',93 ' + (rx+3) + ',93 ' + rx + ',85" fill="#1a1a2e" opacity="0.65"/>';
-    // Rotated label alongside the residual line
-    svg += '<text x="' + (rx-10) + '" y="220" font-size="10" font-weight="600" font-family="Arial,sans-serif" fill="#1a1a2e" text-anchor="middle" transform="rotate(-90 ' + (rx-10) + ' 220)">residual stream</text>';
-    // Read+write connectors between residual line and attn + mlp blocks
-    [{y: 277}, {y: 217}].forEach(function(b){
-      svg += '<line x1="' + rx + '" y1="' + b.y + '" x2="' + (cx-65) + '" y2="' + b.y + '" stroke="#555" stroke-width="1" opacity="0.55"/>';
-    });
-    // Bracket pointing TOWARD the attn+mlp blocks (ticks go LEFT, bracket is to their right)
-    var bx = cx + 75;
-    svg += '<line x1="' + bx + '" y1="190" x2="' + bx + '" y2="300" stroke="#555" stroke-width="1.5"/>';
-    svg += '<line x1="' + bx + '" y1="190" x2="' + (bx-7) + '" y2="190" stroke="#555" stroke-width="1.5"/>';
-    svg += '<line x1="' + bx + '" y1="300" x2="' + (bx-7) + '" y2="300" stroke="#555" stroke-width="1.5"/>';
-    svg += '<text x="' + (bx+7) + '" y="250" font-size="12" font-weight="600" font-family="Arial,sans-serif" fill="#555">\u00D7 N</text>';
-    svg += '</svg>';
-    return svg;
-  }
-  document.querySelectorAll('section[data-flash]').forEach(function(sec){
-    var hl = sec.getAttribute('data-flash');
-    var overlay = document.createElement('div');
-    overlay.className = 'arch-flash fragment fade-out';
-    overlay.setAttribute('data-fragment-index', '0');
-    overlay.innerHTML = buildArch(hl);
-    // Do NOT override section's position — reveal.js relies on its absolute positioning
-    var h2 = sec.querySelector(':scope > h2');
-    if (h2 && h2.nextSibling) sec.insertBefore(overlay, h2.nextSibling);
-    else sec.appendChild(overlay);
-  });
-})();
-
 // Auto-fragment: reveal each top-level chunk of a content slide on click.
 (function autoFragment(){
   document.querySelectorAll('.reveal .slides > section').forEach(function(sec){
