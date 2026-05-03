@@ -62,13 +62,13 @@ Lecture recordings can be found [here](https://drive.google.com/drive/folders/1P
 | 1 | 13.04  | Maksym    | [**Course overview.**](lecture-slides/lecture-1-intro.html) Recent progress in LLMs and agents; AI risks; alignment, HHH, Constitutional AI |
 | 2 | 20.04  | Jonas     | [**LLM background.**](lecture-slides/lecture-2-llm-background.html) Transformers, pre-training, post-training, using models. |
 | 3 | 27.04  | Maksym    | [**Lessons from adversarial ML.**](lecture-slides/lecture-3-adv-ml.html) Jailbreaks for chatbots and agents (prefilling, GCG, PAIR, Crescendo, decomposition); backdoors |
-| 4 | 04.05  | Maksym    | **Open-weight safety.** Model stealing & distillation attacks, fine-tuning attacks, emergent misalignment &nbsp;*— Mini-project 1 due* |
+| 4 | 04.05  | Maksym    | **Open-weight safety.** Model stealing & distillation attacks, fine-tuning attacks, emergent misalignment &nbsp;*— Mini-project 1 due this week* |
 | 5 | 11.05  | Jonas     | **Transparency.** Detection of LLM-generated content and watermarking                      |
-| 6 | 18.05  | Jonas     | **Privacy.** Memorization and copyright in LLMs &nbsp;*— Mini-project 2 due*               |
-| 7 | 01.06  | Jonas / Maksym / Sahar | **Alignment tools.** Pre-training filtering, RLHF, DPO, Constitutional AI, Model Spec with rubric RL, steering vectors, external guardrails, LLMs as judges |
-| 8 | 08.06  | Sahar     | **LLM agents.** Reasoning and planning, deep research, coding and browser/computer-use agents, MCP, agent skills &nbsp;*— Mini-project 3 due* |
+| 6 | 18.05  | Jonas     | **Privacy.** Memorization and copyright in LLMs &nbsp;*— Mini-project 2 due this week*               |
+| 7 | 01.06  | Sahar     | **Alignment tools.** Pre-training filtering, RLHF, DPO, Constitutional AI, Model Spec with rubric RL, steering vectors, external guardrails, LLMs as judges |
+| 8 | 08.06  | Sahar     | **LLM agents.** Reasoning and planning, deep research, coding and browser/computer-use agents, MCP, agent skills &nbsp;*— Mini-project 3 due this week* |
 | 9 | 15.06  | Sahar     | **Agent security.** Prompt injections and contextual privacy                               |
-| 10 | 22.06 | Sahar     | **Scheming & deception.** Sandbagging and evaluation awareness &nbsp;*— Mini-project 4 due* |
+| 10 | 22.06 | Sahar     | **Scheming & deception.** Sandbagging and evaluation awareness &nbsp;*— Mini-project 4 due this week* |
 | 11 | 29.06 | Sahar     | **Multi-agent safety.** Information propagation, collusion, steganography                  |
 | 12 | 06.07 | Maksym    | **Scalable oversight.** AI control and AI R&D                                              |
 | 13 | 13.07 | Jonas     | **Forecasting AI progress.** Scaling laws, the METR time-horizon plot, AI 2027             |
