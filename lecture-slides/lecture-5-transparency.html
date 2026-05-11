@@ -1,0 +1,2188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Transparency: Detection &amp; Watermarking &mdash; AI Safety Course</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/dist/reveal.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/dist/theme/white.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+<script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']],displayMath:[['$$','$$'],['\\[','\\]']]},svg:{fontCache:'global'}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" async></script>
+<style>
+:root{--red:#a51e37;--dark:#1a1a2e;--blue:#1a1a2e;--mid:#555;--accent:#a51e37;--light:#fafafa;--gray:#888;--green:#2e7d32;--green-light:#c8e6c9;--red-light:#ffcdd2}
+.reveal{font-family:'Inter',system-ui,sans-serif;font-size:28px;color:#2d3436}
+.reveal h1,.reveal h2,.reveal h3,.reveal h4{font-family:'Inter',sans-serif;font-weight:700;letter-spacing:-.02em;text-transform:none}
+.reveal h1{font-size:2.2em}.reveal h2{font-size:1.5em;color:var(--dark)}.reveal h3{font-size:1.1em;color:var(--mid)}
+.reveal .slides section{text-align:left;padding:20px 40px;overflow:hidden;box-sizing:border-box}
+.reveal .slides section.title-slide{text-align:center !important}
+.reveal .slides section.title-slide h1{color:var(--dark);font-size:2.2em;margin-bottom:.2em}
+.reveal .slides section.title-slide .subtitle{font-size:1.15em;color:var(--gray);font-weight:300}
+.reveal .slides section.title-slide .course-info{margin-top:1.5em;font-size:.8em;color:var(--gray);line-height:1.8}
+.reveal .slides section.section-slide{text-align:center !important}
+.reveal .slides section.section-slide h2{font-size:2em;color:#fff;text-align:center}
+.reveal .section-slide .section-number{font-size:5em;font-weight:700;opacity:.08;position:absolute;top:10%;right:10%}
+.reveal ul{margin-left:0;padding-left:0}.reveal ul li{margin-bottom:.18em;line-height:1.32;list-style:none;position:relative;padding-left:1em}
+.reveal ul li::before{content:'';position:absolute;left:0;top:.55em;width:4px;height:4px;border-radius:50%;background:#bbb}
+.reveal ul li li::before{background:#ddd;width:4px;height:4px;border-radius:50%}
+.card-grid{display:grid;gap:16px;margin-top:16px}
+.card-grid-2{grid-template-columns:1fr 1fr}.card-grid-3{grid-template-columns:1fr 1fr 1fr;gap:12px}.card-grid-4{grid-template-columns:repeat(4,1fr)}
+.card{background:#fff;border-radius:8px;padding:18px;border:1px solid #e5e5e5}
+.card h4{margin:0 0 8px;font-size:.82em;color:var(--dark)}.card p,.card ul{font-size:.7em;color:#555;margin:0}.card ul li{margin-bottom:.2em}
+.card-grid-4{gap:10px}.card-grid-4 .card{padding:12px}.card-grid-4 .card h4{font-size:.75em}.card-grid-4 .card p{font-size:.6em}
+.card-dark{background:#f5f5f5;color:#2d3436;border:1px solid #e5e5e5}.card-dark h4{color:var(--dark)}.card-dark p,.card-dark ul{color:#555}
+.cite{font-size:.28em;color:#aaa;font-style:italic;word-wrap:break-word;overflow-wrap:break-word;line-height:1.5}
+.cite a{color:#1565c0;text-decoration:underline;text-underline-offset:2px;text-decoration-thickness:1px;border-bottom:none;display:inline-block;margin-bottom:.35em}
+.cite a:hover{color:var(--dark);text-decoration-color:var(--dark)}
+.key-insight{background:#fafafa;border-left:3px solid var(--dark);padding:12px 16px;border-radius:0 6px 6px 0;margin:12px 0;font-size:.8em}
+.key-insight strong{color:var(--dark)}
+.definition{background:#fafafa;border-left:3px solid #999;padding:12px 16px;border-radius:0 6px 6px 0;margin:12px 0;font-size:.8em}
+.math-block{background:#f8f9fa;border-radius:8px;padding:16px;margin:12px 0;text-align:center;font-size:.95em;overflow-x:auto}
+.chart-container{position:relative;margin:12px auto;background:#fff;border-radius:8px;padding:12px}
+.demo-container{background:#f8f9fa;border-radius:12px;padding:16px;margin:12px 0;text-align:center;overflow:hidden}
+.columns{display:flex;gap:24px;align-items:flex-start;max-width:100%;overflow:hidden}.col{flex:1;min-width:0}
+.col-50{flex:0 0 47%;min-width:0}.col-55{flex:0 0 52%;min-width:0}.col-45{flex:0 0 44%;min-width:0}.col-60{flex:0 0 57%;min-width:0}.col-40{flex:0 0 40%;min-width:0}.col-65{flex:0 0 61%;min-width:0}.col-35{flex:0 0 35%;min-width:0}.col-70{flex:0 0 67%;min-width:0}.col-30{flex:0 0 30%;min-width:0}
+.comp-table{width:100%;border-collapse:separate;border-spacing:0;font-size:.68em;margin:12px 0;border-radius:8px;overflow:hidden;table-layout:fixed}
+.comp-table th{background:var(--dark);color:#fff;padding:10px 14px;font-weight:600;text-align:left}
+.comp-table td{padding:8px 14px;border-bottom:1px solid #eee;background:#fff;vertical-align:top}
+.comp-table tr:last-child td{border-bottom:none}.comp-table tr:nth-child(even) td{background:#f8f9fa}
+.attack-chain{display:flex;align-items:center;justify-content:center;gap:6px;margin:16px 0;font-size:.75em;flex-wrap:wrap}
+.attack-chain .step{background:#fff;border:1.5px solid #ddd;border-radius:8px;padding:10px 14px;text-align:center;font-weight:500}
+.attack-chain .arrow{font-size:1.4em;color:#bbb}.attack-chain .step.adversarial{background:var(--dark);color:#fff;border-color:var(--dark)}
+.quote-box{font-size:.8em;font-style:italic;color:#555;border-left:3px solid #ddd;padding:12px 18px;margin:14px 0;background:#fafafa;border-radius:0 6px 6px 0}
+.quote-box .author{font-style:normal;font-weight:600;color:var(--dark);margin-top:6px;font-size:.85em}
+input[type="range"]{-webkit-appearance:none;width:100%;height:6px;border-radius:3px;background:#ddd;outline:none;margin:8px 0}
+input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;border-radius:50%;background:var(--dark);cursor:pointer}
+input[type="text"],textarea{font-family:'JetBrains Mono',monospace;font-size:.7em;padding:8px 10px;border:1px solid #ddd;border-radius:6px;width:100%;box-sizing:border-box;color:#222;background:#fff}
+.btn{padding:7px 16px;border:none;border-radius:8px;background:var(--mid);color:#fff;font-family:'Inter',sans-serif;font-size:.65em;cursor:pointer;margin:4px}.btn:hover{background:var(--dark)}
+.btn-accent{background:var(--accent)}.btn-accent:hover{background:var(--red)}
+.reveal p{margin:.5em 0;line-height:1.4}.reveal section img{border:none;box-shadow:none}
+.reveal .slide-number{font-family:'Inter',sans-serif;font-size:18px;color:var(--gray);background:transparent;right:24px;bottom:16px}
+.reveal .slide-number a,.reveal .slide-number-a{color:var(--gray) !important;text-decoration:none !important;pointer-events:none}
+.small{font-size:.72em}.smaller{font-size:.66em}.tiny{font-size:.58em}
+.metric-row{display:flex;gap:16px;justify-content:center;margin:16px 0;flex-wrap:wrap}
+.metric{text-align:center;padding:14px 20px;background:#fff;border-radius:8px;border:1px solid #e5e5e5;min-width:120px}
+.metric .value{font-size:1.8em;font-weight:700;color:var(--dark)}.metric .label{font-size:.65em;color:#888;margin-top:4px}
+.hint{font-size:.55em;color:#999;font-style:italic;margin-top:6px}
+.code-block{background:#1a1a2e;color:#e8e8e8;border-radius:10px;padding:14px 18px;font-family:'JetBrains Mono',monospace;font-size:.58em;line-height:1.5;overflow-x:auto;text-align:left;margin:10px 0}
+.code-block .kw{color:#c792ea}.code-block .str{color:#c3e88d}.code-block .cmt{color:#546e7a}.code-block .fn{color:#82aaff}.code-block .hl{color:#f78c6c}.code-block .accent{color:#e94560;font-weight:600}
+.warning-box{background:#fafafa;border-left:3px solid #daa520;padding:10px 16px;border-radius:0 6px 6px 0;margin:12px 0;font-size:.78em}
+.warning-box strong{color:#8b6914}
+.reveal a{color:#1565c0;text-decoration:underline;text-underline-offset:2px;text-decoration-thickness:1px}
+.reveal a:hover{color:var(--dark);text-decoration-color:var(--dark)}
+.card a,.card-dark a{color:#1565c0;text-decoration:underline;text-underline-offset:2px;text-decoration-thickness:1px}
+.tok{display:inline-block;padding:2px 4px;border-radius:3px;font-family:'JetBrains Mono',monospace;font-size:.85em;margin:1px;font-weight:500}
+.tok-green{background:var(--green-light);color:#1b5e20}.tok-red{background:var(--red-light);color:#a51e37}
+.proscons{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:8px}
+.pros,.cons{padding:12px 14px;border-radius:8px;font-size:.74em}
+.pros{background:#e8f5e9;border-left:3px solid var(--green)}
+.cons{background:#fdecea;border-left:3px solid var(--accent)}
+.pros h4,.cons h4{margin:0 0 6px;font-size:.95em}
+.pros h4{color:#1b5e20}.cons h4{color:var(--accent)}
+.pros ul li::before{background:var(--green)}.cons ul li::before{background:var(--accent)}
+.policy-quote{background:#fff;border:1px solid #e5e5e5;border-left:4px solid var(--dark);padding:14px 18px;border-radius:0 6px 6px 0;margin:10px 0;font-size:.72em;font-family:'Inter',serif;color:#333;line-height:1.55}
+.policy-quote .source{font-size:.85em;color:var(--gray);margin-top:8px;font-style:italic}
+@media print{
+  .reveal .slides section .fragment.current-visible{opacity:0 !important;visibility:hidden !important}
+  .reveal .slides section .fragment.current-visible:last-of-type{opacity:1 !important;visibility:visible !important}
+}
+</style>
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+
+<!-- ================================================ -->
+<!-- SLIDE 1: Title -->
+<!-- ================================================ -->
+<section class="title-slide">
+  <h1>Transparency</h1>
+  <div class="subtitle">Detection of LLM-Generated Content &amp; Watermarking</div>
+  <div class="course-info">
+    <strong>AI Safety</strong>: Master&rsquo;s Course, Summer Semester 2026<br>
+    University of T&uuml;bingen &middot; 11 May 2026<br><br>
+    <span style="font-size:.9em;">Maksym Andriushchenko &middot; <u>Jonas Geiping</u> &middot; Sahar Abdelnabi</span>
+  </div>
+</section>
+
+<!-- ================================================ -->
+<!-- SLIDE 2: Roadmap -->
+<!-- ================================================ -->
+<section class="no-fragment">
+  <h2>Topics for Today</h2>
+  <div class="card-grid card-grid-3" style="margin-top:14px;">
+    <div class="card"><h4>I &middot; Why Transparency?</h4><p>Three-pillar framing (NIST), the case for detection.</p></div>
+    <div class="card"><h4>II &middot; Post-hoc Detection</h4><p>Word cues, perplexity measures, Binoculars, modern detectors.</p></div>
+    <div class="card"><h4>III &middot; Watermarking</h4><p>KGW green/red list, detection statistics, hash schemes, undetectable watermarks.</p></div>
+    <div class="card"><h4>IV &middot; Attacks</h4><p>Paraphrase, cipher, oracle, copy-paste, watermark stealing, distillation.</p></div>
+    <div class="card"><h4>V &middot; The Future</h4><p>The Volume argument, Unicode, reverse watermarks & cryptographic human attestation.</p></div>
+  </div>
+  <p class="cite" style="margin-top:14px;">Mini-project 2, Part 2 implements the KGW green-list watermark covered in Section III. Due 20 May.</p>
+</section>
+
+<!-- ================================================ -->
+<!-- PART I DIVIDER -->
+<!-- ================================================ -->
+<section class="section-slide" data-background="#1a1a2e">
+  <div style="color:rgba(255,255,255,0.25);font-size:1.2em;font-weight:500;letter-spacing:.3em;text-align:center;margin-top:1.5em;">PART&nbsp;I</div>
+  <h2 style="margin-top:0.5em;">Why Transparency?</h2>
+  <p style="color:rgba(255,255,255,0.6);font-size:.9em;text-align:center;">Definitions, stakes, and the policy landscape</p>
+</section>
+
+<!-- ================================================ -->
+<!-- SLIDE 3: Three pillars of AI transparency -->
+<!-- no-fragment so auto-fragment script doesn't insert extra clicks for the intro <p>. -->
+<!-- ================================================ -->
+<section class="no-fragment">
+  <h2>What is AI Transparency</h2>
+  <p class="small" style="margin-top:0;"> Facets of Transparency </p>
+  <div class="card-grid card-grid-3" style="margin-top:14px;">
+    <div class="card fragment fade-in" data-fragment-index="0">
+      <h4>Model Transparency</h4>
+      <p>Disclosure <em>about the system</em>: weights, training data, methodology, evaluations, governance.</p>
+    </div>
+    <div class="card fragment fade-in" data-fragment-index="1">
+      <h4>Provenance Data Tracking</h4>
+      <p>A chain-of-custody attached to an <em>artifact</em>: signed metadata, capture-device signatures, edit history.</p>
+    </div>
+    <div class="card fragment fade-in" data-fragment-index="2" style="border-color:var(--accent);background:#fff;">
+      <h4 style="color:var(--accent);">Synthetic content detection.</h4>
+      <p>An <em>externally verifiable</em> attribution as synthetic</p>
+    </div>
+  </div>
+  <p class="cite">
+    <a href="https://nvlpubs.nist.gov/nistpubs/ai/NIST.AI.100-4.pdf">NIST AI 100-4 (2024)</a>
+  </p>
+</section>
+
+<!-- ================================================ -->
+<!-- SLIDE 4: Why Detect  -->
+<!-- ================================================ -->
+<section class="title-slide no-fragment">
+  <h1 style="font-size:1.8em;color:var(--dark);">Why Detect AI-Generated Text?</h1>
+</section>
+
+<!-- ================================================ -->
+<!-- SLIDE 4b: Three reasons (Authentication / Observation / Separation) -->
+<!-- ================================================ -->
+<section class="no-fragment">
+  <h2>Why Detect AI-Generated Text?</h2>
+  <div class="card-grid card-grid-3" style="margin-top:14px;">
+    <div class="card">
+      <h4>Authentication</h4>
+      <p style="font-size:.7em;">Authenticate non-human communication. Attribute text to machine writers. Rate the amount of human effort in a datum.</p>
+    </div>
+    <div class="card">
+      <h4>Observation</h4>
+      <p style="font-size:.7em;">Observe usage patterns of AI at scale. Measure where, how fast, and in which domains LLM text is displacing human text.</p>
+    </div>
+    <div class="card">
+      <h4>Separation</h4>
+      <p style="font-size:.7em;">Separate human-written training data from machine-written for future training runs.</p>
+    </div>
+  </div>
+  <p class="cite">
+    <a href="https://arxiv.org/abs/2501.16946">Kulveit et al., &ldquo;Gradual Disempowerment,&rdquo; 2025</a>
+    &middot; <a href="https://arxiv.org/abs/2406.07016">Liang et al., 2024</a>
+  </p>
+</section>
+
+<!-- ================================================ -->
+<!-- SLIDE 5: Policy landscape -->
+<!-- ================================================ -->
+<section class="no-fragment">
+  <h2>The Policy Landscape</h2>
+  <div class="columns">
+    <div class="col-55 fragment fade-in" data-fragment-index="0">
+      <h3 style="font-size:.85em;">EU AI Act, Article 50(2)</h3>
+      <div class="policy-quote">
+        Providers of AI systems generating synthetic audio, image, video <strong>or text</strong> content shall ensure that the outputs are <strong>marked in a machine-readable format and detectable as artificially generated or manipulated</strong>. Providers shall ensure their technical solutions are effective, interoperable, robust and reliable, as far as technically feasible.
+        <div class="source">Regulation (EU) 2024/1689 &middot; in force 1 Aug 2024 &middot; Art. 50 enforceable <strong>2 Aug 2026</strong> &middot; up to <strong>&euro;15M or 3% of worldwide turnover</strong> per Art. 99(4)</div>
+      </div>
+      <p class="small"><strong>EU Code of Practice on AI-Generated Content Transparency.</strong> First draft 17 Dec 2025; final June 2026. Suggests combination of metadata + invisible watermarking + visible disclosure.</p>
+    </div>
+    <div class="col-45">
+      <h3 class="fragment fade-in" data-fragment-index="1" style="font-size:.85em;">United States, California, China</h3>
+      <table class="comp-table" style="font-size:.58em;">
+        <tr><th>Jurisdiction</th><th>Status</th></tr>
+        <tr class="fragment fade-in" data-fragment-index="2"><td><strong>US Federal</strong></td><td>EO 14110 (Biden, Oct 2023) revoked by Trump on <strong>20 Jan 2025</strong>; replaced by EO 14179 (deregulatory). NIST AI 100-4 remains as voluntary guidance.</td></tr>
+        <tr class="fragment fade-in" data-fragment-index="3"><td><strong>California SB 942</strong></td><td>Covers <strong>image, video, audio only</strong> (text excluded). AB 853 (signed Oct 2025) <strong>delayed effective date to 2 Aug 2026</strong></td></tr>
+        <tr class="fragment fade-in" data-fragment-index="4"><td><strong>China </strong></td><td>&ldquo;Measures for Labeling of AI-Generated Synthetic Content&rdquo; (14 Mar 2025, effective <strong>1 Sep 2025</strong>) + national standard <strong>GB 45438-2025</strong></td></tr>
+      </table>
+    </div>
+  </div>
+  <p class="cite">
+    <a href="https://artificialintelligenceact.eu/article/50/">EU AI Act Art. 50</a>
+    &middot; <a href="https://digital-strategy.ec.europa.eu/en/news/commission-publishes-first-draft-code-practice-marking-and-labelling-ai-generated-content">EU Code of Practice draft (Dec 2025)</a>
+    &middot; <a href="https://leginfo.legislature.ca.gov/faces/billNavClient.xhtml?bill_id=202320240SB942">CA SB 942</a>
+    &middot; <a href="https://www.chinalawtranslate.com/en/ai-labeling/">China CAC labeling rules</a>
+  </p>
+</section>
+
+<!-- ================================================ -->
+<!-- PART II DIVIDER -->
+<!-- ================================================ -->
+<section class="section-slide" data-background="#1a1a2e">
+  <div style="color:rgba(255,255,255,0.25);font-size:1.2em;font-weight:500;letter-spacing:.3em;text-align:center;margin-top:1.5em;">PART&nbsp;II</div>
+  <h2 style="margin-top:0.5em;">Post-hoc Detection</h2>
+  <p style="color:rgba(255,255,255,0.6);font-size:.9em;text-align:center;">Word cues, commercial detectors, Binoculars, Pangram</p>
+</section>
+
+<!-- ================================================ -->
+<!-- SLIDE 8: Three problems disambig — bottom box removed per Round 2 -->
+<!-- ================================================ -->
+<section class="no-fragment">
+  <h2>Disambiguation</h2>
+  <div class="card-grid card-grid-3" style="margin-top:12px;">
+    <div class="card">
+      <h4>LLM-text detection</h4>
+      <p style="font-size:.66em;"><em>Question:</em> did a language model write this text?</p>
+      <p style="font-size:.66em;margin-top:6px;"><em>Signals:</em> token statistics, log-prob curvature, stylistic regularities, embedded watermark.</p>
+    </div>
+    <div class="card">
+      <h4>Misinformation detection</h4>
+      <p style="font-size:.66em;"><em>Question:</em> is this claim true or false?</p>
+      <p style="font-size:.66em;margin-top:6px;"><em>Signals:</em> source consistency, world knowledge, fact-check databases.</p>
+    </div>
+    <div class="card">
+      <h4>Deepfake detection</h4>
+      <p style="font-size:.66em;"><em>Question:</em> was this image, audio, or video synthesized or manipulated?</p>
+      <p style="font-size:.66em;margin-top:6px;"><em>Signals:</em> pixel artifacts, frequency-domain residues, inverse generation.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================ -->
+<!-- SLIDE 8: I hate it in LLM-land -->
+<!-- ================================================ -->
+<section class="no-fragment">
+  <h2>I can tell your text is machine-generated ...</h2>
+  <p class="small" style="margin-top:0;">In practice, most frontier AI is surprisingly visible in its speech patterns</p>
+  <h3 style="font-size:.85em;margin-top:18px;">Examples (May '26)</h3>
+  <ul class="small" style="max-width:780px;">
+    <li class="fragment fade-in" data-fragment-index="1">Em-dashes &mdash; especially in not THIS but THAT constructions</li>
+    <li class="fragment fade-in" data-fragment-index="2">Vocabulary shifts that overuse certain phrases</li>
+    <li class="fragment fade-in" data-fragment-index="3">Constructions like &lsquo;Judge [concept] by [term], not binary broken / not broken.&rsquo;, "Catchy" sentence fragments like 'Why it breaks:' </li>
+    <li class="fragment fade-in" data-fragment-index="4">Metanarration incorporating user feedback</li>
+    <li class="fragment fade-in" data-fragment-index="5">Text written to &lsquo;sound&rsquo; convincing, but without substance</li>
+  </ul>
+</section>
+
+<!-- ================================================ -->
+<!-- SLIDE 8: Word-frequency tells -->
+<!-- ================================================ -->
+<section class="no-fragment">
+  <h2>Word-Frequency Analysis</h2>
+  <div class="columns">
+    <div class="col-45 fragment fade-in" data-fragment-index="0">
+      <p class="small">Example: Frequency analysis of <strong>15M PubMed biomedical abstracts</strong> 2010&ndash;2024 finds marker words spiking after 2022:</p>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.65em;line-height:1.9;margin:10px 0;color:#444;">
+        <span class="tok tok-green">delves</span><span class="tok tok-green">intricate</span><span class="tok tok-green">tapestry</span><span class="tok tok-green">underscore</span><br>
+        <span class="tok tok-green">meticulous</span><span class="tok tok-green">commendable</span><span class="tok tok-green">showcase</span><br>
+        <span class="tok tok-green">realm</span><span class="tok tok-green">paramount</span><span class="tok tok-green">garnered</span><span class="tok tok-green">navigating</span>
+      </div>
+      <p class="small"> Liang et al. estimate that at least 13.5% of biomedical abstracts and up to 17.5% of CS papers carry LLM word-frequency signatures, compared to control words (&ldquo;ebola,&rdquo; &ldquo;pandemic&rdquo;).</p>
+      <p class="small" style="margin-top:8px;color:#888;font-style:italic;">&rarr; Mini-project 2, Part 2.1 experiments with vocabulary shifts in Qwen3-4B.</p>
+    </div>
+    <div class="col-55 fragment fade-in" data-fragment-index="1" style="text-align:center;">
+      <img src="lecture-5-images/liang-delve-frequency.png" alt="Liang et al. Figure 1: word-frequency timelines 2010-2024 for nine words across PubMed abstracts, showing sharp post-2022 spikes for delves, crucial, potential, significant, and gradual decline for these, important; control words pandemic and ebola show pre-2020 dynamics; convolutional shows ML-trend-only growth" style="width:100%;max-width:540px;border-radius:8px;border:1px solid #e5e5e5;">
+      <p class="hint" style="text-align:center;">Liang et al. <em>Nat. Hum. Behav.</em> 2025, Fig. 1: nine-word frequency panels, 2010&ndash;2024. Black line: pre-ChatGPT linear projection. Blue line: actual frequency.</p>
+    </div>
+  </div>
+  <p class="cite"><a href="https://www.nature.com/articles/s41562-025-02273-8">Liang et al., &ldquo;Quantifying large language model usage in scientific papers,&rdquo; <em>Nat. Hum. Behav.</em> 2025</a> &middot; <a href="https://arxiv.org/abs/2412.11385">Liang et al., &ldquo;Why Does ChatGPT &lsquo;Delve&rsquo; So Much?&rdquo; COLING 2025</a></p>
+</section>
+
+<!-- ================================================ -->
+<!-- SLIDE 11: Binoculars motivation — PPL baseline + capybara fail -->
+<!-- ================================================ -->
+<section class="no-fragment">
+  <h2>Detector Baselines</h2>
+  <div class="columns">
+    <div class="col-50">
+      <h3 style="font-size:.85em;">The PPL baseline</h3>
+      <p class="small">A language model assigns high probability to text it produces, implying that:</p>
+      <ul class="small">
+        <li class="fragment fade-in" data-fragment-index="1"><strong>Machine-written text</strong> from the same model (and related models) is <em>low</em> perplexity.</li>
+        <li class="fragment fade-in" data-fragment-index="2"><strong>Human text</strong> has <em>normal</em> perplexity.</li>
+      </ul>
+      <div class="math-block fragment fade-in" data-fragment-index="3" style="font-size:.68em;">
+        $\mathrm{PPL}_M(s) = \exp\bigl(-\tfrac{1}{T}\sum_t \log p_M(s_t \mid s_{&lt;t})\bigr)$
+      </div>
+      <h3 class="fragment fade-in" data-fragment-index="4" style="font-size:.85em;margin-top:6px;">Failure Modes:</h3>
+      <p class="small fragment fade-in" data-fragment-index="4">A <strong>prompt</strong> can produce a response that has high PPL <em>in the absence of the prompt</em>. Memorized text has low perplexity for all models.</p>
+    </div>
+    <div class="col-50">
+      <div class="quote-box fragment fade-in" data-fragment-index="5" style="font-size:.7em;margin:0;">
+        <strong>Prompt:</strong> &ldquo;Can you write a few sentences about a capybara that is an astrophysicist?&rdquo;<br><br>
+        <strong>GPT-4:</strong> &ldquo;Dr. Capy Cosmos, a capybara unlike any other, astounded the scientific community with his groundbreaking research in astrophysics&hellip;&rdquo;
+      </div>
+      <div class="quote-box fragment fade-in" data-fragment-index="6" style="font-size:.7em;margin:10px 0 0 0;">
+        <strong>GPT-4:</strong> &ldquo;Mr. and Mrs. Dursley of number four, Privet Drive, were proud to say that they were perfectly normal, thank you very much.&hellip;&rdquo;
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================ -->
+<!-- SLIDE 12: Binoculars  -->
+<!-- ================================================ -->
+<section class="no-fragment">
+  <h2>Detecting Machine Text Using Binoculars</h2>
+  <div class="columns">
+    <div class="col-50 fragment fade-in" data-fragment-index="0">
+      <h3 style="font-size:.85em;">The PPL problem can be avoided by looking at relative perplexity </h3>
+      <p class="small">From two closely-related models: <strong>$M_1$ = observer</strong> (Falcon-7B-Instruct), <strong>$M_2$ = performer</strong> (Falcon-7B).</p>
+      <div class="math-block" style="font-size:.62em;">
+        $\log\mathrm{X\text{-}PPL}(s) = -\tfrac{1}{T}\sum_t \langle M_1(s)_t,\,\log M_2(s)_t\rangle$
+      </div>
+      <p class="small">Per-token cross-entropy of $M_2$&rsquo;s log-probs <em>under $M_1$&rsquo;s next-token distribution</em>.</p>
+      <div class="math-block" style="font-size:.82em;">
+        $B(s) = \dfrac{\log\mathrm{PPL}_{M_1}(s)}{\log\mathrm{X\text{-}PPL}(s)}$
+      </div>
+      <p class="small"><strong>Single threshold $B(s) &lt; 0.901$.</strong> Human text is above, model-written text has anomalously low scores.</p>
+    </div>
+    <div class="col-50 fragment fade-in" data-fragment-index="1">
+      <img src="lecture-5-images/binoculars-ppl-xppl-scatter.png" alt="ROC curves on CNN news against Llama-2-13B-generated text: Binocular Score AUC 0.9933 dominates both PPL alone (AUC 0.6618) and Cross-PPL alone (AUC 0.7141). Neither component is sufficient on its own; the ratio is what works." style="width:100%;max-width:340px;display:block;margin:0 auto;border-radius:8px;border:1px solid #e5e5e5;">
+      <p class="hint" style="text-align:center;font-size:.6em;">Neither PPL (0.66) nor cross-PPL (0.71) alone separates human from machine only their ratio (0.99).</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================ -->
+<!-- SLIDE 13: Pangram  -->
+<!-- ================================================ -->
+<section class="no-fragment">
+  <h2>Modern Industrial Detectors</h2>
+  <p class="small" style="margin-top:0;">Strong detectors are constructed as trained classifiers, but training data design is important:</p>
+  <div class="columns">
+    <div class="col-55 fragment fade-in" data-fragment-index="0">
+      <h3 style="font-size:.85em;">Synthetic mirrors with iterated hard-negative mining</h3>
+      <ol class="small">
+        <li><strong>Mirror prompts.</strong> For each human document, builds a prompt that matches topic + length + register so the AI counterpart is close (e.g. &ldquo;Write a $r$-star review for $b$ around $L$ words long&rdquo;).</li>
+        <li><strong>Iterate.</strong> Train $M_0$. Run on the human pool. Sample false positives. Generate matching mirrors. Retrain $M_{i+1}$. Repeat until plateau.</li>
+        <li><strong>Scale data.</strong> Incorporate all known &lsquo;humanizers&rsquo; and mitigations.</li>
+      </ol>
+    </div>
+    <div class="col-45 fragment fade-in" data-fragment-index="1" style="text-align:center;">
+      <img src="lecture-5-images/pangram-mirrors.png" alt="Pangram training pipeline: human pool feeds through classifier, misclassified human samples (false positives) become hard negatives; an LLM generates synthetic mirror counterparts of those false positives; the augmented dataset retrains the classifier" style="width:100%;max-width:400px;border-radius:2px;border:1px solid #e5e5e5;">
+      <p class="hint" style="text-align:center;font-size:.6em;">Iterated hard-negative loop.</p>
+    </div>
+  </div>
+  <p class="cite"><a href="https://arxiv.org/abs/2402.14873">Emi &amp; Spero, Pangram tech report, 2024</a> &middot; <a href="https://arxiv.org/abs/2501.03437">Masrour, Emi &amp; Spero, DAMAGE, COLING 2025</a> &middot; <a href="https://www.pangram.com/blog/pangram-predicts-21-of-iclr-reviews-are-ai-generated">Pangram ICLR 2026 study</a></p>
+</section>
+
+<!-- ================================================ -->
+<!-- PART III DIVIDER -->
+<!-- ================================================ -->
+<section class="section-slide" data-background="#1a1a2e">
+  <div style="color:rgba(255,255,255,0.25);font-size:1.2em;font-weight:500;letter-spacing:.3em;text-align:center;margin-top:1.5em;">PART&nbsp;III</div>
+  <h2 style="margin-top:0.5em;">Watermarking Text</h2>
+  <p style="color:rgba(255,255,255,0.6);font-size:.9em;text-align:center;">From green/red lists to cryptographic undetectability</p>
+</section>
+
+<!-- ================================================ -->
+<!-- SLIDE 14b: What is watermarking? (standout) -->
+<!-- ================================================ -->
+<section class="title-slide no-fragment">
+  <h1 style="font-size:1.8em;color:var(--dark);">What is watermarking?</h1>
+  <p style="font-size:.95em;color:#555;text-align:center;margin-top:.6em;max-width:820px;margin-left:auto;margin-right:auto;">Embedding hidden signals into (machine-)generated content.</p>
+</section>
+
+<!-- ================================================ -->
+<!-- SLIDE 14c: Why watermark? (standout) -->
+<!-- ================================================ -->
+<section class="title-slide no-fragment">
+  <h1 style="font-size:1.8em;color:var(--dark);">Why watermark?</h1>
+  <p style="font-size:.95em;color:#555;text-align:center;margin-top:.6em;max-width:820px;margin-left:auto;margin-right:auto;">Watermarking makes the detection of generated content tractable.</p>
+</section>
+
+<!-- ================================================ -->
+<!-- SLIDE 15: Watermark def -->
+<!-- ================================================ -->
+<section class="no-fragment">
+  <h2>What do we want out of watermarks?</h2>
+  <div class="columns">
+    <div class="col-50">
+      <h3 class="fragment fade-in" data-fragment-index="1" style="font-size:.85em;margin-top:14px;">Desiderata</h3>
+      <ul class="small" style="margin-top:6px;">
+        <li class="fragment fade-in" data-fragment-index="2">Strong signal in any contiguous portion of generated text.</li>
+        <li class="fragment fade-in" data-fragment-index="3">Detection is cheap and does not require model access.</li>
+        <li class="fragment fade-in" data-fragment-index="4">Doesn&rsquo;t noticeably affect language quality.</li>
+        <li class="fragment fade-in" data-fragment-index="5">Hard to remove without significantly modifying the text.</li>
+        <li class="fragment fade-in" data-fragment-index="6">Detection produces a calibrated statistical confidence (a p-value).</li>
+      </ul>
+    </div>
+    <div class="col-50 fragment fade-in" data-fragment-index="0" style="text-align:center;">
+      <img src="lecture-1-images/kirchenbauer-watermark.png" alt="KGW Figure 1: same prompt, human and watermarked completions side by side, green and red token highlighting" style="width:100%;max-width:480px;border-radius:8px;border:1px solid #e5e5e5;">
+      <p class="hint" style="text-align:center;font-size:.6em;">Same prompt, two completions. Human: 56 tokens, z=0.31, p=0.38. Watermarked: 36 tokens, z=7.4, <strong>p = 6 &times; 10<sup>&minus;14</sup></strong>.</p>
+    </div>
+  </div>
+  <p class="cite"><a href="https://arxiv.org/abs/2301.10226">Kirchenbauer, Geiping, Wen, Katz, Miers &amp; Goldstein, &ldquo;A Watermark for Large Language Models,&rdquo; ICML 2023</a></p>
+</section>
+
+<!-- ================================================ -->
+<!-- SLIDE 16: Next-token prediction baseline (no watermark) -->
+<!-- ================================================ -->
+<section class="no-fragment">
+  <h2>Reminder: Normal Next-Token Prediction</h2>
+  <div class="columns" style="align-items:center;">
+    <div class="col-55" style="text-align:center;">
+      <svg viewBox="0 0 640 380" style="width:100%;max-width:620px;font-family:'Inter',sans-serif;">
+        <g font-size="14" fill="#1a1a2e">
+          <rect x="20"  y="22" width="62" height="30" rx="6" fill="#fff" stroke="#bbb"/><text x="51"  y="42" text-anchor="middle">Matt</text>
+          <rect x="90"  y="22" width="46" height="30" rx="6" fill="#fff" stroke="#bbb"/><text x="113" y="42" text-anchor="middle">sat</text>
+          <rect x="144" y="22" width="40" height="30" rx="6" fill="#fff" stroke="#bbb"/><text x="164" y="42" text-anchor="middle">on</text>
+          <rect x="192" y="22" width="44" height="30" rx="6" fill="#fff" stroke="#bbb"/><text x="214" y="42" text-anchor="middle">the</text>
+          <line x1="246" y1="18" x2="246" y2="56" stroke="#1a1a2e" stroke-width="1.5"/>
+          <rect x="256" y="22" width="68" height="30" rx="6" fill="#fafafa" stroke="#ccc" stroke-dasharray="3,3"/>
+          <text x="290" y="42" text-anchor="middle" fill="#999">couch</text>
+        </g>
+        <g transform="translate(40,110)">
+          <rect x="0" y="20" width="150" height="120" rx="14" fill="#f5f5f5" stroke="#888"/>
+          <polygon points="0,20 75,0 150,20" fill="#e8e8e8" stroke="#888"/>
+          <polygon points="150,60 200,40 200,120 150,100" fill="#e8e8e8" stroke="#888"/>
+          <text x="75" y="88" text-anchor="middle" font-size="13" fill="#1a1a2e" font-style="italic">LM</text>
+          <text x="75" y="108" text-anchor="middle" font-size="11" fill="#555">p(&middot; | context)</text>
+        </g>
+        <g font-family="'JetBrains Mono', monospace" font-size="13">
+          <rect x="285" y="92"  width="70" height="28" rx="6" fill="#fff" stroke="#1a1a2e"/>
+          <rect x="278" y="86"  width="280" height="40" rx="9" fill="none" stroke="#a51e37" stroke-dasharray="4,3" opacity="0.7"/>
+          <text x="320" y="111" text-anchor="middle" fill="#1a1a2e">couch</text>
+          <text x="395" y="111" text-anchor="middle" fill="#1a1a2e">2.24</text>
+          <text x="540" y="111" text-anchor="end"    fill="#1a1a2e">0.414</text>
+          <rect x="285" y="132" width="70" height="28" rx="6" fill="#fff" stroke="#bbb"/>
+          <text x="320" y="151" text-anchor="middle" fill="#1a1a2e">chair</text>
+          <text x="395" y="151" text-anchor="middle" fill="#555">1.73</text>
+          <text x="540" y="151" text-anchor="end"    fill="#555">0.329</text>
+          <rect x="285" y="172" width="70" height="28" rx="6" fill="#fff" stroke="#bbb"/>
+          <text x="320" y="191" text-anchor="middle" fill="#1a1a2e">floor</text>
+          <text x="395" y="191" text-anchor="middle" fill="#555">1.01</text>
+          <text x="540" y="191" text-anchor="end"    fill="#555">0.249</text>
+          <rect x="285" y="212" width="70" height="28" rx="6" fill="#fff" stroke="#bbb"/>
+          <text x="320" y="231" text-anchor="middle" fill="#1a1a2e">cat</text>
+          <text x="395" y="231" text-anchor="middle" fill="#888">&minus;1.98</text>
+          <text x="540" y="231" text-anchor="end"    fill="#888">0.006</text>
+          <rect x="285" y="252" width="70" height="28" rx="6" fill="#fff" stroke="#bbb"/>
+          <text x="320" y="271" text-anchor="middle" fill="#1a1a2e">table</text>
+          <text x="395" y="271" text-anchor="middle" fill="#888">&minus;3.66</text>
+          <text x="540" y="271" text-anchor="end"    fill="#888">0.001</text>
+          <rect x="285" y="292" width="70" height="28" rx="6" fill="#fff" stroke="#bbb"/>
+          <text x="320" y="311" text-anchor="middle" fill="#1a1a2e">potato</text>
+          <text x="395" y="311" text-anchor="middle" fill="#aaa">&minus;6.23</text>
+          <text x="540" y="311" text-anchor="end"    fill="#aaa">0.000</text>
+          <text x="395" y="345" text-anchor="middle" font-size="12" font-family="'Inter',sans-serif" fill="#666">logits</text>
+          <text x="540" y="345" text-anchor="end"    font-size="12" font-family="'Inter',sans-serif" fill="#666">probabilities</text>
+        </g>
+        <line x1="245" y1="160" x2="278" y2="160" stroke="#888" stroke-width="1.5" marker-end="url(#kgwArr1)"/>
+        <defs>
+          <marker id="kgwArr1" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+            <path d="M0,0 L10,5 L0,10 Z" fill="#888"/>
+          </marker>
+        </defs>
+      </svg>
+      <p class="hint" style="text-align:center;">At each step the LM emits a logit per vocabulary token; softmax turns logits into a probability distribution. Sampling picks one token (here, the top one).</p>
+    </div>
+    <!-- <div class="col-45">
+      <p class="small" style="margin-top:0;">A causal LM defines, for context $x_{1:t-1}$, a distribution
+      $p_\theta(\cdot \mid x_{1:t-1}) = \mathrm{softmax}(\ell_t)$ over the vocabulary $V$. Sampling is the only place where randomness enters generation.</p>
+      <p class="small">The watermark insight: the producer can manipulate $\ell_t$ before softmax in a way that is</p>
+      <ul class="small">
+        <li>cryptographically tied to a secret key,</li>
+        <li>almost imperceptible at any single position, but</li>
+        <li>statistically detectable when many positions are aggregated.</li>
+      </ul>
+      <p class="small">Next slide: re-draw the same picture with a coloring of the vocabulary into <span class="tok tok-green">green</span> and <span class="tok tok-red">red</span> halves.</p>
+    </div> -->
+  </div>
+  <!-- <p class="cite"><a href="https://arxiv.org/abs/2301.10226">Kirchenbauer, Geiping, Wen, Katz, Miers &amp; Goldstein, &ldquo;A Watermark for Large Language Models,&rdquo; ICML 2023</a></p> -->
+</section>
+
+<!-- ================================================ -->
+<!-- SLIDE 14b: KGW in code (matches mini-project stub exactly) -->
+<!-- ================================================ -->
+<section class="no-fragment">
+  <h2>Embedding the Watermark: Softly Bias the Logits</h2>
+  <div class="columns" style="align-items:center;">
+    <div class="col-55" style="text-align:center;">
+      <svg viewBox="0 0 640 420" style="width:100%;max-width:620px;font-family:'Inter',sans-serif;">
+        <g font-size="14" fill="#1a1a2e">
+          <rect x="20"  y="22" width="62" height="30" rx="6" fill="#fff" stroke="#bbb"/><text x="51"  y="42" text-anchor="middle">Matt</text>
+          <rect x="90"  y="22" width="46" height="30" rx="6" fill="#fff" stroke="#bbb"/><text x="113" y="42" text-anchor="middle">sat</text>
+          <rect x="144" y="22" width="40" height="30" rx="6" fill="#fff" stroke="#bbb"/><text x="164" y="42" text-anchor="middle">on</text>
+          <rect x="192" y="22" width="44" height="30" rx="6" fill="#fff" stroke="#bbb"/><text x="214" y="42" text-anchor="middle">the</text>
+          <line x1="246" y1="18" x2="246" y2="56" stroke="#1a1a2e" stroke-width="1.5"/>
+          <rect x="256" y="22" width="68" height="30" rx="6" fill="#fafafa" stroke="#1a1a2e" stroke-dasharray="3,3"/>
+          <text x="290" y="42" text-anchor="middle" fill="#1a1a2e" font-weight="600">chair</text>
+        </g>
+        <g transform="translate(40,130)">
+          <rect x="0" y="20" width="150" height="120" rx="14" fill="#f5f5f5" stroke="#888"/>
+          <polygon points="0,20 75,0 150,20" fill="#e8e8e8" stroke="#888"/>
+          <polygon points="150,60 200,40 200,120 150,100" fill="#e8e8e8" stroke="#888"/>
+          <text x="75" y="88" text-anchor="middle" font-size="13" fill="#1a1a2e" font-style="italic">LM</text>
+          <text x="75" y="108" text-anchor="middle" font-size="11" fill="#555">p(&middot; | context)</text>
+        </g>
+        <g stroke-width="2" fill="none" stroke-dasharray="4,3">
+          <line x1="270" y1="92"  x2="270" y2="172" stroke="#a51e37"/>
+          <line x1="270" y1="172" x2="270" y2="332" stroke="#2e7d32"/>
+        </g>
+        <g font-family="'JetBrains Mono', monospace" font-size="13">
+          <rect x="285" y="92"  width="70" height="28" rx="6" fill="#fff" stroke="#a51e37"/>
+          <text x="320" y="111" text-anchor="middle" fill="#1a1a2e">couch</text>
+          <text x="395" y="111" text-anchor="middle" fill="#1a1a2e">2.24</text>
+          <text x="565" y="111" text-anchor="end"    fill="#1a1a2e">0.131</text>
+          <rect x="285" y="132" width="70" height="28" rx="6" fill="#fff" stroke="#2e7d32"/>
+          <rect x="278" y="126" width="295" height="40" rx="9" fill="none" stroke="#1a1a2e" stroke-dasharray="4,3" opacity="0.6"/>
+          <text x="320" y="151" text-anchor="middle" fill="#1a1a2e" font-weight="600">chair</text>
+          <text x="395" y="151" text-anchor="middle" fill="#1a1a2e">1.73</text>
+          <text x="455" y="151" text-anchor="middle" fill="#2e7d32">+ 2.0</text>
+          <text x="565" y="151" text-anchor="end"    fill="#1a1a2e" font-weight="600">0.581</text>
+          <rect x="285" y="172" width="70" height="28" rx="6" fill="#fff" stroke="#2e7d32"/>
+          <text x="320" y="191" text-anchor="middle" fill="#1a1a2e">floor</text>
+          <text x="395" y="191" text-anchor="middle" fill="#555">1.01</text>
+          <text x="455" y="191" text-anchor="middle" fill="#2e7d32">+ 2.0</text>
+          <text x="565" y="191" text-anchor="end"    fill="#1a1a2e">0.283</text>
+          <rect x="285" y="212" width="70" height="28" rx="6" fill="#fff" stroke="#a51e37"/>
+          <text x="320" y="231" text-anchor="middle" fill="#1a1a2e">cat</text>
+          <text x="395" y="231" text-anchor="middle" fill="#888">&minus;1.98</text>
+          <text x="565" y="231" text-anchor="end"    fill="#888">0.002</text>
+          <rect x="285" y="252" width="70" height="28" rx="6" fill="#fff" stroke="#2e7d32"/>
+          <text x="320" y="271" text-anchor="middle" fill="#1a1a2e">table</text>
+          <text x="395" y="271" text-anchor="middle" fill="#888">&minus;3.66</text>
+          <text x="455" y="271" text-anchor="middle" fill="#2e7d32">+ 2.0</text>
+          <text x="565" y="271" text-anchor="end"    fill="#888">0.003</text>
+          <rect x="285" y="292" width="70" height="28" rx="6" fill="#fff" stroke="#a51e37"/>
+          <text x="320" y="311" text-anchor="middle" fill="#1a1a2e">potato</text>
+          <text x="395" y="311" text-anchor="middle" fill="#aaa">&minus;6.23</text>
+          <text x="565" y="311" text-anchor="end"    fill="#aaa">0.000</text>
+          <text x="395" y="350" text-anchor="middle" font-size="12" font-family="'Inter',sans-serif" fill="#666">logits</text>
+          <text x="455" y="350" text-anchor="middle" font-size="12" font-family="'Inter',sans-serif" fill="#2e7d32" font-weight="600">+ &delta;</text>
+          <text x="565" y="350" text-anchor="end"    font-size="12" font-family="'Inter',sans-serif" fill="#666">probabilities</text>
+        </g>
+        <g transform="translate(20,360)">
+          <rect x="0" y="0" width="220" height="48" rx="10" fill="#fff" stroke="#1a1a2e"/>
+          <text x="110" y="20" text-anchor="middle" font-size="12" fill="#1a1a2e" font-weight="600">Pseudo-Random Function</text>
+          <text x="110" y="38" text-anchor="middle" font-size="10" fill="#666" font-style="italic">PRF(key, last $k$ tokens) &rarr; G &cup; R</text>
+        </g>
+        <line x1="240" y1="384" x2="262" y2="332" stroke="#1a1a2e" stroke-width="1.2" marker-end="url(#kgwArr2)"/>
+        <defs>
+          <marker id="kgwArr2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+            <path d="M0,0 L10,5 L0,10 Z" fill="#1a1a2e"/>
+          </marker>
+        </defs>
+      </svg>
+      <p class="hint" style="text-align:center;">PRF hash of previous $k$ tokens splits the vocabulary into <span style="color:#2e7d32;font-weight:600;">green</span> ($\gamma|V|$) and <span style="color:#a51e37;font-weight:600;">red</span>. Add $\delta$ (here $\delta=2$) to green logits before softmax. Most likely token shifts: <em>couch</em> &rarr; <em>chair</em>.</p>
+    </div>
+    <div class="col-45">
+      <p class="small" style="margin-top:0;">Soft red/green watermark:</p>
+      <div class="math-block" style="font-size:.68em;">
+        $\tilde p_v^{(t)} = \dfrac{\exp(\ell_v^{(t)} + \delta\,\mathbb{1}[v\in G])}{\sum_{j} \exp(\ell_j^{(t)} + \delta\,\mathbb{1}[j\in G])}$
+      </div>
+      <p class="small">Hyperparameters:</p>
+      <ul class="small">
+        <li>$\gamma$: green-list fraction</li>
+        <li>$\delta$: green-logit bias</li>
+        <li>$k$: hash window over previous $k$</li>
+      </ul>
+    </div>
+  </div>
+  <p class="cite"><a href="https://arxiv.org/abs/2301.10226">Kirchenbauer et al., ICML 2023, &sect; 3</a></p>
+</section>
+
+
+<!-- ================================================ -->
+<!-- SLIDE 18: Detection by z-test (Round 2 rewrite, Gaussian-first per Jonas) -->
+<!-- ================================================ -->
+<section class="no-fragment">
+  <h2>Detecting the Watermark: a One-Sample $z$-Test</h2>
+  <p class="small" style="margin-top:0;text-align:center;">
+    Given $T$ tokens with green count $|s|_G$ and target green fraction $\gamma$, compute&nbsp;
+    $z = \bigl(|s|_G - \gamma T\bigr) \big/ \sqrt{T\gamma(1-\gamma)}$, then read off a $p$-value from the standard normal tail.
+  </p>
+  <div class="columns" style="gap:18px;">
+    <div class="col-50">
+      <h3 style="font-size:.78em;color:#1565c0;text-align:center;">Human passage</h3>
+      <svg viewBox="0 0 380 320" style="width:100%;max-width:380px;display:block;margin:0 auto;font-family:'Inter',sans-serif;">
+        <g transform="translate(150,4)" stroke="#1a1a2e" stroke-width="1.5" fill="none">
+          <circle cx="14" cy="12" r="7"/>
+          <path d="M2,38 C2,26 26,26 26,38" />
+          <rect x="32" y="2" width="22" height="16" rx="3"/>
+          <line x1="36" y1="8" x2="50" y2="8"/>
+          <line x1="36" y1="13" x2="46" y2="13"/>
+        </g>
+        <g transform="translate(20,56)">
+          <rect x="0"   y="0"  width="22" height="14" rx="2" fill="#c8e6c9"/><rect x="24"  y="0"  width="22" height="14" rx="2" fill="#ffcdd2"/><rect x="48"  y="0"  width="22" height="14" rx="2" fill="#c8e6c9"/><rect x="72"  y="0"  width="22" height="14" rx="2" fill="#ffcdd2"/><rect x="96"  y="0"  width="22" height="14" rx="2" fill="#ffcdd2"/><rect x="120" y="0"  width="22" height="14" rx="2" fill="#c8e6c9"/><rect x="144" y="0"  width="22" height="14" rx="2" fill="#c8e6c9"/><rect x="168" y="0"  width="22" height="14" rx="2" fill="#ffcdd2"/>
+          <rect x="0"   y="18" width="22" height="14" rx="2" fill="#ffcdd2"/><rect x="24"  y="18" width="22" height="14" rx="2" fill="#c8e6c9"/><rect x="48"  y="18" width="22" height="14" rx="2" fill="#ffcdd2"/><rect x="72"  y="18" width="22" height="14" rx="2" fill="#c8e6c9"/><rect x="96"  y="18" width="22" height="14" rx="2" fill="#c8e6c9"/><rect x="120" y="18" width="22" height="14" rx="2" fill="#ffcdd2"/><rect x="144" y="18" width="22" height="14" rx="2" fill="#ffcdd2"/><rect x="168" y="18" width="22" height="14" rx="2" fill="#c8e6c9"/>
+          <rect x="0"   y="36" width="22" height="14" rx="2" fill="#c8e6c9"/><rect x="24"  y="36" width="22" height="14" rx="2" fill="#ffcdd2"/><rect x="48"  y="36" width="22" height="14" rx="2" fill="#ffcdd2"/><rect x="72"  y="36" width="22" height="14" rx="2" fill="#c8e6c9"/><rect x="96"  y="36" width="22" height="14" rx="2" fill="#ffcdd2"/><rect x="120" y="36" width="22" height="14" rx="2" fill="#c8e6c9"/><rect x="144" y="36" width="22" height="14" rx="2" fill="#c8e6c9"/><rect x="168" y="36" width="22" height="14" rx="2" fill="#ffcdd2"/>
+          <rect x="0"   y="54" width="22" height="14" rx="2" fill="#ffcdd2"/><rect x="24"  y="54" width="22" height="14" rx="2" fill="#ffcdd2"/><rect x="48"  y="54" width="22" height="14" rx="2" fill="#c8e6c9"/><rect x="72"  y="54" width="22" height="14" rx="2" fill="#ffcdd2"/><rect x="96"  y="54" width="22" height="14" rx="2" fill="#c8e6c9"/><rect x="120" y="54" width="22" height="14" rx="2" fill="#c8e6c9"/><rect x="144" y="54" width="22" height="14" rx="2" fill="#ffcdd2"/><rect x="168" y="54" width="22" height="14" rx="2" fill="#c8e6c9"/>
+        </g>
+        <g transform="translate(240,68)">
+          <circle cx="34" cy="34" r="32" fill="#c8e6c9" stroke="#888" stroke-width="1"/>
+          <path d="M34,34 L34,2 A32,32 0 0,1 34,66 Z" fill="#ffcdd2" stroke="#888" stroke-width="1"/>
+          <text x="34" y="86" text-anchor="middle" font-size="10" fill="#666">~50% green</text>
+        </g>
+        <g transform="translate(20,170)">
+          <line x1="0" y1="100" x2="340" y2="100" stroke="#888" stroke-width="1"/>
+          <path d="M 10 100 C 70 100, 100 100, 130 35 C 145 8,  175 8,  190 35 C 220 100,250 100,330 100"
+                fill="#e0e0e0" stroke="#555" stroke-width="1.5"/>
+          <line x1="170" y1="105" x2="170" y2="115" stroke="#1a1a2e" stroke-width="1.5"/>
+          <polygon points="170,108 165,118 175,118" fill="#1a1a2e"/>
+          <text x="170" y="132" text-anchor="middle" font-size="11" fill="#1a1a2e">observed</text>
+          <text x="0"   y="115" font-size="10" fill="#888">0</text>
+          <text x="335" y="115" font-size="10" fill="#888" text-anchor="end">z</text>
+        </g>
+        <g font-family="'JetBrains Mono', monospace" font-size="13">
+          <text x="190" y="318" text-anchor="middle" fill="#1a1a2e">
+            <tspan font-weight="600">z = 0.0</tspan>,&nbsp;<tspan font-weight="600">p = 0.50</tspan>
+          </text>
+        </g>
+      </svg>
+      <!-- <p class="hint" style="text-align:center;">$H_0$ (no watermark): green hits at chance, $|s|_G \approx \gamma T$. Observation lands in the bulk: nothing to flag.</p> -->
+    </div>
+    <div class="col-50">
+      <h3 style="font-size:.78em;color:var(--green);text-align:center;">Watermarked passage</h3>
+      <svg viewBox="0 0 380 320" style="width:100%;max-width:380px;display:block;margin:0 auto;font-family:'Inter',sans-serif;">
+        <g transform="translate(150,4)" stroke="#1a1a2e" stroke-width="1.5" fill="none">
+          <rect x="6" y="4" width="22" height="18" rx="3"/>
+          <circle cx="13" cy="12" r="2" fill="#1a1a2e"/>
+          <circle cx="21" cy="12" r="2" fill="#1a1a2e"/>
+          <line x1="17" y1="0" x2="17" y2="4"/>
+          <circle cx="17" cy="0" r="1.5" fill="#1a1a2e"/>
+          <line x1="6" y1="26" x2="28" y2="26"/>
+          <line x1="10" y1="26" x2="10" y2="34"/>
+          <line x1="24" y1="26" x2="24" y2="34"/>
+          <rect x="32" y="2" width="22" height="16" rx="3"/>
+          <line x1="36" y1="8" x2="50" y2="8"/>
+          <line x1="36" y1="13" x2="46" y2="13"/>
+        </g>
+        <g transform="translate(20,56)">
+          <rect x="0"   y="0"  width="22" height="14" rx="2" fill="#c8e6c9"/><rect x="24"  y="0"  width="22" height="14" rx="2" fill="#c8e6c9"/><rect x="48"  y="0"  width="22" height="14" rx="2" fill="#c8e6c9"/><rect x="72"  y="0"  width="22" height="14" rx="2" fill="#ffcdd2"/><rect x="96"  y="0"  width="22" height="14" rx="2" fill="#c8e6c9"/><rect x="120" y="0"  width="22" height="14" rx="2" fill="#c8e6c9"/><rect x="144" y="0"  width="22" height="14" rx="2" fill="#c8e6c9"/><rect x="168" y="0"  width="22" height="14" rx="2" fill="#c8e6c9"/>
+          <rect x="0"   y="18" width="22" height="14" rx="2" fill="#c8e6c9"/><rect x="24"  y="18" width="22" height="14" rx="2" fill="#ffcdd2"/><rect x="48"  y="18" width="22" height="14" rx="2" fill="#c8e6c9"/><rect x="72"  y="18" width="22" height="14" rx="2" fill="#c8e6c9"/><rect x="96"  y="18" width="22" height="14" rx="2" fill="#c8e6c9"/><rect x="120" y="18" width="22" height="14" rx="2" fill="#c8e6c9"/><rect x="144" y="18" width="22" height="14" rx="2" fill="#ffcdd2"/><rect x="168" y="18" width="22" height="14" rx="2" fill="#c8e6c9"/>
+          <rect x="0"   y="36" width="22" height="14" rx="2" fill="#c8e6c9"/><rect x="24"  y="36" width="22" height="14" rx="2" fill="#c8e6c9"/><rect x="48"  y="36" width="22" height="14" rx="2" fill="#c8e6c9"/><rect x="72"  y="36" width="22" height="14" rx="2" fill="#c8e6c9"/><rect x="96"  y="36" width="22" height="14" rx="2" fill="#ffcdd2"/><rect x="120" y="36" width="22" height="14" rx="2" fill="#c8e6c9"/><rect x="144" y="36" width="22" height="14" rx="2" fill="#c8e6c9"/><rect x="168" y="36" width="22" height="14" rx="2" fill="#c8e6c9"/>
+          <rect x="0"   y="54" width="22" height="14" rx="2" fill="#c8e6c9"/><rect x="24"  y="54" width="22" height="14" rx="2" fill="#c8e6c9"/><rect x="48"  y="54" width="22" height="14" rx="2" fill="#ffcdd2"/><rect x="72"  y="54" width="22" height="14" rx="2" fill="#c8e6c9"/><rect x="96"  y="54" width="22" height="14" rx="2" fill="#c8e6c9"/><rect x="120" y="54" width="22" height="14" rx="2" fill="#c8e6c9"/><rect x="144" y="54" width="22" height="14" rx="2" fill="#ffcdd2"/><rect x="168" y="54" width="22" height="14" rx="2" fill="#c8e6c9"/>
+        </g>
+        <g transform="translate(240,68)">
+          <circle cx="34" cy="34" r="32" fill="#c8e6c9" stroke="#888" stroke-width="1"/>
+          <path d="M34,34 L34,2 A32,32 0 0,1 64.4,23.7 Z" fill="#ffcdd2" stroke="#888" stroke-width="1"/>
+          <text x="34" y="86" text-anchor="middle" font-size="10" fill="#666">~80% green</text>
+        </g>
+        <g transform="translate(20,170)">
+          <line x1="0" y1="100" x2="340" y2="100" stroke="#888" stroke-width="1"/>
+          <path d="M 10 100 C 70 100, 100 100, 130 35 C 145 8,  175 8,  190 35 C 220 100,250 100,330 100"
+                fill="#e0e0e0" stroke="#555" stroke-width="1.5"/>
+          <line x1="290" y1="105" x2="290" y2="115" stroke="#a51e37" stroke-width="1.8"/>
+          <polygon points="290,108 285,118 295,118" fill="#a51e37"/>
+          <text x="290" y="132" text-anchor="middle" font-size="11" fill="#a51e37" font-weight="600">observed</text>
+          <text x="170" y="115" text-anchor="middle" font-size="10" fill="#888">0</text>
+          <text x="335" y="115" font-size="10" fill="#888" text-anchor="end">z</text>
+        </g>
+        <g font-family="'JetBrains Mono', monospace" font-size="13">
+          <text x="190" y="318" text-anchor="middle" fill="#a51e37">
+            <tspan font-weight="600">z = 4.0</tspan>,&nbsp;<tspan font-weight="600">p = 3.2 &times; 10<tspan font-size="10" dy="-4">&minus;5</tspan></tspan>
+          </text>
+        </g>
+      </svg>
+      <!-- <p class="hint" style="text-align:center;">$H_1$ (watermarked): the soft bias pulls the empirical green rate to $\sim\!0.8$. The observed $z$ sits in the deep right tail.</p> -->
+    </div>
+  </div>
+  <p class="cite"><a href="https://arxiv.org/abs/2301.10226">Kirchenbauer et al., ICML 2023, &sect; 4</a>. Gaussian here is the large-$T$ limit; for small $T$, it would be more accurate to evaluate the binomial $\sum_{j=g}^T \binom{T}{j}\gamma^j(1-\gamma)^{T-j}$ directly. </p>
+</section>
+
+
+
+<!-- ================================================ -->
+<!-- SLIDE 18: Detection demo, real KGW data from Qwen2.5-0.5B-Instruct -->
+<!-- Round 2 redesign: real watermarked tokens (not fake), step-through animation -->
+<!-- to show sqrt(T) z-score accumulation. Data file: wm-demo-data.json -->
+<!-- ================================================ -->
+<section class="no-fragment">
+  <h2>Detection Example</h2>
+  <p class="small" style="margin-top:0;">Same detector ($\gamma = 0.5, k = 1$, PRF key = 2026, SHA-256) applied to two passages. Watermarked side was generated by <strong>Qwen2.5-0.5B-Instruct</strong> at $\delta = 2$.</p>
+  <div class="columns">
+    <div class="col-50">
+      <h3 style="font-size:.78em;color:#1565c0;">Human passage (Wikipedia-style)</h3>
+      <div id="wmTextA" style="background:#fff;border:1px solid #e5e5e5;border-radius:8px;padding:10px;min-height:170px;font-family:'JetBrains Mono',monospace;font-size:.62em;line-height:1.85;color:#333;overflow-y:auto;max-height:220px;"><span style="color:#aaa;font-style:italic;font-family:'Inter',sans-serif;">Loading&hellip;</span></div>
+      <div class="metric-row" style="margin-top:6px;gap:6px;justify-content:flex-start;">
+        <div class="metric" style="padding:6px 10px;min-width:54px;"><div class="value" id="wmNA" style="font-size:1.0em;">&mdash;</div><div class="label" style="font-size:.55em;">N</div></div>
+        <div class="metric" style="padding:6px 10px;min-width:54px;"><div class="value" id="wmGA" style="font-size:1.0em;">&mdash;</div><div class="label" style="font-size:.55em;">greens</div></div>
+        <div class="metric" style="padding:6px 10px;min-width:54px;"><div class="value" id="wmZA" style="font-size:1.0em;">&mdash;</div><div class="label" style="font-size:.55em;">z</div></div>
+        <div class="metric" style="padding:6px 10px;min-width:54px;"><div class="value" id="wmPA" style="font-size:1.0em;">&mdash;</div><div class="label" style="font-size:.55em;">p</div></div>
+      </div>
+    </div>
+    <div class="col-50">
+      <h3 style="font-size:.78em;color:var(--green);">Watermarked passage (Qwen + KGW)</h3>
+      <div id="wmTextB" style="background:#fff;border:1px solid #e5e5e5;border-radius:8px;padding:10px;min-height:170px;font-family:'JetBrains Mono',monospace;font-size:.62em;line-height:1.85;color:#333;overflow-y:auto;max-height:220px;"><span style="color:#aaa;font-style:italic;font-family:'Inter',sans-serif;">Loading&hellip;</span></div>
+      <div class="metric-row" style="margin-top:6px;gap:6px;justify-content:flex-start;">
+        <div class="metric" style="padding:6px 10px;min-width:54px;"><div class="value" id="wmNB" style="font-size:1.0em;">&mdash;</div><div class="label" style="font-size:.55em;">N</div></div>
+        <div class="metric" style="padding:6px 10px;min-width:54px;"><div class="value" id="wmGB" style="font-size:1.0em;">&mdash;</div><div class="label" style="font-size:.55em;">greens</div></div>
+        <div class="metric" style="padding:6px 10px;min-width:54px;"><div class="value" id="wmZB" style="font-size:1.0em;">&mdash;</div><div class="label" style="font-size:.55em;">z</div></div>
+        <div class="metric" style="padding:6px 10px;min-width:54px;"><div class="value" id="wmPB" style="font-size:1.0em;">&mdash;</div><div class="label" style="font-size:.55em;">p</div></div>
+      </div>
+    </div>
+  </div>
+  <div style="text-align:center;margin-top:8px;">
+    <button class="btn btn-accent" id="wmStep">Step through</button>
+    <button class="btn" id="wmAll">Reveal all</button>
+    <button class="btn" id="wmReset">Reset</button>
+  </div>
+  <script type="application/json" id="wmDemoData">
+{
+  "meta": {
+    "model": "Qwen/Qwen2.5-0.5B-Instruct",
+    "scheme": "KGW soft watermark (Kirchenbauer et al. 2023)",
+    "gamma": 0.5,
+    "delta": 2.0,
+    "k": 1,
+    "key": 2026,
+    "prf": "SHA-256(key|prev_token_id) -> torch.randperm seed; first gamma*V indices are green",
+    "vocab_size": 151936,
+    "tokenizer": "Qwen2Tokenizer",
+    "note": "First k tokens of each passage are uncounted (no context); their 'greens' entry is false as a placeholder."
+  },
+  "human": {
+    "source": "Wikipedia article 'Transformer (deep learning architecture)', lead paragraph (human-written; no LLM generation).",
+    "text": "A transformer is a deep learning architecture that was developed by researchers at Google and is based on the multi-head attention mechanism. Text is converted to numerical representations called tokens, and each token is converted into a vector via lookup from a word embedding table. At each layer, each token is then contextualized within the scope of the context window with other unmasked tokens via a parallel multi-head attention mechanism, allowing the signal for key tokens to be amplified and less important tokens to be diminished.",
+    "tokens": [
+      "A",
+      " transformer",
+      " is",
+      " a",
+      " deep",
+      " learning",
+      " architecture",
+      " that",
+      " was",
+      " developed",
+      " by",
+      " researchers",
+      " at",
+      " Google",
+      " and",
+      " is",
+      " based",
+      " on",
+      " the",
+      " multi",
+      "-head",
+      " attention",
+      " mechanism",
+      ".",
+      " Text",
+      " is",
+      " converted",
+      " to",
+      " numerical",
+      " representations",
+      " called",
+      " tokens",
+      ",",
+      " and",
+      " each",
+      " token",
+      " is",
+      " converted",
+      " into",
+      " a",
+      " vector",
+      " via",
+      " lookup",
+      " from",
+      " a",
+      " word",
+      " embedding",
+      " table",
+      ".",
+      " At",
+      " each",
+      " layer",
+      ",",
+      " each",
+      " token",
+      " is",
+      " then",
+      " contextual",
+      "ized",
+      " within",
+      " the",
+      " scope",
+      " of",
+      " the",
+      " context",
+      " window",
+      " with",
+      " other",
+      " un",
+      "masked",
+      " tokens",
+      " via",
+      " a",
+      " parallel",
+      " multi",
+      "-head",
+      " attention",
+      " mechanism",
+      ",",
+      " allowing",
+      " the",
+      " signal",
+      " for",
+      " key",
+      " tokens",
+      " to",
+      " be",
+      " amplified",
+      " and",
+      " less",
+      " important",
+      " tokens",
+      " to",
+      " be",
+      " diminished",
+      "."
+    ],
+    "token_ids": [
+      32,
+      42578,
+      374,
+      264,
+      5538,
+      6832,
+      17646,
+      429,
+      572,
+      7881,
+      553,
+      11811,
+      518,
+      5085,
+      323,
+      374,
+      3118,
+      389,
+      279,
+      7299,
+      26390,
+      6529,
+      16953,
+      13,
+      2918,
+      374,
+      16099,
+      311,
+      34776,
+      43613,
+      2598,
+      11211,
+      11,
+      323,
+      1817,
+      3950,
+      374,
+      16099,
+      1119,
+      264,
+      4621,
+      4566,
+      18615,
+      504,
+      264,
+      3409,
+      39088,
+      1965,
+      13,
+      2411,
+      1817,
+      6193,
+      11,
+      1817,
+      3950,
+      374,
+      1221,
+      65151,
+      1506,
+      2878,
+      279,
+      6891,
+      315,
+      279,
+      2266,
+      3241,
+      448,
+      1008,
+      650,
+      81535,
+      11211,
+      4566,
+      264,
+      15279,
+      7299,
+      26390,
+      6529,
+      16953,
+      11,
+      10693,
+      279,
+      8286,
+      369,
+      1376,
+      11211,
+      311,
+      387,
+      82498,
+      323,
+      2686,
+      2989,
+      11211,
+      311,
+      387,
+      53082,
+      13
+    ],
+    "greens": [
+      false,
+      false,
+      false,
+      true,
+      false,
+      false,
+      false,
+      false,
+      true,
+      false,
+      true,
+      true,
+      false,
+      true,
+      false,
+      false,
+      true,
+      false,
+      false,
+      true,
+      true,
+      true,
+      true,
+      false,
+      true,
+      true,
+      true,
+      true,
+      false,
+      false,
+      true,
+      false,
+      false,
+      false,
+      false,
+      true,
+      true,
+      true,
+      true,
+      false,
+      false,
+      false,
+      true,
+      true,
+      true,
+      false,
+      false,
+      true,
+      false,
+      true,
+      false,
+      false,
+      true,
+      true,
+      true,
+      true,
+      false,
+      false,
+      true,
+      false,
+      false,
+      false,
+      false,
+      true,
+      false,
+      true,
+      false,
+      false,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      false,
+      true,
+      true,
+      true,
+      false,
+      true,
+      false,
+      true,
+      false,
+      false,
+      false,
+      false,
+      true,
+      true,
+      true,
+      true,
+      true,
+      false,
+      false,
+      true,
+      true,
+      true
+    ],
+    "n": 95,
+    "g": 50,
+    "z": 0.513,
+    "p": 0.3039794
+  },
+  "watermarked": {
+    "source": "Generated by Qwen/Qwen2.5-0.5B-Instruct with KGW soft watermark (gamma=0.5, delta=2, k=1).",
+    "prompt": "Briefly explain how a transformer language model produces the next word given a prompt. Two or three sentences.",
+    "text": "When training a transformer model for language generation, the next word is produced based on various components including encoder output, previous decoder input, and weights learned during training. The idea behind this process is to generate coherent next words that naturally flow with the content of previous inputs.\n\nThe main steps involve:\n1. **Encoder**: The transformer's \"encoder\" module predicts sequence representations at every time step in the sequence.\n2. **Decoder**: The decoding module follows the predicted sequences from the encoder until it reaches the end (batch index < beam_length - 1) or when new tokens have been added to the current batch. \n3. **Self-Attention Mechanism**: The attention mechanism computes similarity between each",
+    "tokens": [
+      "When",
+      " training",
+      " a",
+      " transformer",
+      " model",
+      " for",
+      " language",
+      " generation",
+      ",",
+      " the",
+      " next",
+      " word",
+      " is",
+      " produced",
+      " based",
+      " on",
+      " various",
+      " components",
+      " including",
+      " encoder",
+      " output",
+      ",",
+      " previous",
+      " decoder",
+      " input",
+      ",",
+      " and",
+      " weights",
+      " learned",
+      " during",
+      " training",
+      ".",
+      " The",
+      " idea",
+      " behind",
+      " this",
+      " process",
+      " is",
+      " to",
+      " generate",
+      " coherent",
+      " next",
+      " words",
+      " that",
+      " naturally",
+      " flow",
+      " with",
+      " the",
+      " content",
+      " of",
+      " previous",
+      " inputs",
+      ".\n\n",
+      "The",
+      " main",
+      " steps",
+      " involve",
+      ":\n",
+      "1",
+      ".",
+      " **",
+      "Encoder",
+      "**:",
+      " The",
+      " transformer",
+      "'s",
+      " \"",
+      "encoder",
+      "\"",
+      " module",
+      " predicts",
+      " sequence",
+      " representations",
+      " at",
+      " every",
+      " time",
+      " step",
+      " in",
+      " the",
+      " sequence",
+      ".\n",
+      "2",
+      ".",
+      " **",
+      "Decoder",
+      "**:",
+      " The",
+      " decoding",
+      " module",
+      " follows",
+      " the",
+      " predicted",
+      " sequences",
+      " from",
+      " the",
+      " encoder",
+      " until",
+      " it",
+      " reaches",
+      " the",
+      " end",
+      " (",
+      "batch",
+      " index",
+      " <",
+      " beam",
+      "_length",
+      " -",
+      " ",
+      "1",
+      ")",
+      " or",
+      " when",
+      " new",
+      " tokens",
+      " have",
+      " been",
+      " added",
+      " to",
+      " the",
+      " current",
+      " batch",
+      ".",
+      " \n",
+      "3",
+      ".",
+      " **",
+      "Self",
+      "-",
+      "Attention",
+      " Mechan",
+      "ism",
+      "**:",
+      " The",
+      " attention",
+      " mechanism",
+      " computes",
+      " similarity",
+      " between",
+      " each"
+    ],
+    "token_ids": [
+      4498,
+      4862,
+      264,
+      42578,
+      1614,
+      369,
+      4128,
+      9471,
+      11,
+      279,
+      1790,
+      3409,
+      374,
+      8947,
+      3118,
+      389,
+      5257,
+      6813,
+      2670,
+      23668,
+      2550,
+      11,
+      3681,
+      24551,
+      1946,
+      11,
+      323,
+      14324,
+      9498,
+      2337,
+      4862,
+      13,
+      576,
+      4522,
+      4815,
+      419,
+      1882,
+      374,
+      311,
+      6923,
+      55787,
+      1790,
+      4244,
+      429,
+      17712,
+      6396,
+      448,
+      279,
+      2213,
+      315,
+      3681,
+      11127,
+      382,
+      785,
+      1887,
+      7354,
+      21058,
+      510,
+      16,
+      13,
+      3070,
+      19921,
+      95518,
+      576,
+      42578,
+      594,
+      330,
+      27008,
+      1,
+      4688,
+      55878,
+      8500,
+      43613,
+      518,
+      1449,
+      882,
+      3019,
+      304,
+      279,
+      8500,
+      624,
+      17,
+      13,
+      3070,
+      20732,
+      95518,
+      576,
+      47116,
+      4688,
+      11017,
+      279,
+      19149,
+      23700,
+      504,
+      279,
+      23668,
+      3080,
+      432,
+      24491,
+      279,
+      835,
+      320,
+      14049,
+      1922,
+      366,
+      23418,
+      5118,
+      481,
+      220,
+      16,
+      8,
+      476,
+      979,
+      501,
+      11211,
+      614,
+      1012,
+      3694,
+      311,
+      279,
+      1482,
+      7162,
+      13,
+      715,
+      18,
+      13,
+      3070,
+      12092,
+      12,
+      69329,
+      27801,
+      2142,
+      95518,
+      576,
+      6529,
+      16953,
+      57203,
+      37623,
+      1948,
+      1817
+    ],
+    "greens": [
+      false,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      false,
+      true,
+      true,
+      true,
+      false,
+      false,
+      false,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      false,
+      true,
+      true,
+      false,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      false,
+      true,
+      true,
+      false,
+      true,
+      true,
+      false,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      false,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      false,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      false,
+      false,
+      true,
+      true,
+      false,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      false,
+      false,
+      true,
+      true,
+      true,
+      true,
+      false,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      false,
+      true,
+      true,
+      true,
+      true,
+      true,
+      false,
+      true,
+      true,
+      true,
+      true,
+      false,
+      true,
+      true,
+      false,
+      false,
+      false,
+      true,
+      true,
+      false,
+      false,
+      true,
+      true,
+      false,
+      true,
+      true,
+      true,
+      true,
+      true,
+      false,
+      true
+    ],
+    "n": 139,
+    "g": 112,
+    "z": 7.2096,
+    "p": 2.805702e-13
+  }
+}
+  </script>
+</section>
+
+<!-- ================================================ -->
+<!-- SLIDE 17: delta-quality Pareto, real KGW Fig 4 left + Fig 6 -->
+<!-- ================================================ -->
+<section class="no-fragment">
+  <h2>The $\delta$ Knob: Detection Strength vs Quality</h2>
+  <div class="columns">
+    <div class="col-50">
+      <img src="lecture-5-images/kgw-quality-detection-pareto.png" alt="KGW Figure 4 left: scatter of z-score (better up) vs Oracle Model PPL (better right) for different (delta, gamma) settings; markers per delta in {0,1,2,5,10}, color per gamma in {0.1, 0.25, 0.5, 0.75, 0.9}; sweet spot near delta=2, gamma=0.25 to 0.5 in the upper-right region" style="width:100%;max-width:520px;display:block;margin:0 auto;border-radius:8px;border:1px solid #e5e5e5;">
+      <p class="hint" style="text-align:center;">KGW Fig. 4 (left): the Pareto front. Each marker is a $(\delta, \gamma)$ pair from a sweep on multinomial-sampled Llama generations. Up-and-right is better.</p>
+    </div>
+    <div class="col-50">
+      <h3 style="font-size:.85em;">Reading the frontier</h3>
+      <ul class="small">
+        <li><strong>$\delta = 0$</strong> (gray): no watermark. Z-score $\approx 0$; PPL is the model&rsquo;s baseline.</li>
+        <li><strong>$\delta = 1$</strong>: detection at z $\approx 4$ on most generations; PPL ~5.4 (negligible quality cost).</li>
+        <li><strong>$\delta = 2, \gamma = 0.5$</strong>: AUROC 0.998, PPL 6.2. Default for the mini-project.</li>
+        <li><strong>$\delta = 10$</strong>: detection saturates but PPL approaches 12. Text noticeably degrades.</li>
+        <li>Smaller $\gamma$ raises per-token signal but excludes potential high-probability tokens, raising PPL.</li>
+      </ul>
+    </div>
+  </div>
+  <p class="cite"><a href="https://arxiv.org/abs/2301.10226">KGW 2023, Fig. 4 (soft watermark)</a></p>
+</section>
+
+<!-- ================================================ -->
+<!-- SLIDE 18: Hash schemes — own SVG for variants, real KGW2 data -->
+<!-- ================================================ -->
+<section class="no-fragment">
+  <h2>Robust Variants of the PRF </h2>
+  <p class="small" style="margin-top:0;">The seed for the green/red split at position $i$ is some PRF of the previous $h$ tokens. Three possibilities:</p>
+  <div class="columns" style="gap:12px;align-items:flex-start;">
+    <div class="col-50">
+      <div class="demo-container" style="padding:8px;">
+        <svg id="hashVariants" width="100%" height="240" viewBox="0 0 540 240" preserveAspectRatio="xMidYMid meet" style="display:block;margin:0 auto;"></svg>
+      </div>
+      <!-- <p class="hint" style="text-align:center;">Three combiners over the previous $h$ tokens. <strong>LeftHash</strong> = Additive($h{=}1$) (original KGW). <strong>SelfHash</strong> = Min($h{=}4$) + self-conditioning rejection (the green set is chosen so the <em>candidate token itself</em> would also fall in the green set produced when conditioning on the previous $h$ tokens and the candidate).</p> -->
+    </div>
+    <div class="col-50">
+      <img src="lecture-5-images/kgw2-seeding-comparison.png" alt="KGW2 Figure: two panels side by side. Left: Detection Rate vs Context Width h, for six seeding schemes (Additive-LeftHash, Additive-SelfHash, Min-LeftHash, Min-SelfHash, Skip-LeftHash, Skip-SelfHash); Min-SelfHash holds detection rate near 1 across h while others degrade. Right: Log Diversity vs Context Width h; diversity improves as h grows for most schemes." style="width:100%;max-width:520px;display:block;margin:0 auto;border-radius:8px;border:1px solid #e5e5e5;">
+      <p class="hint" style="text-align:center;">KGW2 Fig. 4. Detection rate (left) and output diversity (right) vs context width $h$. <strong>Min-SelfHash</strong> with $h{=}4$ holds detection up while raising diversity; Additive-LeftHash drops both as $h$ grows.</p>
+    </div>
+  </div>
+  <!-- <div class="warning-box" style="font-size:.7em;margin-top:6px;">
+    <strong>The trade-off in one line.</strong> Larger $h$ raises spoof-resistance (the attacker must learn $\sim |V|^h$ green-list signatures from queries; at $h{=}4$, $|V|{=}100$K, that&rsquo;s $\sim 10^{20}$) but lowers paraphrase-robustness (a single edit destroys $h$ subsequent green-list lookups). The original KGW threat model favors $h{=}1$ or $h{=}2$; spoof-resistant deployments need $h{=}4$ plus multiple independent keys.
+  </div> -->
+  <p class="cite"><a href="https://arxiv.org/abs/2306.04634">Kirchenbauer et al., &ldquo;On the Reliability of Watermarks for Large Language Models,&rdquo; ICLR 2024 &mdash; &sect; 4.1, Fig. 4</a></p>
+</section>
+
+
+<!-- ================================================ -->
+<!-- SLIDE 20: Aaronson Gumbel scheme  -->
+<!-- ================================================ -->
+<section class="no-fragment">
+  <h2>Alternatives: Aaronson&rsquo;s Distortion-Free Gumbel Scheme</h2>
+  <div class="columns">
+    <div class="col-55 fragment fade-in" data-fragment-index="0">
+      <p class="small" style="margin-top:0;">Watermarks need to inject signal somewhere in the sampling. Before we saw KGW biasing, but signals can also be encoded into the draw of the sampler:</p>
+      <div class="math-block" style="font-size:.74em;">
+        $r_v = \mathrm{PRF}(\text{key},\, \text{ctx}, v) \in (0,1)\ \ \forall\, v \in V$<br><br>
+        $w_t \;=\; \displaystyle\arg\max_{v \in V}\, r_v^{\,1/p_v}\;\equiv\;\arg\max_v\, \tfrac{\log r_v}{\log p_v}$
+      </div>
+      <p class="small"><strong>Detection.</strong> Sum a one-statistic over emitted tokens:</p>
+      <div class="math-block" style="font-size:.56em;">
+        $S_T = \displaystyle\sum_{t=1}^{T} -\log\!\bigl(1 - r_{w_t}\bigr) \;\sim\; \mathrm{Gamma}(T, 1)\ \text{ under } H_0.$
+      </div>
+      <p class="small" style="font-size:.7em;">Under the watermark, $S_T$ is stochastically larger; test as a one-sided p-value against the Gamma.</p>
+    </div>
+    <div class="col-45 fragment fade-in" data-fragment-index="1" style="min-width:0;">
+      <h3 style="font-size:.82em;margin-top:0;"> Comparison:</h3>
+      <table class="comp-table" style="font-size:.54em;margin-top:6px;">
+        <tr><th></th><th>Aaronson</th><th>KGW </th></tr>
+        <tr><td>Marginal</td><td><strong>Exact $p$</strong></td><td>Shifted on green</td></tr>
+        <tr><td>Statistic</td><td>$-\log(1{-}r_w)$</td><td>Green count</td></tr>
+        <tr><td>Detection</td><td> Gamma Distribution Test</td><td> Binomial Distribution Test</td></tr>
+        <tr><td>Distortion</td><td>None (in expectation)</td><td>Yes</td></tr>
+        <tr><td>Repeat ctx</td><td><strong>Repeat outcomes</strong></td><td>New random draw</td></tr>
+      </table>
+    </div>
+  </div>
+  <p class="cite">
+    <a href="https://scottaaronson.blog/?p=6823">Aaronson, &ldquo;My AI Safety Lecture for UT Effective Altruism,&rdquo; 2022</a>
+    &middot; <a href="https://simons.berkeley.edu/sites/default/files/2024-10/LLM24-2%20Slides%20-%20Scott%20Aaronson.pdf">Aaronson, Simons LLM Workshop slides, 2024</a>
+    &middot; <a href="https://arxiv.org/abs/2307.15593">Kuditipudi, Thickstun, Hashimoto &amp; Liang, &ldquo;Robust Distortion-Free Watermarks,&rdquo; 2023 (formalization)</a>
+  </p>
+</section>
+
+<!-- ================================================ -->
+<!-- SLIDE 21: CGZ undetectable  -->
+<!-- ================================================ -->
+<section class="no-fragment">
+  <h2>Cryptographically Undetectable Watermarks</h2>
+  <div class="columns">
+    <div class="col-55 fragment fade-in" data-fragment-index="0">
+      <div class="definition" style="font-size:.74em;">
+        <strong>Undetectable (Christ, Gunn, Zamir 2023).</strong> A watermark $W$ is <em>undetectable</em> if no PPT adversary with adaptive query access to the watermarked model can distinguish its outputs from the unwatermarked model with non-negligible advantage.
+      </div>
+      <h3 style="font-size:.82em;margin-top:8px;">One-bit construction</h3>
+      <ol class="small" style="margin-top:2px;">
+        <li>Derive $u = F_k(\text{ctx}) \in (0,1)$ from a PRF.</li>
+        <li>Inverse-CDF $u$ against the next-token distribution $p$ to read off one bit.</li>
+        <li>Embed only at positions with <strong>sufficient empirical entropy</strong>; pass low-entropy positions through verbatim.</li>
+      </ol>
+      <p class="small" style="margin-top:6px;">Strictly stronger than Aaronson: undetectability holds on the <em>joint</em> output distribution, so the key cannot be extracted from polynomial-many queries. <strong>Spoofing is provably blocked.</strong></p>
+    </div>
+    <div class="col-45 fragment fade-in" data-fragment-index="1">
+      <h3 style="font-size:.82em;margin-top:0;">Three regimes of randomness</h3>
+      <table class="comp-table" style="font-size:.6em;">
+        <tr><th>Scheme</th><th>Property</th></tr>
+        <tr><td>KGW </td><td>Distortionary; Can be resampled, combined with any samplers.</td></tr>
+        <tr><td>Aaronson / Kuditipudi</td><td>Distortion-free per token; leaks via repeated context.</td></tr>
+        <tr><td>Christ-Gunn-Zamir</td><td>Undetectable on joint output. Entropy condition required.</td></tr>
+      </table>
+      <div class="warning-box" style="font-size:.66em;margin-top:6px;">
+        <strong>Entropy is unavoidable.</strong> Zero-entropy positions (e.g., copy-paste, code with one obvious next token) cannot carry a hidden bit without changing the output. CGZ formalizes this as a hard limit.
+      </div>
+    </div>
+  </div>
+  <p class="cite"><a href="https://arxiv.org/abs/2306.09194">Christ, Gunn &amp; Zamir, &ldquo;Undetectable Watermarks for Language Models,&rdquo; COLT 2024</a> &middot; <a href="https://arxiv.org/abs/2410.07369">Gunn, Zhao &amp; Song, &ldquo;An Undetectable Watermark for Generative Image Models,&rdquo; ICLR 2025</a></p>
+</section>
+
+
+<!-- ================================================ -->
+<!-- PART IV DIVIDER  -->
+<!-- ================================================ -->
+<section class="section-slide" data-background="#1a1a2e">
+  <div style="color:rgba(255,255,255,0.25);font-size:1.2em;font-weight:500;letter-spacing:.3em;text-align:center;margin-top:1.5em;">PART&nbsp;IV</div>
+  <h2 style="margin-top:0.5em;">Attacks on Watermarks</h2>
+  <p style="color:rgba(255,255,255,0.6);font-size:.9em;text-align:center;">Paraphrase, cipher, oracle, copy-paste, stealing, distillation</p>
+</section>
+
+
+<!-- ================================================ -->
+<!-- SLIDE 18b: Daily-use degradation overview (Safety Security Talk fig 5) -->
+<!-- ================================================ -->
+<section class="no-fragment">
+  <h2>What Could Happen to Watermarked Text in Daily Use?</h2>
+  <img src="lecture-5-images/Safety Security Talk (5) cropped.png" alt="Diagram showing watermarked text undergoing three transformations: machine paraphrasing (GPT camera), human paraphrasing (person at desk), and text mixing (scissors and clipboard). Each path produces an output with a different green/red token mix, summarized in a table mapping watermark fraction to tokens needed for detection: Few, Moderate, Many, It Depends." style="display:block;margin:8px auto 0;max-width:880px;width:100%;">
+</section>
+
+
+<!-- ================================================ -->
+<!-- SLIDE 18c: Machine paraphrasing detail (Safety Security Talk fig 6) -->
+<!-- ================================================ -->
+<section class="no-fragment">
+  <h2>Machine Paraphrasing</h2>
+  <img src="lecture-5-images/Safety Security Talk (6) cropped.png" alt="Two paraphrase pipelines applied to the same watermarked source. Left: GPT-3.5 prompted with a copy-editor instruction; output shows a roughly even green/red mix. Right: Dipper (T5-XXL) called with f-string template containing lex_code and order_code parameters around the source sentence; output shows a similar green/red mix. The source watermark fraction is high; both attackers cut it roughly in half." style="display:block;margin:8px auto 0;max-width:880px;width:100%;">
+  <p class="cite">
+    <a href="https://arxiv.org/abs/2306.04634">Kirchenbauer et al., ICLR 2024</a>
+    &middot; <a href="https://arxiv.org/abs/2303.13408">Krishna et al., &ldquo;Paraphrasing evades detectors of AI-generated text, but retrieval is an effective defense&rdquo; (DIPPER), NeurIPS 2023</a>
+  </p>
+</section>
+
+
+<!-- ================================================ -->
+<!-- SLIDE 19: Paraphrase robustness -->
+<!-- ================================================ -->
+<section class="no-fragment">
+  <h2>Paraphrases</h2>
+  <div class="columns">
+    <div class="col-55">
+      <img src="lecture-5-images/kgw2-paraphrase-zscore.png" alt="KGW2 paper figure: Z-Score of Watermarked Text after Paraphrasing as a function of tokens observed; three curves with shaded variance bands: Dipper (purple), GPT (green), Average Human (gray); humans destroy more of the watermark per token than machines" style="width:100%;max-width:560px;display:block;margin:0 auto;border-radius:8px;border:1px solid #e5e5e5;">
+      <p class="hint" style="text-align:center;">Z-score after paraphrase vs tokens observed for human and machine paraphrasers.</p>
+    </div>
+    <div class="col-45">
+      <h3 style="font-size:.85em;margin-top:0;">Tokens needed at $z = 4$ (KGW2)</h3>
+      <ul class="small">
+        <li><strong>Unparaphrased</strong>: ~25 tokens.</li>
+        <li><strong>GPT-3.5</strong>: ~150&ndash;300 tokens.</li>
+        <li><strong>DIPPER (T5-XXL)</strong>: ~200&ndash;400 tokens.</li>
+        <li><strong>Strong human paraphrase</strong>: ~800 tokens at $\mathrm{FPR}{=}10^{-5}$.</li>
+      </ul>
+      <div class="key-insight" style="font-size:.7em;margin-top:6px;">
+        <strong>Longer text helps</strong>. Per-token signal reduces under paraphrase, but $\sqrt{T}$ accumulation still recovers detection as watermarked tokens leak through.
+      </div>
+    </div>
+  </div>
+  <p class="cite">
+    <a href="https://arxiv.org/abs/2306.04634">Kirchenbauer et al., KGW2, ICLR 2024 &mdash; Fig. 6</a>
+    &middot; <a href="https://arxiv.org/abs/2303.13408">Krishna et al., DIPPER, NeurIPS 2023</a>
+  </p>
+</section>
+
+
+
+<!-- ================================================ -->
+<!-- SLIDE 27: Cipher / Oracle / Copy-Paste -->
+<!-- ================================================ -->
+<section class="no-fragment">
+  <h2>Adversarial Attack Surfaces</h2>
+  <div class="card-grid card-grid-3" style="gap:10px;">
+    <div class="card" style="padding:10px;">
+      <h4 style="margin:0 0 4px;">Ciphers </h4>
+      <p style="font-size:.6em;margin:0;">Prompt in base64, Chinese, or &ldquo;emoji after every word.&rdquo; Watermark fires in the cipher; convert back and <strong>all n-grams change</strong>.</p>
+    </div>
+    <div class="card" style="padding:10px;">
+      <h4 style="margin:0 0 4px;">Oracle (Zhang et al.)</h4>
+      <p style="font-size:.6em;margin:0;">Weak open model proposes; watermarked model only <strong>judges</strong>. Best-of-N approaches strong-model quality with no watermark in the output.</p>
+    </div>
+    <div class="card" style="padding:10px;">
+      <h4 style="margin:0 0 4px;">Copy-Paste mixing</h4>
+      <p style="font-size:.6em;margin:0;">Paste watermarked spans into a longer human document. <strong>CP-$k$-$X\%$</strong> = $k$ spans summing to $X\%$. Single z-test fails; signal returns with length.</p>
+    </div>
+  </div>
+  <div class="columns" style="gap:10px;margin-top:6px;align-items:flex-start;">
+    <div class="col" style="flex:1;text-align:center;">
+      <img src="lecture-5-images/cipher-attack-emoji.png" alt="ChatGPT prompted to write an essay about starting an icecream shop with two emojis after every word, then producing a long emoji-laden response" style="width:100%;max-height:120px;object-fit:contain;border-radius:6px;border:1px solid #eee;background:#fff;">
+      <p class="hint" style="text-align:center;font-size:.55em;margin:2px 0 0;">Cipher prompt: &ldquo;use 😍 after every word.&rdquo; Stripping emoji yields new n-grams.</p>
+    </div>
+    <div class="col" style="flex:1;text-align:center;">
+      <img src="lecture-5-images/cipher-attack-letterswap.png" alt="ChatGPT prompted to write an essay swapping the letter n with m and the letter a with e, producing a deformed but parseable text" style="width:100%;max-height:120px;object-fit:contain;border-radius:6px;border:1px solid #eee;background:#fff;">
+      <p class="hint" style="text-align:center;font-size:.55em;margin:2px 0 0;">Letter-swap variant: $n \leftrightarrow m$, $a \leftrightarrow e$. Harder to spot in transit.</p>
+    </div>
+    <div class="col" style="flex:1;text-align:center;">
+      <img src="lecture-5-images/copy-paste-attack.png" alt="Copy-Paste attack diagram showing watermarked text being scattered as k=1 or k=3 spans inside a larger gray (human) document at 25% mixing fraction" style="width:100%;max-height:120px;object-fit:contain;border-radius:6px;border:1px solid #eee;background:#fff;">
+      <p class="hint" style="text-align:center;font-size:.55em;margin:2px 0 0;">CP-$k$-$X\%$: scatter watermarked spans into human text.</p>
+    </div>
+  </div>
+  <p class="cite" style="margin-top:4px;"><a href="https://arxiv.org/abs/2311.04378">Zhang, Edelman, Francati, Venturi, Ateniese &amp; Barak, &ldquo;Watermarks in the Sand,&rdquo; ICML 2024</a></p>
+</section>
+
+<!-- ================================================ -->
+<!-- SLIDE 28: Stealing & Spoofing  -->
+<!-- ================================================ -->
+<section class="no-fragment">
+  <h2> Watermark Identification and Spoofing</h2>
+  <div class="columns">
+    <div class="col-50 fragment fade-in" data-fragment-index="0">
+      <p class="small" style="margin-top:0;"><strong>Watermark stealing </strong> queries a deployed watermarked model to statistically recover the green-list signature.</p>
+      <p class="small" style="margin:6px 0;">Once the green list is recovered, the attacker has a strong surface to both:</p>
+      <ul class="small" style="margin-top:0;">
+        <li><strong>Scrub</strong>: emit AI text that avoids the green list. Detector misses the generation.</li>
+        <li><strong>Spoof</strong>: write text that hits the green list and looks human. Detector falsely accuses.</li>
+      </ul>
+      <div class="warning-box" style="font-size:.66em;margin-top:6px;padding:6px 10px;">
+        <strong> Difficulty:</strong> Spoofing hardness scales with $k$ for KGW, number of watermarked n-grams scales as $|V|^{k+1}$, but not all are required.
+      </div>
+    </div>
+    <div class="col-50 fragment fade-in" data-fragment-index="1">
+      <img src="lecture-5-images/watermark-stealing-cost.png" alt="Jovanovic et al. Figure 4: spoofing success rate as a function of number of queries on log scale; full attacker reaches >80% with around 10^4 queries (~$50 of API spend)" style="width:100%;max-width:380px;display:block;margin:0 auto;border-radius:6px;border:1px solid #e5e5e5;">
+      <p class="hint" style="text-align:center;font-size:.58em;margin-top:2px;">Spoofing success vs query budget for $k=1$. ~$10^4$ queries reach 80%+.</p>
+      <h3 style="font-size:.82em;margin-top:6px;">Spoofing risks</h3>
+      <ul class="small" style="margin-top:2px;">
+        <li>Frame model provider for output they did not produce.</li>
+        <li>Erode trust in a watermark detector itself.</li>
+      </ul>
+      <div class="key-insight" style="font-size:.66em;margin-top:6px;padding:6px 10px;">
+        <strong>What blocks it.</strong> Christ-Gunn-Zamir 'undetectable' schemes are robust by construction.
+      </div>
+      <p class="cite" style="margin-top:4px;"><a href="https://arxiv.org/abs/2402.19361">Jovanovi&cacute;, Staab &amp; Vechev, ICML 2024</a> &middot; <a href="https://arxiv.org/abs/2410.02693">Pang et al. 2024</a></p>
+    </div>
+  </div>
+</section>
+
+
+<!-- ================================================ -->
+<!-- PART V DIVIDER (was Part VI; renumbered after dropping image excursion) -->
+<!-- ================================================ -->
+<section class="section-slide" data-background="#1a1a2e">
+  <div style="color:rgba(255,255,255,0.25);font-size:1.2em;font-weight:500;letter-spacing:.3em;text-align:center;margin-top:1.5em;">PART&nbsp;V</div>
+  <h2 style="margin-top:0.5em;">The Future of Provenance</h2>
+  <p style="color:rgba(255,255,255,0.6);font-size:.9em;text-align:center;">Volume, Unicode, the reverse problem, cryptography</p>
+</section>
+
+<!-- ================================================ -->
+<!-- SLIDE 30: Volume argument — Chart.js pies, not screenshots -->
+<!-- ================================================ -->
+<section class="no-fragment">
+  <h2>Is Watermarking worth it? The Volume Argument </h2>
+  <p class="small" style="margin-top:0;">The composition of data on the web is shifting with the release of frontier LLMs.</p>
+  <div class="columns" style="margin-top:8px;gap:18px;align-items:center;">
+    <div class="col fragment fade-in" data-fragment-index="0" style="flex:1;text-align:center;">
+      <div style="height:240px;"><canvas id="volPie2021"></canvas></div>
+      <p class="hint" style="text-align:center;margin-top:6px;"><strong>2021.</strong> $\sim$99% of text on the web is human-written.</p>
+    </div>
+    <div class="col fragment fade-in" data-fragment-index="1" style="flex:1;text-align:center;">
+      <div style="height:240px;"><canvas id="volPie2026"></canvas></div>
+      <p class="hint" style="text-align:center;margin-top:6px;"><strong>2026?</strong> By volume, machines dominate. <em>Without</em> watermarks, the entire blue slice is undetectable.</p>
+    </div>
+    <div class="col fragment fade-in" data-fragment-index="2" style="flex:1;text-align:center;">
+      <div style="height:240px;"><canvas id="volPieFuture"></canvas></div>
+      <p class="hint" style="text-align:center;margin-top:6px;"><strong>Watermarked-by-default world.</strong> Only the gray slivers are unverifiable.</p>
+    </div>
+  </div>
+  <div class="key-insight fragment fade-in" data-fragment-index="3" style="margin-top:14px;font-size:.78em;">
+    <strong>Watermarking makes detection tractable.</strong> Without watermarking, <em>everything</em> machine-generated is hard to detect. With watermarking, all text is detectable by default, and only the subset of attacked text (paraphrased, removed) remains hard to detect (as before). 
+  </div>
+  <p class="cite">Pie data: Naveen G. Rao&rsquo;s framing.</p>
+</section>
+
+<!-- ================================================ -->
+<!-- SLIDE 31: Unicode "dumb" watermarks -->
+<!-- ================================================ -->
+<section class="no-fragment">
+  <h2>Unicode Watermarks</h2>
+  <div class="columns">
+    <div class="col-50 fragment fade-in" data-fragment-index="0">
+      <p class="small" style="margin-top:0;"><strong>Whitemark</strong> replaces the ASCII space U+0020 with one of ~22 visually identical Unicode whitespace characters (U+2004 three-per-em, U+200B zero-width, &hellip;). Encodes one bit per whitespace position. Variants for CJK glyph selectors and sub-pixel kerning exist as <em>Variantmark</em> and <em>Printmark</em>. Invisible to human observers, can be copy-pasted.</p>
+      <div class="code-block" style="font-size:.62em;margin-top:6px;">
+<span class="cmt"># defeated in one line of regex</span><br>
+<span class="kw">re</span>.sub(<span class="str">r"[​-‏︀-️ -⁯]"</span>, <span class="str">""</span>, text)
+      </div>
+      <div class="fragment fade-in" data-fragment-index="2" style="text-align:center;margin-top:8px;">
+        <img src="lecture-5-images/easymark-whitemark.png" alt="Easymark/Whitemark codepoint table from Sato 2023: 22 Unicode whitespace variants with their codepoints (U+0020 standard space, U+2000 EN QUAD, U+2001 EM QUAD, U+2002 EN SPACE, U+2003 EM SPACE, U+2004 THREE-PER-EM, U+2005 FOUR-PER-EM, etc.) shown alongside their visual width markers" style="width:100%;max-width:300px;border-radius:8px;border:1px solid #e5e5e5;">
+      </div>
+    </div>
+    <div class="col-50">
+      <div class="fragment fade-in" data-fragment-index="1">
+        <p class="small"><strong>Unicode Consortium Proposal L2/25-241</strong> proposes two new code points, both visually identical to U+2060 WORD JOINER:</p>
+        <ul class="small">
+          <li><strong>TNCI</strong> (Training Non-Consent Indicator): authors could insert it to mark text as forbidden for AI training use.</li>
+          <li><strong>AGTI</strong> (AI-Generated Text Indicator): model providers could insert this to mark their output as machine-generated.</li>
+        </ul>
+        <p class="small">Default insertion: one per sentence at a random position. <em>No bit-encoding, no cryptographic binding</em>. Status: earliest stage of UTC review (not adopted).</p>
+      </div>
+
+    </div>
+  </div>
+  <div class="warning-box" style="margin-top:8px;font-size:.74em;">
+  If we believe in moving toward detection by default, and that all watermarks are breakable, why not use the simplest one?
+  </div>
+  <p class="cite"><a href="https://arxiv.org/abs/2310.08920">Sato, &ldquo;Embarrassingly Simple Text Watermarks,&rdquo; 2023</a> &middot; <a href="https://www.unicode.org/L2/L2025/25241-ai-watermarks.pdf">Casper et al., L2/25-241, &ldquo;Watermark Symbols for AI Training Consent and Text Provenance,&rdquo; UTC, Sep 2025</a></p>
+</section>
+
+<!-- ================================================ -->
+<!-- SLIDE 32: The reverse — strengthened with technical depth (Round 2) -->
+<!-- ================================================ -->
+<section class="no-fragment">
+  <h2>The Reverse Approach: Proving Content Is Human</h2>
+  <p class="small" style="margin-top:0;">Two primitives with different attestation surfaces.</p>
+  <div class="card-grid card-grid-2" style="gap:16px;">
+    <div class="card fragment fade-in" data-fragment-index="1" style="padding:14px;">
+      <div style="text-align:center;height:36px;display:flex;align-items:center;justify-content:center;">
+        <img src="lecture-5-images/c2pa-logo.png" alt="C2PA logo" style="height:28px;">
+      </div>
+      <h4 style="margin-top:4px;font-size:.85em;">C2PA / Content Credentials</h4>
+      <p style="font-size:.7em;">Signed CBOR manifest binding capture device, edits, and AI-gen tool to a hash chain. Verify = X.509 cert + hash check.</p>
+      <p style="font-size:.7em;margin-top:4px;"><strong>Deployed:</strong> Adobe Firefly, DALL&middot;E + Sora, Leica M11-P, Samsung Galaxy S25. EU AI Act Art. 50 may make this mandatory in late 2026.</p>
+    </div>
+    <div class="card fragment fade-in" data-fragment-index="2" style="padding:14px;">
+      <div style="text-align:center;height:36px;display:flex;align-items:center;justify-content:center;">
+        <img src="lecture-5-images/worldcoin-orb.png" alt="Worldcoin Orb" style="height:36px;border-radius:50%;">
+      </div>
+      <h4 style="margin-top:4px;font-size:.85em;">Personhood Credentials</h4>
+      <p style="font-size:.7em;">The Buterin proposal: Offline issuance ceremony, online ZK proof of unique-personhood. Crazy example: Worldcoin, an iris hash &rarr; Groth16 zk-SNARK (World ID).</p>
+      <p style="font-size:.7em;margin-top:4px;">Implemented correctly, ZK proofs can attest authorship or allowed attributes without leaking other information.</p>
+    </div>
+  </div>
+  <div class="key-insight fragment fade-in" data-fragment-index="3" style="margin-top:12px;font-size:.74em;">
+    <strong>Provenance can be addressed on the provider side. Personhood can be addressed from the user side.</strong> Composed, one could hope to always guarantee attribution to humans by  <em>verified-human + uncorrupted pipeline</em>. Technically feasible, but politically complicated.
+  </div>
+  <p class="cite">
+    <a href="https://spec.c2pa.org/specifications/specifications/2.2/specs/C2PA_Specification.html">C2PA Spec 2.2</a>
+    &middot; <a href="https://arxiv.org/abs/2408.07892">Adler, Hitzig, Jain, Birhane, Buterin et al., Personhood Credentials, 2024</a>
+    &middot; <a href="https://world.org/blog/developers/privacy-deep-dive">World / Worldcoin Privacy Deep-Dive</a>
+    &middot; <a href="https://vitalik.eth.limo/general/2023/07/24/biometric.html">Buterin, biometric-PoP critique, 2023</a>
+  </p>
+</section>
+
+<!-- ================================================ -->
+<!-- SLIDE 34: Key takeaways — tightened per Jonas "reconsider" -->
+<!-- ================================================ -->
+<section class="no-fragment">
+  <h2>Key Takeaways</h2>
+  <div class="card-grid card-grid-2" style="margin-top:10px;">
+    <div class="card" style="padding:16px;">
+      <h4>1 &middot; Detection is Hard, but often Doable </h4>
+      <p>Long, unedited LLM text is essentially detectable by modern detectors (because LLMs write in a distinctive style). Short, paraphrased, or adversarially humanized text is hard to detect.</p>
+    </div>
+    <div class="card" style="padding:16px;">
+      <h4>2 &middot; Watermarking turns detection into a tractable hypothesis test.</h4>
+      <p>Red/Green watermarking works by modifying the output distribution of the model slightly. Other watermarks that instead replace the sampling procedure are also possible. Modern watermarks are ideally 'undetectable'.</p>
+    </div>
+    <div class="card" style="padding:16px;">
+      <h4>3 &middot; Attack Vectors against watermarks go far beyond paraphrasing</h4>
+      <p>Cipher attacks, oracle attacks, copy-paste mixing, key stealing and spoofing attacks.</p>
+    </div>
+    <div class="card" style="padding:16px;">
+      <h4>4 &middot; Transparency could also be solved through verification.</h4>
+      <p>Widespread use of watermarks would shrink the amount of undetectable machine-written text; provenance and personhood credentials (C2PA, Adler/Buterin) would increase the amount of verifiably human-written text.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================ -->
+<!-- SLIDE 35: Thank you — trimmed per Jonas (no MP2 line, no Slack) -->
+<!-- ================================================ -->
+<section class="no-fragment">
+  <div style="display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:8px;">
+    <div>
+      <h2 style="margin:0;font-size:1.0em;color:var(--dark);">Thank you &mdash; Questions?</h2>
+      <p class="hint" style="margin:6px 0 0;font-size:.62em;"><strong>Next lecture:</strong> Privacy: Memorization &amp; Copyright in LLMs &middot; Monday, 18 May 2026 &middot; Jonas Geiping</p>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;">
+      <img src="lecture-4-images/feedback-qr.png" alt="Feedback form QR code" style="width:96px;height:96px;border-radius:6px;">
+      <p class="hint" style="margin:0;font-size:.58em;line-height:1.3;">Feedback:<br><a href="https://forms.gle/5JF3H6zhP795HhpD8">forms.gle/5JF3H6zhP795HhpD8</a></p>
+    </div>
+  </div>
+  <img src="lecture-4-images/lecture-schedule.png" alt="Course schedule across 14 lectures of the semester" style="display:block;margin:0 auto;max-width:62%;max-height:540px;object-fit:contain;">
+</section>
+
+</div><!-- end slides -->
+</div><!-- end reveal -->
+
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/dist/reveal.js"></script>
+<script>
+// Auto-fragment: reveal each top-level chunk of a content slide on click.
+(function autoFragment(){
+  document.querySelectorAll('.reveal .slides > section').forEach(function(sec){
+    if (sec.querySelectorAll(':scope > section').length) return;
+    var subs = sec.querySelectorAll(':scope > section');
+    var targets = subs.length ? subs : [sec];
+    targets.forEach(function(s){
+      if (s.classList.contains('title-slide') || s.classList.contains('section-slide') || s.classList.contains('no-fragment')) return;
+      var children = Array.from(s.children);
+      var seenHeading = false;
+      children.forEach(function(el){
+        if (!seenHeading && /^H[1-6]$/.test(el.tagName)) { seenHeading = true; return; }
+        if (el.classList && el.classList.contains('cite')) return;
+        if (seenHeading && el.tagName === 'P' && !el.dataset.fragment) {
+          el.dataset.fragment = 'intro';
+          return;
+        }
+        el.classList.add('fragment','fade-in');
+      });
+    });
+  });
+})();
+Reveal.initialize({hash:true,slideNumber:'c/t',width:1100,height:700,margin:0.04,transition:'none',transitionSpeed:'fast',pdfSeparateFragments:false,controls:false});
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Open external links in new tabs
+  document.querySelectorAll('a[href^="http"]').forEach(function(a) {
+    a.setAttribute('target', '_blank');
+    a.setAttribute('rel', 'noopener');
+  });
+
+  // ================================
+  // SLIDE 18: Watermark detection demo, REAL DATA
+  // Two passages: human (Wikipedia transformer paragraph) and watermarked
+  // (Qwen2.5-0.5B-Instruct generation with KGW soft watermark applied during sampling).
+  // Data pre-computed offline by /tmp/gen_kgw_demo.py and saved to wm-demo-data.json.
+  // The detector replays the SHA-256 PRF over previous token IDs, so green flags are
+  // recoverable from the data alone. Step-through animates the cumulative z-score.
+  // ================================
+  function initWmDemo() {
+    const stepBtn = document.getElementById('wmStep');
+    if (!stepBtn || stepBtn._init) return; stepBtn._init = true;
+    const allBtn = document.getElementById('wmAll');
+    const resetBtn = document.getElementById('wmReset');
+
+    // Standard normal CDF via Abramowitz 7.1.26 erf
+    function normalCDF(z) {
+      const sign = z < 0 ? -1 : 1;
+      const a1=0.254829592,a2=-0.284496736,a3=1.421413741,a4=-1.453152027,a5=1.061405429,p=0.3275911;
+      const x = Math.abs(z) / Math.SQRT2;
+      const t = 1.0 / (1.0 + p * x);
+      const y = 1.0 - (((((a5*t + a4)*t) + a3)*t + a2)*t + a1)*t * Math.exp(-x*x);
+      return 0.5 * (1.0 + sign * y);
+    }
+
+    let DATA = null;
+    let stateA = { idx: 0 };
+    let stateB = { idx: 0 };
+    const GAMMA = 0.5;
+
+    // Read inlined JSON (no fetch; ensures static PDF print also shows real data).
+    try {
+      const dataEl = document.getElementById('wmDemoData');
+      if (dataEl) {
+        DATA = JSON.parse(dataEl.textContent);
+        // Auto-reveal everything so the static PDF (and first-glance viewer) shows the result.
+        // Step / Reset / Reveal all still work for live demos.
+        stateA.idx = DATA.human.tokens.length;
+        stateB.idx = DATA.watermarked.tokens.length;
+        renderState();
+      }
+    } catch (e) {
+      document.getElementById('wmTextA').textContent = 'Failed to parse demo data: ' + e;
+    }
+
+    function renderPanel(target, passage, idx) {
+      const tokens = passage.tokens;
+      const greens = passage.greens;
+      const html = [];
+      for (let i = 0; i < tokens.length; i++) {
+        const tok = tokens[i].replace(/</g,'&lt;').replace(/>/g,'&gt;') || '·';
+        if (i < idx) {
+          if (greens[i] === true) html.push('<span class="tok tok-green">' + tok + '</span>');
+          else if (greens[i] === false) {
+            // i==0 is uncounted (no context); render greyed.
+            if (i === 0) html.push('<span class="tok" style="background:#eee;color:#888;">' + tok + '</span>');
+            else html.push('<span class="tok tok-red">' + tok + '</span>');
+          }
+        } else {
+          html.push('<span class="tok" style="background:transparent;color:#bbb;">' + tok + '</span>');
+        }
+      }
+      document.getElementById('wmText' + target).innerHTML = html.join(' ');
+
+      // Compute live N/g/z/p over revealed tokens (skipping i==0 which has no context)
+      let n = 0, g = 0;
+      for (let i = 1; i < idx; i++) {
+        if (greens[i] === true) { n++; g++; }
+        else if (greens[i] === false) { n++; }
+      }
+      const stdev = Math.sqrt(n * GAMMA * (1 - GAMMA));
+      const z = stdev > 0 ? (g - GAMMA * n) / stdev : 0;
+      const p = 1 - normalCDF(z);
+      document.getElementById('wmN' + target).textContent = n || '—';
+      document.getElementById('wmG' + target).textContent = n ? g : '—';
+      document.getElementById('wmZ' + target).textContent = n ? z.toFixed(2) : '—';
+      document.getElementById('wmP' + target).textContent = n ? (p < 1e-4 ? p.toExponential(1) : p.toFixed(3)) : '—';
+    }
+
+    function renderState() {
+      if (!DATA) return;
+      renderPanel('A', DATA.human, stateA.idx);
+      renderPanel('B', DATA.watermarked, stateB.idx);
+    }
+
+    stepBtn.addEventListener('click', () => {
+      if (!DATA) return;
+      // If both panels are already fully revealed, restart from 0 so the lecturer
+      // can step through again from a fresh start.
+      if (stateA.idx >= DATA.human.tokens.length && stateB.idx >= DATA.watermarked.tokens.length) {
+        stateA.idx = 0; stateB.idx = 0;
+      } else {
+        const stepSize = 8;
+        stateA.idx = Math.min(stateA.idx + stepSize, DATA.human.tokens.length);
+        stateB.idx = Math.min(stateB.idx + stepSize, DATA.watermarked.tokens.length);
+      }
+      renderState();
+    });
+    if (allBtn) allBtn.addEventListener('click', () => {
+      if (!DATA) return;
+      stateA.idx = DATA.human.tokens.length;
+      stateB.idx = DATA.watermarked.tokens.length;
+      renderState();
+    });
+    if (resetBtn) resetBtn.addEventListener('click', () => {
+      stateA.idx = 0; stateB.idx = 0;
+      renderState();
+    });
+  }
+
+  // ================================
+  // SLIDE 18: Hash-scheme variants SVG (Additive / Skip / Min)
+  // Three small panels showing how each scheme combines previous h tokens
+  // into a single PRF seed.
+  // ================================
+  function initHashVariants() {
+    const svg = document.getElementById('hashVariants');
+    if (!svg || svg._init) return; svg._init = true;
+    const s = d3.select(svg);
+    const h = 4;
+    const cellW = 18, cellH = 18;        // smaller cells
+    const cellGap = 3;
+    const tokensY = 70;                  // y of token row
+    const combY = 120;                   // y of combiner
+    const outY = 160;                    // y of output bar (below combiner)
+    const panelW = 160;                  // each panel uses 0..160 in local coords
+    const tokenRowW = h * cellW + (h - 1) * cellGap;          // 4*18 + 3*3 = 81
+    const tokenRowX0 = (panelW - tokenRowW) / 2;              // left edge of token row
+    const combX = panelW / 2;                                 // combiner centered
+
+    function panel(xOff, label, type) {
+      const g = s.append('g').attr('transform', `translate(${xOff},0)`);
+      // Panel header
+      g.append('text').attr('x', panelW/2).attr('y', 28)
+        .attr('text-anchor','middle').attr('font-family','Inter')
+        .attr('font-size','14').attr('font-weight','700').attr('fill','#1a1a2e').text(label);
+
+      // Input tokens
+      const ts = [];
+      for (let i = 0; i < h; i++) {
+        const x = tokenRowX0 + i * (cellW + cellGap);
+        g.append('rect').attr('x', x).attr('y', tokensY - cellH/2)
+          .attr('width', cellW).attr('height', cellH).attr('rx', 3)
+          .attr('fill', '#fff').attr('stroke', '#888').attr('stroke-width', 1);
+        g.append('text').attr('x', x + cellW/2).attr('y', tokensY + 4)
+          .attr('text-anchor','middle').attr('font-family','JetBrains Mono')
+          .attr('font-size','8').attr('fill', '#444').text('t' + (i+1-h));
+        ts.push({ x: x + cellW/2, y: tokensY + cellH/2 });
+      }
+
+      // Combiner circle
+      g.append('circle').attr('cx', combX).attr('cy', combY).attr('r', 13)
+        .attr('fill', '#a51e37').attr('opacity', 0.9);
+      const combLabel = type === 'add' ? '+' : type === 'skip' ? '↦' : 'min';
+      g.append('text').attr('x', combX).attr('y', combY + 4)
+        .attr('text-anchor','middle').attr('font-family','Inter')
+        .attr('font-size', type === 'min' ? '9' : '14').attr('font-weight','700')
+        .attr('fill','#fff').text(combLabel);
+
+      // Arrows from inputs into combiner
+      if (type === 'add' || type === 'min') {
+        ts.forEach(t => {
+          g.append('line').attr('x1', t.x).attr('y1', t.y)
+            .attr('x2', combX).attr('y2', combY - 13)
+            .attr('stroke', '#888').attr('stroke-width', 1).attr('opacity', 0.8);
+        });
+      } else {
+        // skip: highlight the chosen token (leftmost) with red border
+        const chosen = g.select('rect:nth-of-type(1)');
+        // re-stroke it to make selection clear
+        const x0 = tokenRowX0;
+        g.append('rect').attr('x', x0 - 1.5).attr('y', tokensY - cellH/2 - 1.5)
+          .attr('width', cellW + 3).attr('height', cellH + 3).attr('rx', 4)
+          .attr('fill', 'none').attr('stroke', '#a51e37').attr('stroke-width', 1.6);
+        g.append('line').attr('x1', x0 + cellW/2).attr('y1', tokensY + cellH/2)
+          .attr('x2', combX).attr('y2', combY - 13)
+          .attr('stroke', '#a51e37').attr('stroke-width', 1.4);
+      }
+
+      // Arrow combiner -> output bar
+      g.append('line').attr('x1', combX).attr('y1', combY + 13)
+        .attr('x2', combX).attr('y2', outY - 4)
+        .attr('stroke', '#888').attr('stroke-width', 1.2)
+        .attr('marker-end', 'url(#hv-arrow)');
+
+      // Output green/red bar (a single horizontal strip of cells, not a vertical column)
+      const nOut = 6;
+      const outCellW = 12, outCellH = 10;
+      const outRowW = nOut * outCellW + (nOut - 1) * 2;
+      const outX0 = (panelW - outRowW) / 2;
+      const colorSets = {
+        add:  ['#c8e6c9','#ffcdd2','#c8e6c9','#ffcdd2','#c8e6c9','#ffcdd2'],
+        skip: ['#c8e6c9','#c8e6c9','#ffcdd2','#c8e6c9','#ffcdd2','#c8e6c9'],
+        min:  ['#ffcdd2','#c8e6c9','#c8e6c9','#ffcdd2','#c8e6c9','#c8e6c9']
+      };
+      for (let i = 0; i < nOut; i++) {
+        g.append('rect').attr('x', outX0 + i * (outCellW + 2)).attr('y', outY)
+          .attr('width', outCellW).attr('height', outCellH).attr('rx', 1.5)
+          .attr('fill', colorSets[type][i]);
+      }
+      g.append('text').attr('x', panelW/2).attr('y', outY + outCellH + 12)
+        .attr('text-anchor','middle').attr('font-family','Inter').attr('font-size','9')
+        .attr('fill', '#666').text('seed → G / R split');
+
+      // Description
+      const desc = type === 'add'
+        ? 'sum hash of last h tokens'
+        : type === 'skip'
+        ? 'hash one chosen past token'
+        : 'min over h hashes';
+      g.append('text').attr('x', panelW/2).attr('y', outY + outCellH + 30)
+        .attr('text-anchor','middle').attr('font-family','Inter').attr('font-size','10')
+        .attr('fill', '#444').attr('font-weight','500').text(desc);
+    }
+
+    // Define arrowhead marker once
+    const defs = s.append('defs');
+    defs.append('marker').attr('id','hv-arrow').attr('viewBox','0 0 10 10')
+      .attr('refX', 8).attr('refY', 5).attr('markerWidth', 6).attr('markerHeight', 6)
+      .attr('orient','auto-start-reverse')
+      .append('path').attr('d','M 0 0 L 10 5 L 0 10 z').attr('fill','#888');
+
+    // Three panels, side by side. Total width = 3*160 + 2*30 = 540 (matches viewBox).
+    const gap = 30;
+    panel(0,                   'Additive', 'add');
+    panel(panelW + gap,        'Skip',     'skip');
+    panel(2 * (panelW + gap),  'Min',      'min');
+  }
+
+  // ================================
+  // SLIDE 30: Volume argument — three Chart.js pies
+  // ================================
+  function initVolumePies() {
+    const ids = [
+      { id: 'volPie2021', data: [99, 1], labels: ['Human-generated', 'Machine-generated'], colors: ['#5b9bd5', '#1a4a78'] },
+      { id: 'volPie2026', data: [10, 90], labels: ['Human-generated', 'Machine-generated'], colors: ['#5b9bd5', '#1a4a78'] },
+      { id: 'volPieFuture', data: [10, 79, 10, 1], labels: ['Human', 'Watermarked', 'Unwatermarked', 'Broken watermarks'], colors: ['#5b9bd5', '#1a4a78', '#a8a8a8', '#e94560'] }
+    ];
+    ids.forEach(p => {
+      const canvas = document.getElementById(p.id);
+      if (!canvas || canvas._init) return; canvas._init = true;
+      new Chart(canvas, {
+        type: 'pie',
+        data: { labels: p.labels, datasets: [{ data: p.data, backgroundColor: p.colors, borderColor: '#fff', borderWidth: 1.5 }] },
+        options: {
+          responsive: true, maintainAspectRatio: false, animation: false,
+          plugins: {
+            legend: { position: 'bottom', labels: { font: { size: 10 }, boxWidth: 12 } },
+            tooltip: { callbacks: { label: (ctx) => ctx.label + ': ' + ctx.parsed + '%' } }
+          }
+        }
+      });
+    });
+  }
+
+  function initAll() {
+    try { initWmDemo(); } catch(e){ console.warn(e); }
+    try { initHashVariants(); } catch(e){ console.warn(e); }
+    try { initVolumePies(); } catch(e){ console.warn(e); }
+  }
+  setTimeout(initAll, 400);
+  Reveal.on('slidechanged', () => setTimeout(initAll, 200));
+  Reveal.on('ready', () => setTimeout(initAll, 300));
+});
+</script>
+
+</body>
+</html>

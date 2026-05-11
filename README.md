@@ -63,7 +63,7 @@ Lecture recordings can be found [here](https://drive.google.com/drive/folders/1P
 | 2 | 20.04  | Jonas     | [**LLM background.**](lecture-slides/lecture-2-llm-background.html) Transformers, pre-training, post-training, using models. |
 | 3 | 27.04  | Maksym    | [**Lessons from adversarial ML.**](lecture-slides/lecture-3-adv-ml.html) Jailbreaks for chatbots and agents (prefilling, GCG, PAIR, Crescendo, decomposition); backdoors |
 | 4 | 04.05  | Maksym    | [**Open-weight safety.**](lecture-slides/lecture-4-open-weight-safety.html) Model stealing & distillation attacks, fine-tuning attacks, emergent misalignment &nbsp;*— Mini-project 1 due this week* |
-| 5 | 11.05  | Jonas     | **Transparency.** Detection of LLM-generated content and watermarking                      |
+| 5 | 11.05  | Jonas     | [**Transparency.**](lecture-slides/lecture-5-transparency.html) Detection of LLM-generated content and watermarking                      |
 | 6 | 18.05  | Jonas     | **Privacy.** Memorization and copyright in LLMs &nbsp;*— Mini-project 2 due this week*               |
 | 7 | 01.06  | Sahar     | **Alignment tools.** Pre-training filtering, RLHF, DPO, Constitutional AI, Model Spec with rubric RL, steering vectors, external guardrails, LLMs as judges |
 | 8 | 08.06  | Sahar     | **LLM agents.** Reasoning and planning, deep research, coding and browser/computer-use agents, MCP, agent skills &nbsp;*— Mini-project 3 due this week* |
