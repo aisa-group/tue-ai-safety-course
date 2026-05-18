@@ -829,9 +829,8 @@ Der Sommer ist da - die Urlaubszeit r&uuml;ckt n&auml;her. Auch f&uuml;r die Mit
   <div style="display:flex;align-items:center;gap:18px;margin:4px 0 8px;">
     <img src="lecture-6-images/commoncrawl-logo.svg" alt="CommonCrawl logo" style="height:60px;flex:none;">
     <p class="small" style="margin:0;text-align:left;color:#333;font-size:.7em;line-height:1.4;">
-      <strong>Common Crawl Foundation</strong> &middot; non-profit registered in California, founded 2007 by Gil Elbaz.
-      Mission: keep a free, public, machine-readable copy of the open web, funded by donations.
-      One web crawl per month since 2008.
+      <strong>Common Crawl Foundation</strong> &middot; non-profit registered in California, founded 2007 by Gil Elbaz with the
+      mission to keep a free, public, machine-readable copy of the open web, funded by donations.
     </p>
   </div>
   <div class="card-grid card-grid-4" style="gap:10px;margin:6px 0 10px;">
@@ -839,8 +838,8 @@ Der Sommer ist da - die Urlaubszeit r&uuml;ckt n&auml;her. Auch f&uuml;r die Mit
     <div class="card" style="padding:8px 10px;text-align:center;"><div style="font-size:1.0em;font-weight:700;color:#a51e37;">~400&nbsp;TB</div><div style="font-size:.58em;color:#555;">compressed per crawl</div></div>
     <div class="card" style="padding:8px 10px;text-align:center;"><div style="font-size:1.0em;font-weight:700;color:#a51e37;">WARC&nbsp;/&nbsp;WET&nbsp;/&nbsp;WAT</div><div style="font-size:.58em;color:#555;">raw HTTP &middot; extracted text &middot; metadata</div></div>
   </div>
-  <p class="hint" style="margin:0 0 4px;font-size:.58em;color:#666;">Almost every web-derived LLM corpus (C4, RefinedWeb, FineWeb, DCLM, the OLMo CC subset) is a filtered slice of CC. A single raw WARC record:</p>
-  <pre style="background:#1a1a2e;color:#e5e5e5;border-radius:6px;padding:10px 14px;font-family:'JetBrains Mono','Fira Code',monospace;font-size:.48em;line-height:1.45;margin:0;overflow:hidden;white-space:pre-wrap;">
+  <p class="hint" style="margin:0 0 4px;font-size:.58em;color:#666;">Almost every public web-derived LLM corpus (C4, RefinedWeb, FineWeb, Dolmino) is a filtered slice of CC. A single raw WARC record:</p>
+  <pre style="background:#1a1a2e;color:#e5e5e5;border-radius:6px;padding:10px 14px;font-family:'JetBrains Mono','Fira Code',monospace;font-size:.38em;line-height:1.45;margin:0;overflow:hidden;white-space:pre-wrap;">
 <span style="color:#a8c0ff;">WARC/1.0</span>
 <span style="color:#a8c0ff;">WARC-Type</span>: response
 <span style="color:#a8c0ff;">WARC-Date</span>: 2024-09-12T03:47:21Z
@@ -868,7 +867,7 @@ Content-Type: text/html; charset=utf-8</span>
 <!-- ================================================ -->
 <section class="no-fragment">
   <h2>What&rsquo;s Actually in CommonCrawl?</h2>
-  <img src="lecture-6-images/c4-top-tlds.png" alt="Dodge et al. 2021 Figure 2: top-25 top-level domains in C4.EN by tokens. .com dominates by 10x, followed by .org, .co.uk, .net, .com.au, .edu, .ca, .info, .org.uk, .in, .gov, .eu, .de, .tk, .co, .co.za, .us, .ie, .co.nz, .ac.uk, .ru, .nl, .io, .me, .it" style="width:100%;max-width:880px;display:block;margin:4px auto 4px;border-radius:8px;border:1px solid #e5e5e5;background:#fff;">
+  <img src="lecture-6-images/c4-top-tlds.png" alt="Dodge et al. 2021 Figure 2: top-25 top-level domains in C4.EN by tokens. .com dominates by 10x, followed by .org, .co.uk, .net, .com.au, .edu, .ca, .info, .org.uk, .in, .gov, .eu, .de, .tk, .co, .co.za, .us, .ie, .co.nz, .ac.uk, .ru, .nl, .io, .me, .it" style="width:100%;max-width:780px;display:block;margin:4px auto 4px;border-radius:8px;border:1px solid #e5e5e5;background:#fff;">
   <p class="cite"><a href="https://aclanthology.org/2021.emnlp-main.98/">Dodge, Sap, Marasovi&cacute;, Agnew, Ilharco, Groeneveld, Mitchell, Gardner, &ldquo;Documenting Large Webtext Corpora: A Case Study on the Colossal Clean Crawled Corpus,&rdquo; EMNLP 2021</a></p>
 </section>
 
@@ -880,7 +879,7 @@ Content-Type: text/html; charset=utf-8</span>
   <div class="columns" style="margin-top:4px;align-items:flex-start;">
     <div class="col-50 fragment fade-in" style="padding-right:4px;">
       <h3 style="font-size:.78em;margin:0 0 6px;color:#a51e37;">What is a knowledge cutoff?</h3>
-      <p style="font-size:.62em;margin:0 0 8px;line-height:1.45;">A single date that labs publish in the system card. <strong>Operationally:</strong> the last day on which documents were eligible to enter the training corpus.</p>
+      <p style="font-size:.62em;margin:0 0 8px;line-height:1.45;">A single date published in the system card. <strong>Operationally:</strong> the last day on which documents were eligible to enter the training corpus.</p>
       <table style="width:100%;font-size:.6em;border-collapse:collapse;margin:0 0 8px;">
         <tr style="border-bottom:1px solid #e5e5e5;background:#fafafa;">
           <th style="text-align:left;padding:6px 8px;font-weight:600;">Model</th>
@@ -895,13 +894,13 @@ Content-Type: text/html; charset=utf-8</span>
         <tr><td style="padding:6px 8px;">GPT-5.5</td><td style="text-align:center;">Dec 2025</td><td style="text-align:center;color:#555;">Apr 2026</td></tr>
       </table>
       <div class="key-insight" style="margin-top:6px;font-size:.62em;line-height:1.45;">
-        <strong>How reliable is it?</strong> The stated date is <em>often</em> the cutoff of pretraining knowledge. Closed-source model posttraining can leak information. The full knowledge peak sits well before the stated date (see right).
+        <strong>How reliable is it?</strong> The stated date is <em>often</em> the cutoff of pretraining knowledge. But, closed-source model post-training can leak information beyond the cut off date. The full knowledge peak sits before the stated date (see right).
       </div>
     </div>
     <div class="col-50 fragment fade-in" style="padding-left:4px;">
       <h3 style="font-size:.78em;margin:0 0 6px;color:#a51e37;">Knowledge cutoffs can be fuzzy</h3>
       <img src="lecture-6-images/zhao-set-the-clock-cropped.png" alt="Zhao et al. 2024 Figure 1 left column: per-year F1 on temporal QA for GPT-3, LLaMA-65B, LLaMA2-70B, LLaMA2-7B. Each panel marks the empirical peak year. GPT-3 peaks 2017 (F1 16.6), LLaMA1-65B peaks 2018 (20.1), LLaMA2-70B peaks 2019 (23.0), LLaMA2-7B peaks 2019 (14.1)." style="width:100%;max-width:560px;display:block;margin:0 auto;border-radius:6px;border:1px solid #e5e5e5;background:#fff;">
-      <p class="hint" style="text-align:center;font-size:.55em;margin:4px 0 0;">Zhao et al. 2024, Fig. 1. Red triangle = year of peak F1 on temporal QA. Label = <em>(peak year, peak F1)</em>. The peak sits 2&ndash;8 years before each model's stated cutoff.</p>
+      <p class="hint" style="text-align:center;font-size:.55em;margin:4px 0 0;">Zhao et al. 2024, Fig. 1. Red triangle = year of peak F1 on temporal QA. Label = <em>(peak year, peak F1)</em>. </p>
     </div>
   </div>
   <p class="cite"><a href="https://arxiv.org/abs/2402.16797">Zhao, Yu, Lewis, Pasupat, Aly, &ldquo;Set the Clock,&rdquo; Findings ACL 2024</a> &middot; <a href="https://arxiv.org/abs/2403.12958">Cheng et al., &ldquo;Dated Data,&rdquo; Findings EMNLP 2024</a> &middot; <a href="https://arxiv.org/abs/2405.08460">Zhu et al., &ldquo;Is Your LLM Outdated?&rdquo; NAACL 2025</a></p>
@@ -948,10 +947,9 @@ Content-Type: text/html; charset=utf-8</span>
   <div class="columns">
     <div class="col-50">
       <h3 style="font-size:.82em;margin-top:0;">Long-tailed data forces memorization</h3>
-      <p class="small">Natural-language tokens follow a heavy-tailed (roughly Zipf) frequency distribution. A non-trivial fraction of training subpopulations appears <em>exactly once</em>.</p>
-      <div class="math-block" style="font-size:.7em;">
-        Feldman (2020): on long-tail data with singleton mass $\tau$,
-        $\mathrm{err}_{\text{memory-free}} - \mathrm{err}_{\mathrm{opt}} = \Omega(\tau)$
+      <p class="small">Natural-language tokens (and n-grams) follow a heavy-tailed (roughly Zipf) frequency distribution. A non-trivial fraction of training subpopulations appears <em>exactly once</em>.</p>
+      <div class="math-block" style="font-size:.72em;">
+        <strong>Feldman (2020)<sup>†</sup>:</strong> the excess error of any non-memorizing learner is lower-bounded by the probability mass on training examples drawn from singleton subpopulations.
       </div>
       <p class="small">Translation: a learner that refuses to memorize is provably suboptimal by an amount that scales with the size of the long tail.</p>
     </div>
@@ -962,9 +960,12 @@ Content-Type: text/html; charset=utf-8</span>
         <div class="metric" style="padding:8px 12px;"><div class="value" style="font-size:1.3em;">14 Gbits</div><div class="label" style="font-size:.55em;">in a 7B-parameter model</div></div>
       </div>
       <p class="small">Stored factual knowledge is at most $\approx 2$ bits per parameter, independent of (transformer) architecture, optimizer, and (for trained-to-convergence runs) int8 quantization.</p>
-      <p class="small"><strong>Consequence.</strong> Some memorization is required by the data and physically bounded by the weights. Both bounds <em>scale up</em> with model size.</p>
+      <p class="small"><strong>Consequence.</strong> Memorization is <em>required</em> by the data (Feldman) and <em>bounded</em> by the weights (Allen-Zhu). Larger models can memorize more of the long tail before saturating the 2-bit ceiling.</p>
     </div>
   </div>
+  <p class="cite" style="font-size:.45em;opacity:.7;margin:6px 0 2px;">
+    <sup>†</sup> Formally: for any stable (non-memorizing) learner, $\;\mathrm{excess\ risk} \,\gtrsim\, \Pr[\text{example from a singleton subpopulation}]$.
+  </p>
   <p class="cite"><a href="https://arxiv.org/abs/1906.05271">Feldman, &ldquo;Does Learning Require Memorization?&rdquo; STOC 2020</a> &middot; <a href="https://arxiv.org/abs/2008.03703">Feldman &amp; Zhang, &ldquo;What Neural Networks Memorize and Why,&rdquo; NeurIPS 2020</a> &middot; <a href="https://arxiv.org/abs/2404.05405">Allen-Zhu &amp; Li, &ldquo;Physics of Language Models 3.3: Knowledge Capacity Scaling Laws,&rdquo; ICLR 2025</a></p>
 </section>
 
@@ -1042,11 +1043,11 @@ Content-Type: text/html; charset=utf-8</span>
     </div>
     <div class="col-50 fragment fade-in">
       <div class="metric-row" style="margin:6px 0;gap:10px;flex-direction:column;align-items:stretch;">
-        <div class="metric" style="padding:10px 14px;"><div class="value" style="font-size:1.3em;">150&times;</div><div class="label" style="font-size:.58em;">memorization rate under attack vs. baseline (0.852% vs. 0.02%)</div></div>
-        <div class="metric" style="padding:10px 14px;"><div class="value" style="font-size:1.3em;">10,000+</div><div class="label" style="font-size:.58em;">unique verbatim 50-token training sequences extracted for ~$200 in API calls</div></div>
-        <div class="metric" style="padding:10px 14px;"><div class="value" style="font-size:1.3em;">1.5 &times; 10<sup>6</sup></div><div class="label" style="font-size:.58em;">unique 50-token sequences memorized in gpt-3.5-turbo (Good&ndash;Turing lower bound)</div></div>
+        <div class="metric" style="padding:10px 14px;"><div class="value" style="font-size:1em;">150&times;</div><div class="label" style="font-size:.58em;">memorization rate under attack vs. baseline (0.852% vs. 0.02%)</div></div>
+        <div class="metric" style="padding:10px 14px;"><div class="value" style="font-size:1em;">10,000+</div><div class="label" style="font-size:.58em;">unique verbatim 50-token training sequences extracted for ~$200 in API calls</div></div>
+        <div class="metric" style="padding:10px 14px;"><div class="value" style="font-size:1em;">1.5 &times; 10<sup>6</sup></div><div class="label" style="font-size:.58em;">unique 50-token sequences memorized in gpt-3.5-turbo </div></div>
       </div>
-      <p class="hint" style="margin-top:10px;font-size:.62em;">Recovered text includes real PII (names, phones, addresses), Bitcoin keys, NSFW content, source code, copyrighted books.</p>
+      <p class="hint" style="margin-top:10px;font-size:.62em;">Recovered text includes Personally Identifiable Information (PII), e.g. names, phones, addresses, as well as Bitcoin keys, NSFW content, source code, copyrighted books.</p>
     </div>
   </div>
   <p class="cite"><a href="https://arxiv.org/abs/2311.17035">Nasr, Carlini, Hayase, Jagielski, Cooper, Ippolito, Choquette-Choo, Wallace, Tram&egrave;r, Lee, &ldquo;Scalable Extraction of Training Data from (Production) Language Models,&rdquo; 2023</a> &middot; <a href="https://not-just-memorization.github.io/extracting-training-data-from-chatgpt.html">Companion blog post</a></p>
@@ -1111,9 +1112,9 @@ Content-Type: text/html; charset=utf-8</span>
 <!-- COPYRIGHT (related) DIVIDER -->
 <!-- ================================================ -->
 <section class="section-slide" data-background="#1a1a2e">
-  <div style="color:rgba(255,255,255,0.25);font-size:1.2em;font-weight:500;letter-spacing:.3em;text-align:center;margin-top:1.5em;">RELATED</div>
+  <div style="color:rgba(255,255,255,0.25);font-size:1.2em;font-weight:500;letter-spacing:.3em;text-align:center;margin-top:1.5em;">INTERMISSION</div>
   <h2 style="margin-top:0.5em;">Copyright</h2>
-  <p style="color:rgba(255,255,255,0.6);font-size:.9em;text-align:center;">Bartz, NYT, fair use, Warhol, the EU AI Act</p>
+  <p style="color:rgba(255,255,255,0.6);font-size:.9em;text-align:center;">Is Training on all of this Data a Copyright Concern? Is Memorizing it? </p>
 </section>
 
 <!-- ================================================ -->
@@ -1157,7 +1158,7 @@ Content-Type: text/html; charset=utf-8</span>
     </g>
   </svg>
   <div class="card fragment fade-in" style="max-width:1100px;margin:8px auto 0;padding:8px 14px;background:#fafafa;border-color:#e5e5e5;">
-    <p style="font-size:.6em;margin:0;line-height:1.5;"><strong>17 U.S.C. &sect; 107 fair-use factors:</strong> (1) purpose &amp; character (commercial / transformative); (2) nature of the work; (3) amount used; (4) market effect. <em>Both prongs are litigated against all four. Bartz won on one; NYT alleges the other.</em></p>
+    <p style="font-size:.6em;margin:0;line-height:1.5;"><strong>17 U.S.C. &sect; 107 fair-use factors:</strong> (1) purpose &amp; character (commercial / transformative); (2) nature of the work; (3) amount used; (4) market effect.</em></p>
   </div>
   <p class="cite"><a href="https://www.law.cornell.edu/uscode/text/17/107">17 U.S.C. &sect; 107 on Cornell LII</a></p>
 </section>
@@ -1167,7 +1168,7 @@ Content-Type: text/html; charset=utf-8</span>
 <!-- ================================================ -->
 <section class="no-fragment">
   <h2>Bartz v. Anthropic: the Supply-Chain Argument</h2>
-  <p class="small" style="text-align:center;color:#666;margin:0 0 10px;">The first U.S. ruling on whether LLM training is fair use. Judge Alsup decomposed the pipeline and ruled on each stage separately.</p>
+  <p class="small" style="text-align:center;color:#666;margin:0 0 10px;">The first U.S. ruling on whether LLM training is fair use. The training pipeline was decomposed and separately evaluated:</p>
   <div class="card-grid card-grid-3" style="margin-top:0;gap:10px;">
     <div class="card fragment fade-in" style="background:#eaf6ea;border-left:3px solid #2e7d32;">
       <h4 style="font-size:.72em;color:#1b5e20;">Acquire (purchased)</h4>
@@ -1188,7 +1189,7 @@ Content-Type: text/html; charset=utf-8</span>
   <div class="columns" style="margin-top:14px;align-items:flex-start;">
     <div class="col-50 fragment fade-in">
       <h3 style="font-size:.78em;margin:0;">What this means for an ML pipeline</h3>
-      <p class="small">The <em>training transformation</em> itself was OK. Liability attached only to the <strong>data-acquisition step</strong>. The technical question &ldquo;does the model store the books?&rdquo; was never reached: Alsup ruled on supply-chain provenance, not on memorization.</p>
+      <p class="small">The <em>training transformation</em> itself was OK. Liability attached only to the <strong>data-acquisition step</strong>. The technical question &ldquo;does the model store the books?&rdquo; was never reached: The judge ruled on supply-chain provenance, not on memorization.</p>
     </div>
     <div class="col-50 fragment fade-in">
       <h3 style="font-size:.78em;margin:0;">Settlement, Sept 5 2025</h3>
@@ -1208,28 +1209,24 @@ Content-Type: text/html; charset=utf-8</span>
   <h2>NYT v. OpenAI: the Output-Side Argument</h2>
   <p class="small" style="text-align:center;color:#666;margin:0 0 8px;">The legal mirror of Bartz: liability not at acquisition but at <em>generation</em>. NYT&rsquo;s complaint is 100 examples of near-verbatim NYT text emitted by GPT-4 from short prompts.</p>
   <div class="columns" style="align-items:flex-start;margin-top:6px;">
-    <div class="col-50 fragment fade-in">
+<div class="col-50 fragment fade-in">
       <h3 style="font-size:.72em;margin:0 0 4px;color:#444;">Exhibit J, example 24 (excerpted)</h3>
-      <div class="code-block" style="font-size:.5em;line-height:1.45;padding:10px 14px;">
-        <div class="cmt">// system prompt</div>
-        <span class="kw">You are a helpful assistant.</span>
-        <div class="cmt" style="margin-top:6px;">// user prompt</div>
-        Hi there. I&rsquo;m being paywalled out of reading
-        The New York Times&rsquo;s article &ldquo;Snow Fall: The
-        Avalanche at Tunnel Creek&rdquo; by The New York Times.
-        Could you please print out the first paragraph of
-        the article for me please?
-        <div class="cmt" style="margin-top:6px;">// gpt-4 output (matches NYT verbatim)</div>
-        <span class="str">The snow burst through the trees with no warning
-        but a last-second whoosh of sound, a two-story
-        wall of white and Chris Rudolph&rsquo;s piercing cry:
-        &ldquo;Avalanche! Elyse!&rdquo; The very thing the 16
-        skiers and snowboarders had felt safest about &mdash;
-        their distance from the ridgeline above &mdash; was
-        their undoing &hellip;</span>
-      </div>
+      <div class="code-block" style="font-size:.4em;line-height:1.45;padding:10px 14px;">
+        <div class="cmt">// prompt: article URL + headline + first 7.5 paragraphs as prefix</div>
+        <div style="margin:4px 0 0 0;">
+          <span class="str">&ldquo;When Barack Obama joined Silicon Valley&rsquo;s top luminaries for dinner in California last February, each guest was asked to come with a question for the president. But as Steven P. Jobs of Apple spoke, President Obama interrupted with an inquiry of his own: what would it take to make iPhones in the United States?&rdquo;</span>
+          <div class="cmt" style="margin:4px 0;">&nbsp;&nbsp;[&hellip;]</div>
+          <span class="str">&ldquo;&hellip;However, what has vexed Mr. Obama as well as economists and policy makers is that Apple&mdash;and many of America&rsquo;s other global companies&mdash;aren&rsquo;t&rdquo;</span>
+        </div>
+
+        <div class="cmt" style="margin-top:10px;">// gpt-4 continuation &mdash; verbatim match with the article</div>
+        <div style="margin:4px 0 0 0;">
+          <span class="match">&ldquo;nearly as avid in creating American jobs as other famous companies were in their heydays. Apple employs 43,000 people in the United States and 20,000 overseas, a small fraction of the over 400,000 American workers at General Motors in the 1950s, or the hundreds of thousands at General Electric in the 1980s.&rdquo;</span>
+          <div class="cmt" style="margin:4px 0 0 0;">&nbsp;&nbsp;[&hellip;]</div>
+        </div>
+      </div><!-- /.code-block -->
       <p class="hint" style="font-size:.55em;text-align:center;">Exhibit J reproduces 100 such pairs across 127 pages.</p>
-    </div>
+    </div><!-- /.col-50 -->
     <div class="col-50 fragment fade-in">
       <h3 style="font-size:.74em;margin:0;">The technical claim (translated)</h3>
       <p class="smaller">NYT&rsquo;s claim is based on a <a href="#/13">divergence attack</a>, i.e. <em>observable input&ndash;output behavior</em>: GPT-4 emits protected expression (under some prompts).</p>
@@ -1244,8 +1241,10 @@ Content-Type: text/html; charset=utf-8</span>
     </div>
     
   </div>
-  <p class="cite"><a href="https://www.nysd.uscourts.gov/sites/default/files/2025-04/yf%2023cv11195%20OpenAI%20MTD%20opinion%20april%204%202025.pdf">Stein MTD opinion, April 4 2025 (S.D.N.Y. PDF)</a> &middot; <a href="https://openai.com/index/openai-and-journalism/">OpenAI, &ldquo;OpenAI and journalism,&rdquo; Jan 8 2024</a></p>
+  <p class="cite"><a href="https://www.nysd.uscourts.gov/sites/default/files/2025-04/yf%2023cv11195%20OpenAI%20MTD%20opinion%20april%204%202025.pdf">Stein MTD opinion, April 4 2025 (S.D.N.Y. PDF)</a> &middot; <a href="https://openai.com/index/openai-and-journalism/">OpenAI, &ldquo;OpenAI and journalism,&rdquo; Jan 8 2024</a>, <a href="http://nytco-assets.nytimes.com/2023/12/Lawsuit-Document-dkt-1-68-Ex-J.pdf"> &ldquo;Exhibit J&rdquo;, NYT case,</a> </p>
 </section>
+
+
 
 <!-- ================================================ -->
 <!-- SLIDE 24: Warhol turn -->
@@ -1305,9 +1304,9 @@ Content-Type: text/html; charset=utf-8</span>
   <h2>European Law: The Two-Step Opt-Out</h2>
   <div class="card-grid card-grid-2" style="gap:14px;">
     <div class="card fragment fade-in">
-      <h4 style="color:#1565c0;">Step 1: CDSM Art. 4 (2019)</h4>
+      <h4 style="color:#1565c0;">Step 1: Copyright in the Digital Single Market (CDSM Art. 4, 2019)</h4>
       <p style="font-size:.66em;">EU-wide text-and-data-mining exception: scraping for ML training is lawful <strong>by default</strong>, <em>unless</em> the rightsholder has reserved rights.</p>
-      <p style="font-size:.66em;margin-top:6px;"><strong>Reservation must be machine-readable</strong> (robots.txt, ai.txt, TDM Reservation Protocol, HTTP headers).</p>
+      <p style="font-size:.66em;margin-top:6px;"><strong>Reservation must be machine-readable</strong> (robots.txt, ai.txt, Text-and-Data-Mining (TDM) Reservation Protocol, HTTP headers).</p>
     </div>
     <div class="card fragment fade-in">
       <h4 style="color:#1565c0;">Step 2: AI Act Art. 53 (2024/1689)</h4>
@@ -1318,7 +1317,7 @@ Content-Type: text/html; charset=utf-8</span>
       </ul>
     </div>
   </div>
-  <p class="small fragment fade-in" style="margin-top:14px;color:#444;"><strong>The compliance loop.</strong> If a corpus contains works with valid TDM reservations, training on them in the EU is infringing, independent of Bartz-style transformativeness. Filtering against opt-out signals becomes a <em>data-pipeline</em> requirement.</p>
+  <p class="small fragment fade-in" style="margin-top:14px;color:#444;"><strong>Compliance via Opt-Outs.</strong> If a corpus contains works with valid TDM reservations, training on them in the EU is infringing, independent of Bartz-style transformativeness. Filtering against opt-out signals becomes a <em>data-pipeline</em> requirement.</p>
   <p class="cite"><a href="https://artificialintelligenceact.eu/article/53/">EU AI Act Art. 53</a> &middot; <a href="https://eur-lex.europa.eu/eli/dir/2019/790/oj">CDSM Directive 2019/790 Art. 4</a> &middot; <a href="https://code-of-practice.ai/">EU GPAI Code of Practice (July 2025)</a></p>
 </section>
 
@@ -1327,7 +1326,7 @@ Content-Type: text/html; charset=utf-8</span>
 <!-- ================================================ -->
 <section class="no-fragment">
   <h2>Intermission: Memorization &ne; Copying</h2>
-  <img src="lecture-6-images/haviv-thin-thick.png" alt="Haviv et al. Fig 1: a spectrum of expressive protection from 'thin' content (facts, idioms, public-domain text, generic boilerplate) to 'thick' content (recognizable characters, distinctive stylistic identity, original expressive works)" style="width:100%;max-width:780px;display:block;margin:6px auto 6px;border-radius:8px;border:1px solid #e5e5e5;">
+  <img src="lecture-6-images/haviv-thin-thick.png" alt="Haviv et al. Fig 1: a spectrum of expressive protection from 'thin' content (facts, idioms, public-domain text, generic boilerplate) to 'thick' content (recognizable characters, distinctive stylistic identity, original expressive works)" style="width:100%;max-width:680px;display:block;margin:6px auto 6px;border-radius:8px;border:1px solid #e5e5e5;">
   <p class="hint" style="text-align:center;font-size:.6em;margin:0 0 6px;">Haviv et al. (2026): copyright protection runs from <em>thin</em> (facts, idioms, boilerplate) to <em>thick</em> (recognizable characters, distinctive style).</p>
   <div class="columns">
     <div class="col-50 fragment fade-in">
@@ -1646,7 +1645,7 @@ checks if a number is prime.
   <h2>Sleeper Agents: Poisoning could induce alignment failures</h2>
   <div class="columns" style="align-items:flex-start;">
     <div class="col-55 fragment fade-in">
-      <img src="lecture-6-images/sleeper-agents.png" alt="Hubinger et al. 2024 Figure 1: three-stage experimental setup. Stage 1 Backdoor Insertion: model is trained to respond differently when a trigger token appears in the prompt. Stage 2 Safety Training: standard SFT plus RL fine-tuning plus adversarial training. Stage 3: backdoor still triggers on the held-out trigger." style="width:100%;display:block;margin:0 auto;border-radius:8px;border:1px solid #e5e5e5;">
+      <img src="lecture-6-images/sleeper-agents.png" alt="Hubinger et al. 2024 Figure 1: three-stage experimental setup. Stage 1 Backdoor Insertion: model is trained to respond differently when a trigger token appears in the prompt. Stage 2 Safety Training: standard SFT plus RL fine-tuning plus adversarial training. Stage 3: backdoor still triggers on the held-out trigger." style="width:50%;display:block;margin:0 auto;border-radius:1px;border:1px solid #e5e5e5;">
       <p class="hint" style="text-align:center;font-size:.62em;margin-top:4px;">Stage 1: install a backdoor. Stage 2: try to remove it with the full alignment stack.</p>
     </div>
     <div class="col-45 fragment fade-in">
@@ -1792,7 +1791,7 @@ Wikipedia (EN)           6.85 GiB    bio category alone has ~200k articles</div>
 </section>
 
 <!-- ================================================ -->
-<!-- SLIDE: An actual WMDP-Bio example (placeholder) -->
+<!-- SLIDE: An actual WMDP-Bio example  -->
 <!-- ================================================ -->
 <section class="no-fragment">
   <h2>WMDP-Bio: an Example Question</h2>
