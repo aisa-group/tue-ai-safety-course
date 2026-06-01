@@ -65,7 +65,7 @@ Lecture recordings can be found [here](https://drive.google.com/drive/folders/1P
 | 4 | 04.05  | Maksym    | [**Open-weight safety.**](lecture-slides/lecture-4-open-weight-safety.html) Model stealing & distillation attacks, fine-tuning attacks, emergent misalignment &nbsp;*— Mini-project 1 due this week* |
 | 5 | 11.05  | Jonas     | [**Transparency.**](lecture-slides/lecture-5-transparency.html) Detection of LLM-generated content and watermarking                      |
 | 6 | 18.05  | Jonas     | [**Problems with 'Big Data'.**](lecture-slides/lecture-6-data.html) Privacy, Memorization, and Other Data Integrity Issues with LLMs &nbsp;*— Mini-project 2 due this week*               |
-| 7 | 01.06  | Sahar     | **Alignment tools.** Pre-training filtering, RLHF, DPO, Constitutional AI, Model Spec with rubric RL, steering vectors, external guardrails, LLMs as judges |
+| 7 | 01.06  | Sahar     | [**Alignment Tools.**](lecture-slides/lecture-7-alignment-tools.html) Pre-training filtering, RLHF, DPO, Constitutional AI, LLMs as judges, Model Spec with rubric RL, steering vectors |
 | 8 | 08.06  | Sahar     | **LLM agents.** Reasoning and planning, deep research, coding and browser/computer-use agents, MCP, agent skills &nbsp;*— Mini-project 3 due this week* |
 | 9 | 15.06  | Sahar     | **Agent security.** Prompt injections and contextual privacy                               |
 | 10 | 22.06 | Sahar     | **Scheming & deception.** Sandbagging and evaluation awareness &nbsp;*— Mini-project 4 due this week* |
