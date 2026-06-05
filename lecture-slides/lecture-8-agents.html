@@ -1,0 +1,1230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LLM Agents — AI Safety, University of Tübingen</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/reveal.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --ink:#1b1e2e;
+  --ink2:#2b2f40;
+  --red:#A51E37;
+  --red-soft:#fbeef0;
+  --gray:#5f6470;
+  --muted:#9aa0ab;
+  --line:#e6e8ec;
+  --card:#f7f8fa;
+  --green:#1f7a4d;
+  --green-soft:#eaf6ef;
+  --blue:#2563a8;
+  --blue-soft:#eef4fb;
+  --amber-soft:#fdf6e8;
+}
+
+.reveal{
+  font-family:'Inter',system-ui,-apple-system,sans-serif;
+  font-size:25px;
+  color:var(--ink2);
+  font-weight:400;
+  letter-spacing:-0.005em;
+}
+.reveal .slides{ text-align:left; }
+.reveal .slides section{ height:100%; top:0 !important; box-sizing:border-box; width:100%; }
+.reveal .slides section *{ box-sizing:border-box; }
+
+/* Headings */
+.reveal h1,.reveal h2,.reveal h3{
+  color:var(--ink);
+  font-weight:800;
+  letter-spacing:-0.025em;
+  margin:0 0 .35em 0;
+  line-height:1.05;
+  text-transform:none;
+}
+.reveal h1{ font-size:2.35em; }
+.reveal h2{ font-size:1.72em; }
+.reveal h3{ font-size:1.12em; font-weight:700; }
+.reveal h1 .accent,.reveal h2 .accent{ color:var(--muted); font-weight:800; }
+.reveal h2 .sub{ color:var(--muted); font-weight:600; font-size:.62em; letter-spacing:-0.01em; }
+.reveal p,.reveal li{ line-height:1.45; }
+.reveal strong{ color:var(--ink); font-weight:700; }
+.reveal em{ color:inherit; }
+a,.reveal a{ color:var(--red); text-decoration:none; }
+
+/* slide padding */
+.reveal .slides section.standard{ padding:42px 60px 64px 60px; }
+
+/* eyebrow */
+.eyebrow{
+  color:var(--red); font-weight:700; font-size:.62em;
+  letter-spacing:.13em; text-transform:uppercase; margin-bottom:.5em;
+}
+.subtitle-mono{
+  font-family:'JetBrains Mono',monospace; color:var(--red);
+  font-size:.66em; font-weight:500; margin:-.2em 0 .8em 0; letter-spacing:-0.01em;
+}
+.lead{ color:var(--gray); font-size:1.04em; max-width:24em; line-height:1.5; }
+.lead.wide{ max-width:34em; }
+
+/* citation footnote */
+.cite{
+  position:absolute; left:60px; bottom:26px; right:60px;
+  font-size:.5em; font-style:italic; color:var(--muted); letter-spacing:0;
+}
+.cite a{ color:var(--muted); text-decoration:underline; }
+
+/* page number handled by reveal */
+.reveal .slide-number{ font-size:14px; color:var(--muted); background:transparent; }
+
+/* ---- Title slide ---- */
+.title-slide{ display:flex !important; flex-direction:column; justify-content:center; align-items:center; height:100%; text-align:center; padding:0 8%; }
+.title-slide h1{ font-size:3.1em; margin-bottom:.18em; }
+.title-slide .tsub{ font-size:1.25em; color:var(--gray); font-weight:500; margin-bottom:1.4em; }
+.title-slide .meta{ color:var(--gray); font-size:.86em; line-height:1.7; }
+.title-slide .meta .k{ color:var(--ink); font-weight:700; }
+.title-slide .authors{ margin-top:1.5em; color:var(--muted); font-size:.84em; }
+
+/* ---- Section divider ---- */
+.divider{ display:flex !important; flex-direction:column; justify-content:center; height:100%; padding:0 9%; }
+.divider .kicker{ color:var(--red); font-weight:700; font-size:.7em; letter-spacing:.14em; text-transform:uppercase; margin-bottom:.3em; }
+.divider h2{ font-size:2.9em; margin-bottom:.25em; }
+.divider .dsub{ color:var(--gray); font-size:1.05em; max-width:30em; line-height:1.5; }
+.divider .rule{ width:64px; height:5px; background:var(--red); border-radius:3px; margin-bottom:1.1em; }
+
+/* ---- Cards ---- */
+.cards{ display:grid; gap:18px; margin-top:8px; }
+.cards.c2{ grid-template-columns:1fr 1fr; }
+.cards.c3{ grid-template-columns:1fr 1fr 1fr; }
+.cards.c4{ grid-template-columns:repeat(4,1fr); }
+.card{
+  background:var(--card); border:1px solid var(--line); border-radius:14px;
+  padding:20px 22px;
+}
+.card h3{ margin-bottom:.3em; }
+.card p{ color:var(--gray); font-size:.84em; margin:0; line-height:1.42; }
+.card .num{ color:var(--red); font-weight:700; font-size:.7em; letter-spacing:.04em; }
+.card.tint-green{ background:var(--green-soft); border-color:#cfe8d9; }
+.card.tint-red{ background:var(--red-soft); border-color:#f3d4da; }
+.card.tint-blue{ background:var(--blue-soft); border-color:#d4e3f3; }
+.card.tint-amber{ background:var(--amber-soft); border-color:#f0e3c4; }
+.card.outline-red{ background:#fff; border:2px solid var(--red); }
+.card.outline-red h3{ color:var(--red); }
+.card .tag{ font-weight:700; }
+.tag-yes{ color:var(--green); font-weight:700; }
+.tag-no{ color:var(--red); font-weight:700; }
+
+/* stat */
+.stat{ background:var(--card); border:1px solid var(--line); border-radius:14px; padding:16px 22px; text-align:center; }
+.stat .big{ color:var(--red); font-weight:800; font-size:2.0em; line-height:1; letter-spacing:-0.03em; }
+.stat .lab{ color:var(--gray); font-size:.78em; margin-top:.35em; }
+
+/* boxes */
+.databox{
+  background:var(--card); border:1px solid var(--line); border-radius:12px;
+  padding:16px 20px; font-family:'JetBrains Mono',monospace; font-size:.66em;
+  line-height:1.5; color:var(--ink2); white-space:pre-wrap;
+}
+.quote{
+  background:var(--card); border-left:4px solid var(--red); border-radius:0 10px 10px 0;
+  padding:14px 20px; font-family:'JetBrains Mono',monospace; font-size:.66em; line-height:1.55; color:var(--ink2);
+}
+.quote .who{ color:var(--red); font-weight:700; }
+.note{ background:var(--card); border-radius:10px; padding:14px 18px; border:1px solid var(--line); }
+.note h3{ color:var(--red); font-size:.92em; margin-bottom:.25em; }
+.note p{ color:var(--gray); font-size:.84em; margin:0; }
+
+/* table */
+.reveal table{ border-collapse:collapse; width:100%; font-size:.8em; }
+.reveal table thead th{ background:var(--ink); color:#fff; font-weight:700; text-align:left; padding:9px 14px; }
+.reveal table thead th:first-child{ border-radius:8px 0 0 0; }
+.reveal table thead th:last-child{ border-radius:0 8px 0 0; }
+.reveal table td{ padding:8px 14px; border-bottom:1px solid var(--line); }
+.reveal table tbody tr:last-child td{ border-bottom:none; }
+
+/* figure */
+.fig{ display:flex; flex-direction:column; align-items:center; }
+.fig img{ border-radius:10px; background:#fff; }
+.fig.bordered img{ border:1px solid var(--line); padding:6px; }
+.figcap{ color:var(--muted); font-size:.66em; font-style:italic; margin-top:8px; text-align:center; max-width:40em; line-height:1.4; }
+
+/* two col layout */
+.cols{ display:grid; gap:30px; align-items:center; }
+.cols.c2{ grid-template-columns:minmax(0,1fr) minmax(0,1fr); }
+.cols.s60{ grid-template-columns:minmax(0,1.4fr) minmax(0,1fr); }
+.cols.s40{ grid-template-columns:minmax(0,1fr) minmax(0,1.4fr); }
+.cols > *{ min-width:0; }
+.quote, .databox, .lead{ overflow-wrap:break-word; }
+
+/* pills / steps */
+.steps{ display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+.step{ background:var(--card); border:1px solid var(--line); border-radius:14px; padding:18px 20px; position:relative; }
+.step .n{ display:inline-flex; width:30px; height:30px; border-radius:50%; background:var(--red); color:#fff; font-weight:700; align-items:center; justify-content:center; font-size:.8em; margin-bottom:.5em; }
+.step h3{ font-size:1.0em; margin-bottom:.3em; }
+.step p{ color:var(--gray); font-size:.78em; margin:0; line-height:1.4; }
+
+/* pipeline flow */
+.flow{ display:flex; align-items:stretch; gap:0; margin-top:10px; }
+.flow .node{ flex:1; background:var(--card); border:1px solid var(--line); border-radius:12px; padding:14px 14px; text-align:center; }
+.flow .node .t{ font-weight:700; color:var(--ink); font-size:.9em; }
+.flow .node .d{ color:var(--gray); font-size:.72em; margin-top:.25em; }
+.flow .arr{ display:flex; align-items:center; color:var(--red); font-size:1.4em; padding:0 12px; font-weight:700; }
+
+.hl-red{ color:var(--red); font-weight:700; }
+.hl-green{ color:var(--green); font-weight:700; }
+.small{ font-size:.82em; }
+.center{ text-align:center; }
+ul.tight{ margin:0; padding-left:1.1em; }
+ul.tight li{ margin:.3em 0; color:var(--gray); font-size:.92em; }
+ul.tight li strong{ color:var(--ink); }
+
+/* recap list: one topic per row */
+.recap{ display:flex; flex-direction:column; gap:8px; margin-top:14px; }
+.recap-row{ display:flex; align-items:baseline; gap:16px; padding:9px 18px; background:var(--card); border:1px solid var(--line); border-radius:10px; }
+.recap-row .stage{ flex:0 0 150px; color:var(--red); font-weight:700; font-size:.56em; letter-spacing:.08em; text-transform:uppercase; }
+.recap-row .m{ flex:1; font-weight:700; color:var(--ink); font-size:.82em; }
+.recap-row .p{ flex:0 0 auto; color:var(--gray); font-size:.66em; font-style:italic; text-align:right; }
+.recap-row .p a{ color:var(--gray); text-decoration:underline; }
+
+/* feedback / thank-you slide */
+.feedback{ display:flex; align-items:center; gap:40px; margin-top:28px; }
+.feedback .qr{ flex:0 0 auto; text-align:center; }
+.feedback .qr img{ width:230px; height:230px; border:1px solid var(--line); border-radius:14px; padding:12px; background:#fff; }
+.feedback .qr .cap{ color:var(--muted); font-size:.66em; margin-top:8px; }
+.feedback .ftext{ flex:1; }
+.feedback .ftext .big{ font-size:1.5em; font-weight:800; color:var(--ink); line-height:1.15; letter-spacing:-0.02em; margin-bottom:.3em; }
+.feedback .ftext .lab{ color:var(--red); font-weight:700; font-size:.66em; letter-spacing:.12em; text-transform:uppercase; margin-bottom:.5em; }
+.feedback .ftext .link{ font-family:'JetBrains Mono',monospace; font-size:.92em; font-weight:500; }
+.feedback .ftext .link a{ color:var(--red); text-decoration:underline; }
+
+/* Codex interactive lifecycle stepper */
+.codex{ display:grid; grid-template-columns:minmax(0,0.92fr) minmax(0,1.25fr); gap:22px; align-items:stretch; margin-top:14px; }
+.codex .stages{ display:flex; flex-direction:column; gap:8px; }
+.codex .si{ display:flex; gap:11px; align-items:flex-start; padding:9px 13px; border:1px solid var(--line); border-radius:10px; background:var(--card); opacity:.38; transition:opacity .18s ease, border-color .18s ease, background .18s ease; }
+.codex .si.on{ opacity:1; }
+.codex .si.active{ border-color:var(--red); background:var(--red-soft); }
+.codex .si .si-n{ flex:0 0 22px; width:22px; height:22px; border-radius:50%; background:var(--muted); color:#fff; font-weight:700; font-size:.6em; display:flex; align-items:center; justify-content:center; }
+.codex .si.active .si-n{ background:var(--red); }
+.codex .si.done .si-n{ background:var(--green); }
+.codex .si .si-t{ font-weight:700; color:var(--ink); font-size:.78em; line-height:1.2; }
+.codex .si .si-d{ color:var(--gray); font-size:.68em; margin-top:2px; line-height:1.3; }
+.codex .screen{ border:1px solid var(--line); border-radius:12px; overflow:hidden; background:#fff; display:flex; flex-direction:column; min-height:296px; }
+.codex .screen .bar{ background:var(--ink); display:flex; align-items:center; gap:6px; padding:8px 12px; }
+.codex .screen .bar .dot{ width:9px; height:9px; border-radius:50%; background:#5b6072; }
+.codex .screen .bar .ttl{ color:#c9cdd8; font-family:'JetBrains Mono',monospace; font-size:.56em; margin-left:8px; }
+.codex .screen .body{ padding:14px 16px; font-family:'JetBrains Mono',monospace; font-size:.62em; line-height:1.6; color:var(--ink2); flex:1; }
+.codex .panel{ display:none; }
+.codex .panel.show{ display:block; }
+.codex .ln{ white-space:pre-wrap; }
+.codex .c-mut{ color:var(--muted); }
+.codex .c-grn{ color:var(--green); font-weight:600; }
+.codex .c-red{ color:var(--red); font-weight:600; }
+.codex .c-blu{ color:var(--blue); }
+.codex .c-amb{ color:#9a6a00; }
+.codex .add{ color:var(--green); }
+.codex .del{ color:var(--red); }
+.codex .chip{ display:inline-block; background:var(--red); color:#fff; border-radius:6px; padding:2px 10px; font-weight:700; font-size:.92em; }
+.codex .prbox{ border:1px solid var(--line); border-radius:8px; padding:10px 12px; margin-top:8px; }
+.codex .prbox .prh{ font-weight:700; color:var(--ink); }
+
+/* HLE accuracy bar chart */
+.hle-chart{ display:flex; flex-direction:column; gap:9px; }
+.hle-row{ display:grid; grid-template-columns:128px 1fr 42px; align-items:center; gap:10px; }
+.hle-lab{ color:var(--gray); font-size:.72em; text-align:right; line-height:1.15; }
+.hle-track{ background:var(--line); border-radius:5px; height:16px; overflow:hidden; }
+.hle-bar{ height:100%; background:var(--muted); border-radius:5px; }
+.hle-bar.hot{ background:var(--red); }
+.hle-val{ color:var(--gray); font-size:.72em; font-weight:600; }
+
+.katex{ font-size:1.0em; }
+.eqbox{ background:var(--card); border:1px solid var(--line); border-radius:12px; padding:18px 20px; text-align:center; }
+.eqlabel{ color:var(--muted); font-size:.72em; font-style:italic; margin-bottom:6px; }
+
+/* interactive ReAct trace */
+.trace{ display:flex; flex-direction:column; gap:9px; }
+.trace .line{ border-radius:8px; padding:9px 14px; font-family:'JetBrains Mono',monospace; font-size:.62em; line-height:1.45; border:1px solid var(--line); opacity:.28; transition:opacity .18s ease; }
+.trace .line.on{ opacity:1; }
+.trace .line .lbl{ font-weight:700; }
+.trace .thought{ background:var(--blue-soft); border-color:#d4e3f3; }
+.trace .thought .lbl{ color:var(--blue); }
+.trace .action{ background:var(--amber-soft); border-color:#f0e3c4; }
+.trace .action .lbl{ color:#9a6a00; }
+.trace .obs{ background:var(--card); }
+.trace .obs .lbl{ color:var(--gray); }
+.trace .answer{ background:var(--green-soft); border-color:#cfe8d9; }
+.trace .answer .lbl{ color:var(--green); }
+.stepbtn{ background:var(--red); color:#fff; border:none; border-radius:8px; padding:7px 16px; font-family:'Inter',sans-serif; font-weight:700; font-size:.62em; cursor:pointer; letter-spacing:.02em; }
+.hint{ color:var(--muted); font-size:.62em; font-style:italic; margin-top:6px; }
+.badge{ display:inline-block; background:var(--red-soft); color:var(--red); border:1px solid #f3d4da; border-radius:20px; padding:2px 12px; font-size:.62em; font-weight:700; letter-spacing:.04em; text-transform:uppercase; }
+
+/* fragment cleanliness */
+.reveal .fragment.fade-in-then-semi-out.visible.current-fragment{ opacity:1; }
+
+/* print fixes */
+@media print{
+  .reveal .slides section{ box-shadow:none !important; }
+  .card,.stat,.databox,.quote,.note,.step,.flow .node{ box-shadow:none !important; }
+  .trace .line{ opacity:1 !important; }
+  .codex .si{ opacity:1 !important; }
+  section.pdf-center-title{ padding-top:250px !important; }
+  section.pdf-center-divider{ padding-top:272px !important; }
+}
+</style>
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+
+<!-- ============ TITLE ============ -->
+<section class="title-slide" data-background-color="#ffffff">
+  <h1>LLM <span class="accent">Agents</span></h1>
+  <div class="tsub">From next-token prediction to systems that reason, act, and use tools</div>
+  <div class="meta">
+    <div><span class="k">AI Safety</span>: Master's Course, Summer Semester 2026</div>
+    <div>University of Tübingen · 8 June 2026</div>
+  </div>
+  <div class="authors">Maksym Andriushchenko · Jonas Geiping · <u>Sahar Abdelnabi</u></div>
+</section>
+
+<!-- ============ MOTIVATION 1: from chatbot to agent ============ -->
+<section class="standard" data-background-color="#ffffff">
+  <div class="eyebrow">Motivation</div>
+  <h2>From a chatbot to an agent</h2>
+  <div class="cols c2" style="margin-top:22px;">
+    <div>
+      <p class="lead wide">A chat model maps a prompt to a single text response. An <strong>agent</strong> is a model placed in a loop: it can <strong>take actions in an environment</strong>, observe the results, and decide what to do next, all in service of a goal.</p>
+      <p class="lead wide" style="margin-top:.8em;">Three ingredients turn a model into an agent: <strong>reasoning</strong> (plan and decompose), <strong>tools / actions</strong> (reach beyond text), and a <strong>feedback loop</strong> with the world.</p>
+    </div>
+    <div class="flow">
+      <div class="node"><div class="t">LLM</div><div class="d">reason &amp; decide next step</div></div>
+      <div class="arr">→</div>
+      <div class="node" style="border-color:var(--red);background:var(--red-soft);"><div class="t" style="color:var(--red)">Action</div><div class="d">call a tool, browse, run code</div></div>
+      <div class="arr">→</div>
+      <div class="node"><div class="t">Environment</div><div class="d">returns an observation</div></div>
+    </div>
+  </div>
+  <div class="note" style="margin-top:26px;"><p style="color:var(--gray);">This lecture follows the capability arc: <strong>reasoning</strong> &rarr; <strong>tool use</strong> &rarr; <strong>deep research</strong> &rarr; <strong>coding agents</strong> &rarr; <strong>web and computer use</strong> &rarr; <strong>connecting agents to the world</strong> (MCP, Skills). The safety and security implications of agents are the subject of the next lecture.</p></div>
+  <div class="cite">The loop closes the gap between a static predictor and a system that can change its own next input by acting.</div>
+</section>
+
+<!-- ============ Effective agents: workflows vs agents ============ -->
+<section class="standard" data-background-color="#ffffff">
+  <div class="eyebrow">Building effective agents · Anthropic</div>
+  <h2>Workflows vs. agents</h2>
+  <div class="cols c2" style="margin-top:14px;">
+    <div class="card tint-blue">
+      <h3>Workflow</h3>
+      <p>LLMs and tools are orchestrated through <strong>predefined code paths</strong>. The control flow is fixed by the engineer; the model fills in the blanks.</p>
+    </div>
+    <div class="card tint-red">
+      <h3>Agent</h3>
+      <p>The LLM <strong>dynamically directs its own process and tool use</strong>, keeping control over how it accomplishes the task. The path is decided at run time.</p>
+    </div>
+  </div>
+  <div class="cols s40" style="margin-top:20px;align-items:center;">
+    <p class="lead wide">Both build on one block: the <strong>augmented LLM</strong>, a model equipped with retrieval, tools, and memory. The guiding advice: <strong>start with the simplest thing that works</strong>, and add agentic complexity only when simpler calls fall short.</p>
+    <div class="fig bordered">
+      <img src="lecture-8-images/effective-augmented-llm.png" alt="The augmented LLM" style="width:100%;max-width:530px;">
+      <div class="figcap">The augmented LLM: the basic building block, with retrieval, tools, and memory.</div>
+    </div>
+  </div>
+  <div class="cite"><a href="https://www.anthropic.com/engineering/building-effective-agents" target="_blank" rel="noopener">Anthropic, "Building Effective Agents", Dec 2024</a>.</div>
+</section>
+
+<!-- ============ Effective agents: patterns ============ -->
+<section class="standard" data-background-color="#ffffff">
+  <h2>A small set of composable patterns</h2>
+  <p class="lead wide" style="margin-bottom:14px;max-width:60em;">Most successful systems are not complex frameworks but compositions of a few patterns. The first five are <strong>workflows</strong>; the last is a true <strong>agent</strong>.</p>
+  <div class="cards c3">
+    <div class="card"><div class="num">WORKFLOW</div><h3>Prompt chaining</h3><p>Fixed sequence of calls; each step processes the previous output, with optional intermediate checks.</p></div>
+    <div class="card"><div class="num">WORKFLOW</div><h3>Routing</h3><p>Classify the input, then dispatch to a specialized prompt or model.</p></div>
+    <div class="card"><div class="num">WORKFLOW</div><h3>Parallelization</h3><p>Run calls at once: <em>sectioning</em> (split subtasks) or <em>voting</em> (aggregate diverse runs).</p></div>
+    <div class="card"><div class="num">WORKFLOW</div><h3>Orchestrator-workers</h3><p>A lead LLM breaks down a task, delegates to workers, and synthesizes the results.</p></div>
+    <div class="card"><div class="num">WORKFLOW</div><h3>Evaluator-optimizer</h3><p>One LLM generates, another critiques; loop until the evaluation criteria are met.</p></div>
+    <div class="card outline-red"><div class="num" style="color:var(--red)">AGENT</div><h3>Autonomous agent</h3><p>Uses tools in a loop on environmental feedback; plans and acts independently with human checkpoints.</p></div>
+  </div>
+  <div class="cite"><a href="https://www.anthropic.com/engineering/building-effective-agents" target="_blank" rel="noopener">Anthropic 2024</a>. We now build up these capabilities historically, starting with reasoning.</div>
+</section>
+
+<!-- ============ SECTION: Reasoning ============ -->
+<section class="divider" data-background-color="#ffffff">
+  <div class="kicker">Part 1 · The foundation</div>
+  <div class="rule"></div>
+  <h2>Reasoning</h2>
+  <div class="dsub">Before a model can act well, it has to think. Two related early ideas: eliciting reasoning in-context, then coupling it to action.</div>
+</section>
+
+<!-- CoT 1 -->
+<section class="standard" data-background-color="#ffffff">
+  <div class="eyebrow">Chain-of-Thought prompting</div>
+  <h2>Make the model show its work</h2>
+  <div class="cols s40" style="margin-top:10px;">
+    <div>
+      <p class="lead wide">Standard few-shot prompting gives only <strong>input &rarr; answer</strong> exemplars, and large models still fail multi-step arithmetic and reasoning. <strong>Chain-of-thought</strong> adds a few exemplars that include the <strong>intermediate reasoning steps</strong>, so the model generates its own reasoning before answering.</p>
+      <ul class="tight" style="margin-top:12px;">
+        <li>No fine-tuning, no gradients: purely <strong>in-context</strong>.</li>
+        <li>Works with a handful (e.g. 8) of worked examples.</li>
+        <li>Decomposes a hard problem into steps the model can handle.</li>
+      </ul>
+    </div>
+    <div class="fig bordered">
+      <img src="lecture-8-images/cot-fig1.png" alt="Chain-of-thought prompting example" style="width:100%;max-width:600px;">
+      <div class="figcap">Wei et al. 2022, Fig. 1. The model output (green) is the generated chain of thought leading to the answer.</div>
+    </div>
+  </div>
+  <div class="cite"><a href="https://arxiv.org/abs/2201.11903" target="_blank" rel="noopener">Wei et al., "Chain-of-Thought Prompting Elicits Reasoning in Large Language Models", NeurIPS 2022</a>.</div>
+</section>
+
+<!-- CoT 2 -->
+<section class="standard" data-background-color="#ffffff">
+  <div class="eyebrow">Chain-of-Thought · an emergent ability of scale</div>
+  <h2>It only works once the model is big enough</h2>
+  <div class="cols s60" style="margin-top:10px;">
+    <div>
+      <p class="lead wide">On small models CoT gives little or no benefit, and can even hurt. The gains show up only around the <strong>~100B parameter</strong> scale, which makes CoT an <strong>emergent ability</strong>: flat for small models, then rising steeply once the model is large enough.</p>
+      <div class="cards c2" style="margin-top:16px;">
+        <div class="stat"><div class="big">17.9 → 56.9</div><div class="lab">PaLM 540B on GSM8K (math word problems), standard vs. CoT prompting</div></div>
+        <div class="stat"><div class="big">+9.2</div><div class="lab">points on StrategyQA commonsense (68.6 → 77.8), beating prior fine-tuned SOTA</div></div>
+      </div>
+      <p class="small" style="color:var(--gray);margin-top:12px;">On GSM8K, PaLM 540B with CoT also passed a fine-tuned GPT-3 175B plus a verifier, the prior state of the art.</p>
+    </div>
+    <div class="fig bordered">
+      <img src="lecture-8-images/cot-fig4-scaling.png" alt="CoT solve rate vs model scale on GSM8K, SVAMP, and MAWPS" style="width:100%;max-width:400px;">
+      <div class="figcap">Wei et al. 2022, Fig. 4. Standard vs. CoT vs. prior supervised best, across LaMDA, GPT, and PaLM. CoT pulls ahead only at the largest scale.</div>
+    </div>
+  </div>
+  <div class="cite">Wei et al. 2022. Curves shown for the LaMDA, GPT-3, and PaLM model families on three arithmetic benchmarks.</div>
+</section>
+
+<!-- CoT 3: examples across task types -->
+<section class="standard" data-background-color="#ffffff">
+  <div class="eyebrow">Chain-of-Thought · one recipe, many tasks</div>
+  <h2>The same trick spans different kinds of reasoning</h2>
+  <div class="cols s40" style="margin-top:8px;">
+    <div>
+      <p class="lead wide">CoT is not just for arithmetic. The same format, a few worked examples that spell out their reasoning, helps across <strong>arithmetic</strong>, <strong>commonsense</strong>, and <strong>symbolic</strong> reasoning.</p>
+      <ul class="tight" style="margin-top:10px;">
+        <li><strong>Arithmetic</strong>: GSM8K, SVAMP, MAWPS math word problems.</li>
+        <li><strong>Commonsense</strong>: CSQA, StrategyQA, date and sports questions, robot planning (SayCan).</li>
+        <li><strong>Symbolic</strong>: last-letter concatenation, coin-flip state tracking.</li>
+      </ul>
+      <p class="small" style="color:var(--gray);margin-top:10px;">In each task the model writes out the intermediate steps (highlighted) before it commits to an answer.</p>
+    </div>
+    <div class="fig bordered">
+      <img src="lecture-8-images/cot-fig3-examples.png" alt="Chain-of-thought examples across task categories" style="width:100%;max-width:680px;">
+      <div class="figcap">Wei et al. 2022, Fig. 3. Worked CoT examples for arithmetic, commonsense, and symbolic reasoning.</div>
+    </div>
+  </div>
+  <div class="cite">Wei et al. 2022. The chain of thought (highlighted) is generated by the model, not given in the question.</div>
+</section>
+
+<!-- ReAct 1: concept + HotpotQA -->
+<section class="standard" data-background-color="#ffffff">
+  <div class="eyebrow">ReAct · synergizing reasoning and acting</div>
+  <h2>Interleave thinking with acting</h2>
+  <div class="cols c2" style="margin-top:4px;align-items:center;">
+    <p class="lead wide">Pure CoT can hallucinate; pure acting lacks planning. <strong>ReAct</strong> interleaves both in one trace, prompted with only 1 to 2 examples.</p>
+    <ul class="tight">
+      <li><strong>Thought</strong>: free-form reasoning, decompose and decide.</li>
+      <li><strong>Action</strong>: call a tool (e.g. <code>search[...]</code>).</li>
+      <li><strong>Observation</strong>: the result, fed back into context.</li>
+    </ul>
+  </div>
+  <div class="fig bordered" style="margin-top:12px;">
+    <img src="lecture-8-images/react-hotpotqa.png" alt="HotpotQA: Standard vs CoT vs Act-only vs ReAct" style="width:100%;max-width:930px;display:block;margin:0 auto;">
+    <div class="figcap" style="margin-top:6px;">Knowledge task (HotpotQA): standard, CoT, and act-only miss; ReAct gets it right.</div>
+  </div>
+  <div class="cite"><a href="https://arxiv.org/abs/2210.03629" target="_blank" rel="noopener">Yao et al., "ReAct: Synergizing Reasoning and Acting in Language Models", ICLR 2023</a>, Fig. 1.</div>
+</section>
+
+<!-- ReAct 1b: ALFWorld decision task -->
+<section class="standard" data-background-color="#ffffff">
+  <div class="eyebrow">ReAct · interactive decision making</div>
+  <h2>The same loop, now acting in a world</h2>
+  <p class="lead wide" style="max-width:60em;margin-top:4px;">In <strong>ALFWorld</strong>, the agent navigates a simulated home to reach a goal (here: put a pepper shaker on a drawer). <strong>Act-only</strong> takes blind actions and gets stuck repeating ones that do nothing. <strong>ReAct</strong>'s interleaved <strong>thoughts</strong> (blue) decide where to look and track the sub-goal, so it finds the object and completes the task.</p>
+  <div class="fig bordered" style="margin-top:14px;">
+    <img src="lecture-8-images/react-alfworld.png" alt="ALFWorld: Act-only vs ReAct" style="width:100%;max-width:1000px;display:block;margin:0 auto;">
+    <div class="figcap" style="margin-top:6px;">Decision task (ALFWorld): act-only (left) wanders and fails; ReAct (right) reasons about where the object is, then acts.</div>
+  </div>
+  <div class="cite"><a href="https://arxiv.org/abs/2210.03629" target="_blank" rel="noopener">Yao et al. 2023</a>, Fig. 1. ALFWorld is a text-based embodied environment (Shridhar et al. 2021).</div>
+</section>
+
+<!-- ReAct 2 interactive trace + results -->
+<section class="standard" data-background-color="#ffffff">
+  <div class="eyebrow">ReAct · a trace, and what it enables</div>
+  <h2>Reasoning + acting beats either alone</h2>
+  <div class="cols c2" style="margin-top:8px;align-items:start;">
+    <div>
+      <div class="trace" id="reactTrace">
+        <div class="line thought on"><span class="lbl">Thought 1:</span> I need to find when the Eiffel Tower was completed, then add its height.</div>
+        <div class="line action"><span class="lbl">Act 1:</span> search["Eiffel Tower completion year"]</div>
+        <div class="line obs"><span class="lbl">Obs 1:</span> The Eiffel Tower was completed in 1889.</div>
+        <div class="line action"><span class="lbl">Act 2:</span> lookup["height"]</div>
+        <div class="line obs"><span class="lbl">Obs 2:</span> It is 330 metres tall.</div>
+        <div class="line answer"><span class="lbl">Answer:</span> Completed 1889; height 330 m.</div>
+      </div>
+      <div style="margin-top:12px;display:flex;gap:10px;align-items:center;">
+        <button class="stepbtn" id="reactStep">Step ▶</button>
+        <span class="hint" style="margin:0;">Click to advance the Thought / Action / Observation loop.</span>
+      </div>
+    </div>
+    <div>
+      <p class="lead wide">Across knowledge and decision tasks, ReAct's reasoning is more <strong>grounded</strong> and <strong>interpretable</strong> than CoT's. On the two decision tasks, 1 to 2 examples beat trained baselines:</p>
+      <div class="cards c2" style="margin-top:14px;">
+        <div class="stat"><div class="big">71%</div><div class="lab">ALFWorld success vs. 45% act-only and 37% for BUTLER (imitation learning)</div></div>
+        <div class="stat"><div class="big">+10</div><div class="lab">WebShop success: ReAct 40.0% vs. 30.1% act-only, also topping the IL and RL baselines</div></div>
+      </div>
+      <div class="note" style="margin-top:14px;"><h3>What "combining" means here</h3><p>ReAct already reasons, but over <strong>retrieved</strong> facts. <strong>CoT-SC</strong> reasons from the model's <strong>own</strong> knowledge (majority vote over sampled chains). The best HotpotQA method, <strong>ReAct &rarr; CoT-SC</strong>, runs ReAct and falls back to CoT-SC only when it cannot answer within a step budget.</p></div>
+    </div>
+  </div>
+  <div class="cite">Yao et al. 2023, Table 1 and &sect;3.2 (combining internal + external knowledge). Knowledge: HotpotQA, FEVER; decision: ALFWorld, WebShop.</div>
+</section>
+
+<!-- ============ SECTION: Tool use ============ -->
+<section class="divider" data-background-color="#ffffff">
+  <div class="kicker">Part 2 · Reaching beyond text</div>
+  <div class="rule"></div>
+  <h2>Tool use</h2>
+  <div class="dsub">Teach models to call external tools: first by self-supervised training, then at scale, then by writing code instead of picking from a menu.</div>
+</section>
+
+<!-- Toolformer 1 -->
+<section class="standard" data-background-color="#ffffff">
+  <div class="eyebrow">Toolformer · models teaching themselves tools</div>
+  <h2>Learn tool use from the model's own signal</h2>
+  <div class="cols s40" style="margin-top:8px;">
+    <div>
+      <p class="lead wide">LLMs fail at things tiny tools do trivially: exact arithmetic, factual lookup, today's date, translation. <strong>Toolformer</strong> teaches a model to decide <strong>which</strong> API to call, <strong>when</strong>, and with <strong>what arguments</strong>, in a <strong>self-supervised</strong> way needing only a few demonstrations per tool.</p>
+      <p class="small" style="color:var(--gray);margin-top:10px;">Tools: a calculator, a question-answering system, Wikipedia search, a translation system, and a calendar. Base model: GPT-J (6.7B).</p>
+    </div>
+    <div class="fig bordered">
+      <img src="lecture-8-images/toolformer-fig1.png" alt="Toolformer API call examples" style="width:100%;max-width:560px;">
+      <div class="figcap">Fig. 1. API calls are inserted inline; results are inserted into the text.</div>
+    </div>
+  </div>
+  <div class="cite"><a href="https://arxiv.org/abs/2302.04761" target="_blank" rel="noopener">Schick et al., "Toolformer: Language Models Can Teach Themselves to Use Tools", NeurIPS 2023</a>.</div>
+</section>
+
+<!-- Toolformer 2 -->
+<section class="standard" data-background-color="#ffffff">
+  <div class="eyebrow">Toolformer · the self-supervised method</div>
+  <h2>Keep only the calls that actually help</h2>
+  <p class="lead wide" style="max-width:60em;margin-bottom:8px;">Filtering: a candidate API call is kept only if its result <strong>reduces the model's loss</strong> (perplexity) on the following tokens. Useful calls survive; others are discarded. The model is then fine-tuned on this augmented text.</p>
+  <div class="fig bordered" style="margin-top:6px;">
+    <img src="lecture-8-images/toolformer-fig2.png" alt="Toolformer sample-execute-filter pipeline" style="width:100%;max-width:1040px;">
+    <div class="figcap">Fig. 2. Sample candidate API calls &rarr; execute them &rarr; filter by whether they lower the LM loss.</div>
+  </div>
+  <div class="cols c2" style="margin-top:16px;align-items:center;">
+    <div class="note"><p>With tools, the 6.7B model <strong>beats GPT-3 (175B)</strong> on math and factual tasks: ASDiv 7.5 (without tools) &rarr; 40.4 (GPT-3 is 14.0), SVAMP 5.2 (without tools) &rarr; 29.4 (GPT-3 is  10.0).</p></div>
+    <div class="note"><p>Core language modeling is <strong>preserved</strong>: perplexity is unchanged when API calls are disabled.</p></div>
+  </div>
+  <div class="cite">Schick et al. 2023. Self-supervision means no human labels for when or how to call a tool.</div>
+</section>
+
+<!-- ToolLLM 1: the data -->
+<section class="standard" data-background-color="#ffffff">
+  <div class="eyebrow">ToolLLM · tool use at scale</div>
+  <h2>From a handful of tools to 16,000+ real APIs</h2>
+  <p class="lead wide" style="max-width:64em;margin-top:0;">Open models lagged far behind ChatGPT at real tool use, partly for lack of training data. <strong>ToolLLM</strong> builds <strong>ToolBench</strong>, a large tool-use dataset, <strong>automatically with ChatGPT</strong> (no human labels), in three stages.</p>
+  <div class="cols s60" style="margin-top:8px;align-items:center;">
+    <div class="steps" style="grid-template-columns:1fr;gap:7px;">
+      <div class="step" style="padding:13px 18px;"><div class="n">1</div><h3>Collect APIs</h3><p>Crawl <strong>16,464 real REST APIs</strong> across 49 categories from <strong>RapidAPI Hub</strong> (a public API marketplace), keeping each one's documentation.</p></div>
+      <div class="step" style="padding:13px 18px;"><div class="n">2</div><h3>Generate instructions</h3><p>ChatGPT writes diverse user requests that need one or several of these APIs (<strong>single-tool and multi-tool</strong>).</p></div>
+      <div class="step" style="padding:13px 18px;border-color:var(--red);"><div class="n" style="background:var(--ink)">3</div><h3>Annotate solution paths</h3><p>ChatGPT searches for a working <strong>sequence of API calls</strong> for each instruction: the supervised target.</p></div>
+    </div>
+    <div class="fig bordered">
+      <img src="lecture-8-images/toolllm-fig1.png" alt="ToolBench construction and inference pipeline" style="width:100%;max-width:900x;">
+      <div class="figcap">Fig. 1. Collect &rarr; instruct &rarr; solve yields <strong>ToolBench</strong>, used to fine-tune <strong>ToolLLaMA</strong>; at inference an API retriever feeds in the relevant APIs.</div>
+    </div>
+  </div>
+  <div class="cite"><a href="https://arxiv.org/abs/2307.16789" target="_blank" rel="noopener">Qin et al., "ToolLLM: Facilitating LLMs to Master 16000+ Real-world APIs", ICLR 2024</a>. RapidAPI Hub lists thousands of real public web APIs (finance, weather, maps, ...).</div>
+</section>
+
+<!-- ToolLLM 2: solving + evaluation -->
+<section class="standard" data-background-color="#ffffff">
+  <div class="eyebrow">ToolLLM · searching for a solution, and evaluating it</div>
+  <h2>Backtracking search, and matching ChatGPT</h2>
+  <div class="cols s60" style="margin-top:8px;align-items:center;">
+    <div>
+      <p class="lead wide">Real API calls fail often (bad arguments, dead endpoints), so a single linear chain (ReAct) gets stuck. <strong>DFSDT</strong> (Depth-First Search-based Decision Tree) lets the model <strong>try several action paths and backtrack</strong> from a failed call.</p>
+      <ul class="tight" style="margin-top:8px;">
+        <li><strong>API retriever</strong>: a neural search model that selects the few relevant APIs from the 16k pool.</li>
+        <li><strong>ToolLLaMA</strong>: LLaMA-2-7B fine-tuned on ToolBench; reaches <strong>similar performance to ChatGPT</strong>, even on unseen APIs.</li>
+        <li><strong>ToolEval</strong>: an automatic ChatGPT judge scoring <strong>pass rate</strong> (finished in budget) and <strong>win rate</strong> (quality vs a reference).</li>
+      </ul>
+    </div>
+    <div class="fig bordered">
+      <img src="lecture-8-images/toolllm-dfsdt.png" alt="DFSDT vs ReAct reasoning tree" style="width:100%;max-width:550px;">
+      <div class="figcap">Qin et al. 2023, Fig. 4. DFSDT explores a tree and abandons failed paths; a single chain (ReAct) gives up. DFSDT lifts ChatGPT's average pass rate from 40.2% (ReAct) to 64.8%.</div>
+    </div>
+  </div>
+  <div class="cite"><a href="https://arxiv.org/abs/2307.16789" target="_blank" rel="noopener">Qin et al. 2024</a>. Pass rate and win rate are computed automatically by ToolEval, validated against human judgments.</div>
+</section>
+
+<!-- CodeAct 1 -->
+<section class="standard" data-background-color="#ffffff">
+  <div class="eyebrow">CodeAct · code as the action space</div>
+  <h2>Stop picking from a menu. Write code.</h2>
+  <p class="lead wide" style="max-width:74em;margin-top:2px;">Predefined JSON / text tool calls are rigid: they cannot easily compose tools or reuse libraries. Same task (find the cheapest country to buy a phone): the text agent takes <strong>many turns</strong>; <strong>CodeAct</strong> does it in <strong>one Python action</strong>.</p>
+  <div class="fig bordered" style="margin-top:8px;">
+    <img src="lecture-8-images/codeact-fig1-cropped.png" alt="CodeAct vs Text/JSON actions" style="width:100%;max-width:900px;display:block;margin:0 auto;">
+    <div class="figcap" style="margin-top:5px;">Fig. 1. Text/JSON many actions (left); a single code action (right).</div>
+  </div>
+  <div class="cards c4" style="margin-top:12px;gap:12px;">
+    <div class="card" style="padding:12px 14px;"><h3 style="font-size:.92em;">Composability</h3><p>Chain many operations in one action.</p></div>
+    <div class="card" style="padding:12px 14px;"><h3 style="font-size:.92em;">Control flow</h3><p>Loops, branches, functions for free.</p></div>
+    <div class="card" style="padding:12px 14px;"><h3 style="font-size:.92em;">Ecosystem</h3><p>Call any existing Python library.</p></div>
+    <div class="card" style="padding:12px 14px;"><h3 style="font-size:.92em;">Fewer actions</h3><p>One code block replaces many tool calls.</p></div>
+  </div>
+  <div class="cite"><a href="https://arxiv.org/abs/2402.01030" target="_blank" rel="noopener">Wang et al., "Executable Code Actions Elicit Better LLM Agents", ICML 2024</a>.</div>
+</section>
+
+<!-- CodeAct 2 -->
+<section class="standard" data-background-color="#ffffff">
+  <div class="eyebrow">CodeAct · the interaction loop</div>
+  <h2>Run, observe, self-debug</h2>
+  <div class="cols s60" style="margin-top:8px;align-items:center;">
+    <div>
+      <p class="lead wide">The agent emits code; a <strong>Python interpreter executes it</strong>; the output or traceback comes back as an observation. The agent uses execution feedback to <strong>debug its own code</strong> and revise its plan across turns.</p>
+      <div class="cards c2" style="margin-top:16px;">
+        <div class="stat"><div class="big">+20%</div><div class="lab">higher success rate than JSON/text actions, with up to 30% fewer actions</div></div>
+        <div class="stat"><div class="big">74.4%</div><div class="lab">GPT-4 on M3ToolEval with CodeAct, a +20.7 point gain over text actions</div></div>
+      </div>
+    </div>
+    <div class="flow" style="flex-direction:column;gap:8px;">
+      <div class="node"><div class="t">Generate code</div></div>
+      <div class="arr" style="justify-content:center;transform:rotate(90deg);">→</div>
+      <div class="node" style="border-color:var(--red);background:var(--red-soft);"><div class="t" style="color:var(--red)">Execute (interpreter)</div></div>
+      <div class="arr" style="justify-content:center;transform:rotate(90deg);">→</div>
+      <div class="node"><div class="t">Observe output / error</div><div class="d">loop back to fix and continue</div></div>
+    </div>
+  </div>
+  <div class="cite">Wang et al. 2024. Both numbers come from M3ToolEval (Table 3, visualized in Fig. 1 bottom): up to +20% success and up to 30% fewer actions across 17 LLMs; GPT-4 with CodeAct reaches 74.4%, a +20.7 point gain over text actions. Next: how the agent is trained to behave this way.</div>
+</section>
+
+<!-- CodeAct 3: training data + fine-tuning -->
+<section class="standard" data-background-color="#ffffff">
+  <div class="eyebrow">CodeAct · building the agent</div>
+  <h2>Where the skill comes from: data, then fine-tuning</h2>
+  <p class="lead wide" style="max-width:62em;margin-top:2px;">No new human labels are collected. <strong>CodeActInstruct</strong> repurposes existing benchmarks into the code-action format, has strong models attempt them in the interpreter loop, keeps the trajectories that work, and fine-tunes a small open model on the result.</p>
+  <div class="steps" style="margin-top:16px;">
+    <div class="step"><div class="n">1</div><h3>Repurpose existing tasks</h3><p><strong>7K</strong> multi-turn trajectories drawn from five capabilities: info-seeking (HotpotQA), symbolic math (MATH), code with self-debug (APPS), tabular reasoning (WikiTableQuestion), and embodied planning (ALFWorld). Each is recast so the action is <strong>Python code</strong>.</p></div>
+    <div class="step"><div class="n">2</div><h3>Generate &amp; filter</h3><p>Strong LLMs (<strong>GPT-4, GPT-3.5, Claude</strong>) solve each task in the run-observe loop. Keep only successful runs, <strong>favoring ones where the model errs then fixes itself</strong>, so the data teaches self-debugging (411 from GPT-4, 6,728 from GPT-3.5 / Claude).</p></div>
+    <div class="step" style="border-color:var(--red);"><div class="n" style="background:var(--ink)">3</div><h3>Fine-tune</h3><p>Full supervised fine-tuning of <strong>Llama-2-7B</strong> and <strong>Mistral-7B</strong>. CodeActInstruct is <strong>mixed with general chat data</strong> (ShareGPT, OpenOrca, CapyBara) so conversation and general ability are kept. Result: <strong>CodeActAgent</strong>.</p></div>
+  </div>
+  <div class="note" style="margin-top:16px;"><p>The recurring recipe for agents: take an <strong>environment with ground truth</strong> (here, the interpreter), let a strong model generate trajectories in it, <strong>filter for the behavior you want</strong> (successful, self-correcting), and distill it into a smaller policy.</p></div>
+  <div class="cite"><a href="https://arxiv.org/abs/2402.01030" target="_blank" rel="noopener">Wang et al. 2024</a>. CodeActInstruct: ~10.6M tokens of agent data, mixed with ~55M tokens of general conversation data for tuning.</div>
+</section>
+
+<!-- Writing tools 1 -->
+<section class="standard" data-background-color="#ffffff">
+  <div class="eyebrow">Writing tools for agents · Anthropic</div>
+  <h2>What makes a good tool for an agent?</h2>
+  <p class="lead wide" style="max-width:60em;margin-bottom:14px;">Agents are non-deterministic and run under limited context, so tools need to be designed for <strong>agent ergonomics</strong>, not just wrap an existing API endpoint.</p>
+  <div class="cards c2">
+    <div class="card tint-blue"><h3>Build fewer tools</h3><p>Consolidate workflows: one <code>schedule_event</code> is better than separate list/find/create calls.</p></div>
+    <div class="card tint-green"><h3>Return meaningful context from tools</h3><p>Prefer semantic names over opaque UUIDs; offer a <code>concise</code> vs <code>detailed</code> format. Be token-efficient: paginate, filter, truncate.</p></div>
+    <div class="card tint-amber"><h3>Namespacing</h3><p>Group tools by prefix (<code>asana_search</code>, <code>jira_search</code>) so the agent selects the right one among hundreds.</p></div>
+    <div class="card tint-red"><h3>Prompt-engineer the descriptions</h3><p>Write specs as if for a new hire; use unambiguous names. Small refinements alone yielded SOTA on SWE-bench Verified.</p></div>
+  </div>
+  <div class="cite"><a href="https://www.anthropic.com/engineering/writing-tools-for-agents" target="_blank" rel="noopener">Anthropic, "Writing Tools for Agents", 2025</a>. In Claude Code, tool responses are truncated at 25,000 tokens by default.</div>
+</section>
+
+<!-- Writing tools 2 -->
+<section class="standard" data-background-color="#ffffff">
+  <div class="eyebrow">Writing tools for agents · evaluation-driven</div>
+  <h2>Let the agent help optimize its own tools</h2>
+  <div class="cols s40" style="margin-top:8px;">
+    <div>
+      <p class="lead wide">The reliable way to get tools right is an <strong>evaluation loop</strong>: generate realistic tasks, run them in agentic loops, and collect more than accuracy: runtime, number of tool calls, tokens consumed, and tool errors. Then let Claude read the transcripts and <strong>refactor the tool definitions</strong>.</p>
+      <div class="note" style="margin-top:14px;"><p>On both the Slack and Asana servers, <strong>Claude-optimized tools beat the original human-written tools</strong> on held-out test accuracy.</p></div>
+    </div>
+    <div class="fig bordered">
+      <img src="lecture-8-images/tools-asana-accuracy.png" alt="Human vs Claude-optimized tool accuracy" style="width:100%;max-width:480px;">
+      <div class="figcap">Accuracy of human-written vs. Claude-optimized tools (Asana server).</div>
+    </div>
+  </div>
+  <div class="cite"><a href="https://www.anthropic.com/engineering/writing-tools-for-agents" target="_blank" rel="noopener">Anthropic 2025</a>.</div>
+</section>
+
+<!-- ============ SECTION: Deep research ============ -->
+<section class="divider" data-background-color="#ffffff">
+  <div class="kicker">Part 3 · Research as a task</div>
+  <div class="rule"></div>
+  <h2>Deep research</h2>
+  <div class="dsub">Autonomous, multi-step exploration of the web to answer hard questions, with citations. From WebGPT to today's multi-agent systems.</div>
+</section>
+
+<!-- WebGPT 1 -->
+<section class="standard" data-background-color="#ffffff">
+  <div class="eyebrow">WebGPT · the precursor</div>
+  <h2>Answering questions by browsing</h2>
+  <div class="cols s40" style="margin-top:8px;">
+    <div>
+      <p class="lead wide">Long-form QA needs evidence, but models hallucinate and give no provenance. <strong>WebGPT</strong> fine-tunes GPT-3 to answer in a <strong>text-based web-browsing environment</strong>. The model works <strong>purely in text</strong>: it reads a written summary of the current state and replies with a single command, then writes an answer <strong>with citations</strong>.</p>
+      <p class="small" style="color:var(--gray);margin-top:10px;">Commands (Table 1): <code>Search</code>, <code>Click link</code>, <code>Find in page</code>, <code>Quote</code>, <code>Scroll</code>, <code>Back</code>, <code>End: Answer</code>. The closest precursor to modern deep research.</p>
+    </div>
+    <div class="fig bordered">
+      <img src="lecture-8-images/webgpt-demo.png" alt="WebGPT human demonstrator interface" style="width:100%;max-width:540px;">
+      <div class="figcap">Fig. 1 (left). The graphical interface shown to <strong>human demonstrators</strong>.</div>
+    </div>
+  </div>
+  <div class="note" style="margin-top:10px;"><p style="color:var(--gray);">The browser above is for the <strong>humans</strong> who recorded demonstrations. The model instead receives a <strong>text summary</strong> of the same state (question, page text at the cursor, link indices, actions left) and outputs <strong>one text command</strong>.</p></div>
+  <div class="cite"><a href="https://arxiv.org/abs/2112.09332" target="_blank" rel="noopener">Nakano et al., "WebGPT: Browser-assisted question-answering with human feedback", OpenAI 2021</a>. Fig. 1 caption: an observation "as shown to human demonstrators (left) and models (right)".</div>
+</section>
+
+<!-- WebGPT 2 -->
+<section class="standard" data-background-color="#ffffff">
+  <div class="eyebrow">WebGPT · training and results</div>
+  <h2>Imitation, then a learned reward</h2>
+  <div class="cols s60" style="margin-top:8px;align-items:center;">
+    <div>
+      <p class="lead wide">Training combines <strong>behavior cloning</strong> from human browsing demonstrations with a <strong>reward model</strong> from human comparisons, used for RL and best-of-n <strong>rejection sampling</strong>: the same RLHF machinery seen in the alignment lecture, applied to a browsing policy.</p>
+      <div class="cards c2" style="margin-top:16px;">
+        <div class="stat"><div class="big">56%</div><div class="lab">of the time, WebGPT (175B) answers are preferred over its human demonstrators</div></div>
+        <div class="stat"><div class="big">69%</div><div class="lab">preferred over the highest-voted Reddit reference answer (ELI5)</div></div>
+      </div>
+    </div>
+    <div class="flow" style="flex-direction:column;gap:8px;">
+      <div class="node"><div class="t">Behavior cloning</div><div class="d">imitate human browsing</div></div>
+      <div class="arr" style="justify-content:center;transform:rotate(90deg);">→</div>
+      <div class="node"><div class="t">Reward model</div><div class="d">from answer comparisons</div></div>
+      <div class="arr" style="justify-content:center;transform:rotate(90deg);">→</div>
+      <div class="node" style="border-color:var(--red);background:var(--red-soft);"><div class="t" style="color:var(--red)">RL + rejection sampling</div><div class="d">optimize the policy</div></div>
+    </div>
+  </div>
+  <div class="cite">Nakano et al. 2021. Dataset: ELI5. Citations let humans verify the claims, addressing honesty/provenance.</div>
+</section>
+
+<!-- Deep Research OpenAI -->
+<section class="standard" data-background-color="#ffffff">
+  <div class="eyebrow">OpenAI Deep Research</div>
+  <h2>An autonomous research analyst</h2>
+  <div class="cols s60" style="margin-top:10px;align-items:center;">
+    <div>
+      <p class="lead wide">Deep research <strong>autonomously conducts multi-step research</strong>: it searches, reads, and pivots based on what it finds across hundreds of sources, then produces a <strong>fully cited report</strong>, in 5 to 30 minutes.</p>
+      <ul class="tight" style="margin-top:12px;">
+        <li>Powered by a version of <strong>o3 optimized for browsing</strong> and data analysis.</li>
+        <li><strong>Browsing-specific training</strong>: end-to-end RL on hard browsing and reasoning tasks; it learns to plan, backtrack, and react to live information.</li>
+        <li>SOTA on <strong>Humanity's Last Exam (26.6%)</strong> and the <strong>GAIA</strong> web-research benchmark.</li>
+      </ul>
+    </div>
+    <div class="fig">
+      <div style="width:100%;max-width:470px;">
+        <div style="font-weight:700;color:var(--ink);font-size:.82em;margin-bottom:12px;">Humanity's Last Exam &middot; accuracy (pass@1)</div>
+        <div class="hle-chart">
+          <div class="hle-row"><div class="hle-lab">GPT-4o</div><div class="hle-track"><div class="hle-bar" style="width:11.8%;"></div></div><div class="hle-val">3.3%</div></div>
+          <div class="hle-row"><div class="hle-lab">Claude 3.5 Sonnet</div><div class="hle-track"><div class="hle-bar" style="width:15.4%;"></div></div><div class="hle-val">4.3%</div></div>
+          <div class="hle-row"><div class="hle-lab">OpenAI o1</div><div class="hle-track"><div class="hle-bar" style="width:32.5%;"></div></div><div class="hle-val">9.1%</div></div>
+          <div class="hle-row"><div class="hle-lab">DeepSeek-R1</div><div class="hle-track"><div class="hle-bar" style="width:33.6%;"></div></div><div class="hle-val">9.4%</div></div>
+          <div class="hle-row"><div class="hle-lab">o3-mini (high)</div><div class="hle-track"><div class="hle-bar" style="width:46.4%;"></div></div><div class="hle-val">13.0%</div></div>
+          <div class="hle-row"><div class="hle-lab" style="color:var(--red);font-weight:700;">Deep research (o3)</div><div class="hle-track"><div class="hle-bar hot" style="width:95%;"></div></div><div class="hle-val" style="color:var(--red);font-weight:700;">26.6%</div></div>
+        </div>
+      </div>
+      <div class="figcap">OpenAI, Feb 2025. Deep research (o3) on the 3,000-question frontier-knowledge benchmark; near 3&times; the next-best model. It also set a new state of the art on the GAIA web-research benchmark.</div>
+    </div>
+  </div>
+  <div class="cite"><a href="https://openai.com/index/introducing-deep-research/" target="_blank" rel="noopener">OpenAI, "Introducing deep research", 2025</a>. Scores from the launch post. The trajectory from WebGPT: browsing is now a trained, autonomous skill, not a scripted tool loop.</div>
+</section>
+
+<!-- Multi-agent research 1 -->
+<section class="standard" data-background-color="#ffffff">
+  <div class="eyebrow">Anthropic · multi-agent research system</div>
+  <h2>One lead agent, many parallel subagents</h2>
+  <div class="cols s40" style="margin-top:6px;">
+    <div>
+      <p class="lead wide">Research is open-ended: you cannot hardcode a path. Claude's Research feature uses the <strong>orchestrator-workers</strong> pattern: a <strong>lead agent</strong> plans and spawns <strong>subagents that explore in parallel</strong>, each with its <strong>own context window</strong>, then compress and return findings to be synthesized.</p>
+      <ul class="tight" style="margin-top:10px;">
+        <li>Parallel breadth-first exploration.</li>
+        <li>Separation of concerns: each subagent owns a sub-problem.</li>
+        <li>More total context brought to bear than one agent could hold.</li>
+      </ul>
+    </div>
+    <div class="fig">
+      <img src="lecture-8-images/mas-architecture.png" alt="Multi-agent research architecture" style="width:100%;max-width:660px;border:1px solid var(--line);border-radius:10px;padding:6px;background:#fff;">
+      <div class="figcap">Anthropic 2025. Lead agent orchestrates search and citation subagents.</div>
+    </div>
+  </div>
+  <div class="cite"><a href="https://www.anthropic.com/engineering/multi-agent-research-system" target="_blank" rel="noopener">Anthropic, "How we built our multi-agent research system", Jun 2025</a>.</div>
+</section>
+
+<!-- Multi-agent research 2 -->
+<section class="standard" data-background-color="#ffffff">
+  <div class="eyebrow">Multi-agent research · it works, but it is expensive</div>
+  <h2>Performance tracks tokens</h2>
+  <div class="cols c2" style="margin-top:8px;align-items:center;">
+    <div>
+      <div class="cards c2">
+        <div class="stat"><div class="big">+90.2%</div><div class="lab">multi-agent (Opus 4 lead + Sonnet 4 subagents) over single-agent Opus 4 on their research eval</div></div>
+        <div class="stat"><div class="big">~80%</div><div class="lab">of performance variance explained by token usage, tool calls, and model choice</div></div>
+      </div>
+      <div class="note" style="margin-top:16px;"><h3>The downside</h3><p>This is <strong>token-hungry</strong> (see right), so it pays off only on high-value tasks. Coordination, delegation prompts, and debugging stateful agents are hard.</p></div>
+    </div>
+    <div class="fig">
+      <div style="width:100%;max-width:430px;">
+        <div style="font-weight:700;color:var(--ink);font-size:.82em;margin-bottom:16px;">Token usage, relative to one chat</div>
+        <div class="hle-chart" style="gap:16px;">
+          <div class="hle-row"><div class="hle-lab">Chat</div><div class="hle-track" style="height:22px;"><div class="hle-bar" style="width:6.7%;"></div></div><div class="hle-val">1&times;</div></div>
+          <div class="hle-row"><div class="hle-lab">Single agent</div><div class="hle-track" style="height:22px;"><div class="hle-bar" style="width:26.7%;"></div></div><div class="hle-val">4&times;</div></div>
+          <div class="hle-row"><div class="hle-lab" style="color:var(--red);font-weight:700;">Multi-agent</div><div class="hle-track" style="height:22px;"><div class="hle-bar hot" style="width:100%;"></div></div><div class="hle-val" style="color:var(--red);font-weight:700;">15&times;</div></div>
+        </div>
+      </div>
+      <div class="figcap">More agents bring more parallel context, but token cost scales with it: about 15&times; a chat.</div>
+    </div>
+  </div>
+  <div class="cite">Anthropic 2025. The orchestrator-worker pattern from Part 1, deployed in production.</div>
+</section>
+
+<!-- ============ SECTION: Coding agents ============ -->
+<section class="divider" data-background-color="#ffffff">
+  <div class="kicker">Part 4 · The coding agent era</div>
+  <div class="rule"></div>
+  <h2>Coding agents</h2>
+  <div class="dsub">A benchmark of real GitHub issues made coding the main testbed for agents, and changed how they are built.</div>
+</section>
+
+<!-- SWE-bench 1 -->
+<section class="standard" data-background-color="#ffffff">
+  <div class="eyebrow">SWE-bench</div>
+  <h2>Can a model resolve a real GitHub issue?</h2>
+  <div class="cols s40" style="margin-top:8px;">
+    <div>
+      <p class="lead wide">Toy coding benchmarks were saturated. <strong>SWE-bench</strong> uses <strong>2,294 real issue + pull-request pairs</strong> from 12 popular Python repos (django, sympy, scikit-learn, ...). Given the full codebase and the issue, the model must produce a <strong>patch</strong>.</p>
+      <ul class="tight" style="margin-top:10px;">
+        <li>Graded by <strong>running the repo's real unit tests</strong>: <code>FAIL_TO_PASS</code> (bug fixed) and <code>PASS_TO_PASS</code> (no regressions).</li>
+        <li>Hard: huge context, cross-file edits, real-world reasoning.</li>
+      </ul>
+    </div>
+    <div class="fig bordered">
+      <img src="lecture-8-images/swebench-fig1.png" alt="SWE-bench task construction" style="width:100%;max-width:700px;">
+      <div class="figcap">Fig. 1. Issue + codebase &rarr; generated patch &rarr; verified by the test suite.</div>
+    </div>
+  </div>
+  <div class="cite"><a href="https://arxiv.org/abs/2310.06770" target="_blank" rel="noopener">Jimenez et al., "SWE-bench: Can Language Models Resolve Real-World GitHub Issues?", ICLR 2024</a>.</div>
+</section>
+
+<!-- SWE-bench 2 -->
+<section class="standard" data-background-color="#ffffff">
+  <div class="eyebrow">SWE-bench · the gap that launched a field</div>
+  <h2>Almost nothing worked, at first</h2>
+  <div class="cols c2" style="margin-top:8px;align-items:start;">
+    <div>
+      <p class="lead wide">At release, the best model resolved only a tiny fraction of issues. SWE-bench gave a hard, objective target that keeps refreshing as repositories file new issues.</p>
+      <div class="cards c2" style="margin-top:14px;">
+        <div class="stat"><div class="big">1.96%</div><div class="lab">best model at release (Claude 2, BM25 retrieval) on the full benchmark</div></div>
+        <div class="stat"><div class="big">2,294</div><div class="lab">real task instances across 12 Python repositories</div></div>
+      </div>
+    </div>
+    <div class="note"><h3>Why a "Verified" subset?</h3><p style="color:var(--gray);">The unit tests were overly specific. Many samples were underspecified. It is sometimes hard to set up an environment; perfectly valid solutions might be graded as incorrect. So the full benchmark <strong>underestimates</strong> ability.</p><p style="color:var(--gray);margin-top:9px;"><strong>SWE-bench Verified</strong> is 500 tasks that <strong>93 professional developers</strong> confirmed are solvable and fairly graded. Now the standard reporting set (frontier agents exceed 70%). The point is <strong>fair grading, not bad code</strong>: the repos are real and high quality; a subset of tasks just scored unreliably.</p></div>
+  </div>
+  <div class="cite">Jimenez et al. 2023; <a href="https://openai.com/index/introducing-swe-bench-verified/" target="_blank" rel="noopener">OpenAI, "Introducing SWE-bench Verified", Aug 2024</a>. Executable ground truth made it the field's reference target.</div>
+</section>
+
+<!-- Codex 1 -->
+<section class="standard" data-background-color="#ffffff">
+  <div class="eyebrow">OpenAI Codex · a cloud software-engineering agent</div>
+  <h2>An agent that lives in a sandboxed repo</h2>
+  <p class="lead wide" style="max-width:72em;margin-top:0;">Codex runs each task in its <strong>own isolated, sandboxed cloud environment preloaded with your repository</strong>. It reads and edits files and <strong>runs commands</strong> (tests, linters, type checkers), then proposes a pull request you review.</p>
+  <div class="codex" id="codex">
+    <div class="stages">
+      <div class="si" data-step="0"><div class="si-n">1</div><div><div class="si-t">Assign a task</div><div class="si-d">A natural-language issue, in your repo.</div></div></div>
+      <div class="si" data-step="1"><div class="si-n">2</div><div><div class="si-t">Spin up a sandbox</div><div class="si-d">Isolated container, repo preloaded, network off.</div></div></div>
+      <div class="si" data-step="2"><div class="si-n">3</div><div><div class="si-t">Edit and run</div><div class="si-d">Change files, run the test suite in a terminal.</div></div></div>
+      <div class="si" data-step="3"><div class="si-n">4</div><div><div class="si-t">Iterate to green</div><div class="si-d">Read the failure, fix, re-run until tests pass.</div></div></div>
+      <div class="si" data-step="4"><div class="si-n">5</div><div><div class="si-t">Propose a PR</div><div class="si-d">Open a pull request, citing terminal logs.</div></div></div>
+    </div>
+    <div class="screen">
+      <div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="ttl" id="codexTtl">codex</span></div>
+      <div class="body">
+        <div class="panel" data-step="0">
+          <div class="ln c-mut"># user assigns a task</div>
+          <div class="ln"><span class="c-blu">task&gt;</span> Fix jdiff error with special characters in filenames</div>
+          <div class="ln c-mut">repo: codex-cli   branch: main</div>
+          <div class="ln" style="margin-top:8px;"><span class="chip">Code ▶</span></div>
+        </div>
+        <div class="panel" data-step="1">
+          <div class="ln c-mut"># a fresh, isolated environment is created</div>
+          <div class="ln"><span class="c-grn">✓</span> clone repository into /workspace</div>
+          <div class="ln"><span class="c-grn">✓</span> install dependencies (cached)</div>
+          <div class="ln"><span class="c-grn">✓</span> load AGENTS.md, setup script</div>
+          <div class="ln c-amb">⊘ network access: DISABLED at execution</div>
+        </div>
+        <div class="panel" data-step="2">
+          <div class="ln c-mut"># edit files, then run the suite</div>
+          <div class="ln"><span class="del">- execSync(`git diff`, { shell: true })</span></div>
+          <div class="ln"><span class="add">+ execFileSync('git', ['diff'], { shell: false })</span></div>
+          <div class="ln"><span class="add">+ test('handles filenames with quotes', ...)</span></div>
+          <div class="ln" style="margin-top:6px;"><span class="c-blu">$</span> pnpm test tests/get-diff.test.ts</div>
+        </div>
+        <div class="panel" data-step="3">
+          <div class="ln"><span class="c-blu">$</span> pnpm test  <span class="c-mut">(run 1)</span></div>
+          <div class="ln c-red">✗ 1 failed  ·  get-diff: special characters</div>
+          <div class="ln c-mut">  → read traceback, adjust escaping</div>
+          <div class="ln" style="margin-top:6px;"><span class="c-blu">$</span> pnpm test  <span class="c-mut">(run 2)</span></div>
+          <div class="ln c-grn">✓ 31 passed  ·  0 failed   (4m 28s)</div>
+        </div>
+        <div class="panel" data-step="4">
+          <div class="ln c-mut"># human reviews the proposed change</div>
+          <div class="prbox">
+            <div class="prh">Fix jdiff error with special characters</div>
+            <div class="ln c-mut" style="margin-top:3px;">2 files changed &nbsp;<span class="add">+46</span> <span class="del">−11</span></div>
+            <div class="ln c-grn" style="margin-top:4px;">✓ evidence: tests 31 passed, terminal logs attached</div>
+            <div class="ln" style="margin-top:7px;"><span class="chip">Open pull request</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div style="display:flex;gap:12px;align-items:center;margin-top:12px;">
+    <button class="stepbtn" id="codexStep">Step ▶</button>
+    <span class="hint" style="margin:0;">Click to walk through one Codex task, from prompt to reviewed pull request.</span>
+  </div>
+  <div class="cite"><a href="https://openai.com/index/introducing-codex/" target="_blank" rel="noopener">OpenAI, "Introducing Codex", May 2025</a>. Powered by codex-1, a version of o3 trained with RL on real coding tasks.</div>
+</section>
+
+<!-- Codex 2 -->
+<section class="standard" data-background-color="#ffffff">
+  <div class="eyebrow">OpenAI Codex · results</div>
+  <h2>Closing the SWE-bench gap</h2>
+  <div class="cols s60" style="margin-top:8px;align-items:center;">
+    <div>
+      <p class="lead wide">At release the best system solved only ~2% of the <strong>full SWE-bench</strong> (2,294 tasks). The field then moved to <strong>SWE-bench Verified</strong>, a different, cleaner 500-task subset (previous slide). On Verified, codex-1 reaches <strong>72.1% with a single attempt</strong> and about <strong>84% with multiple attempts</strong>.</p>
+      <div class="note" style="margin-top:14px;"><p>Mind the test sets: the ~2% and the 72.1% are <strong>not the same benchmark</strong>, so this is a trajectory, not a like-for-like jump. The pattern that won: a model trained for the task, an environment it can <strong>act in and get ground truth from</strong> (run the tests), iterative self-correction, and a human reviewing the diff.</p></div>
+    </div>
+    <div class="cards" style="grid-template-columns:1fr;">
+      <div class="stat"><div class="big">72.1%</div><div class="lab">SWE-bench Verified, single attempt (codex-1)</div></div>
+      <div class="stat"><div class="big">~84%</div><div class="lab">Verified, with multiple parallel attempts (pass@8)</div></div>
+    </div>
+  </div>
+  <div class="cite"><a href="https://openai.com/index/introducing-codex/" target="_blank" rel="noopener">OpenAI, "Introducing Codex", May 2025</a>: codex-1 scored 72.1% on <a href="https://openai.com/index/introducing-swe-bench-verified/" target="_blank" rel="noopener">SWE-bench Verified</a> (pass@1). The ~2% release figure (<a href="https://arxiv.org/abs/2310.06770" target="_blank" rel="noopener">Jimenez et al. 2023</a>) was on the full benchmark.</div>
+</section>
+
+<!-- ============ SECTION: Web & computer use ============ -->
+<section class="divider" data-background-color="#ffffff">
+  <div class="kicker">Part 5 · Acting in realistic environments</div>
+  <div class="rule"></div>
+  <h2>Web &amp; computer-use agents</h2>
+  <div class="dsub">Realistic environments to test agents, the move from HTML to pixels, and the long road to reliable computer use.</div>
+</section>
+
+<!-- WebArena -->
+<section class="standard" data-background-color="#ffffff">
+  <div class="eyebrow">WebArena</div>
+  <h2>A realistic, reproducible web to act in</h2>
+  <div class="cols s40" style="margin-top:8px;">
+    <div>
+      <p class="lead wide">Agents had been tested in toy simulators. <strong>WebArena</strong> is a self-hosted, fully functional web with sites across <strong>4 domains</strong> (e-commerce, social forum, GitLab, a CMS) plus tools and knowledge resources, and <strong>812 long-horizon tasks</strong> given as natural-language intents.</p>
+      <ul class="tight" style="margin-top:10px;">
+        <li>Graded by <strong>functional correctness</strong>: programmatic checks of the end state, not text matching.</li>
+      </ul>
+      <div class="note" style="margin-top:12px;"><p>The best GPT-4 agent succeeded on only <strong>14.41%</strong> of tasks, versus <strong>78.24%</strong> for humans. A large performance gap.</p></div>
+    </div>
+    <div class="fig bordered">
+      <img src="lecture-8-images/webarena-fig1.png" alt="WebArena environment overview" style="width:100%;max-width:700px;">
+      <div class="figcap">Fig. 1. Self-hosted sites + tools; tasks verified by functional correctness.</div>
+    </div>
+  </div>
+  <div class="cite"><a href="https://arxiv.org/abs/2307.13854" target="_blank" rel="noopener">Zhou et al., "WebArena: A Realistic Web Environment for Building Autonomous Agents", ICLR 2024</a>.</div>
+</section>
+
+<!-- WebArena example -->
+<section class="standard" data-background-color="#ffffff">
+  <div class="eyebrow">WebArena · how a task is graded</div>
+  <h2>Three real tasks, three ways to check the end state</h2>
+  <p class="lead wide" style="max-width:66em;margin-top:2px;">The agent acts with <code>click</code> / <code>type</code> / <code>goto</code> over the page's accessibility tree. It is then graded by <strong>functional correctness</strong>, on the resulting state, not the words. One task per reward type, verbatim from the paper:</p>
+  <div class="cards" style="grid-template-columns:1fr;gap:13px;margin-top:14px;">
+    <div class="card tint-blue" style="padding:14px 18px;">
+      <div class="cols s60" style="gap:22px;align-items:center;">
+        <div><div class="num" style="color:var(--blue);">INFORMATION SEEKING &middot; string match</div><div style="color:var(--ink);font-weight:600;margin-top:3px;">"Tell me the name of the customer who has the most cancellations in the history"</div></div>
+        <div class="databox" style="font-size:.62em;padding:11px 14px;">exact_match(answer, "Samantha Jones")</div>
+      </div>
+    </div>
+    <div class="card tint-amber" style="padding:14px 18px;">
+      <div class="cols s60" style="gap:22px;align-items:center;">
+        <div><div class="num" style="color:#9a6a00;">SITE NAVIGATION &middot; URL match</div><div style="color:var(--ink);font-weight:600;margin-top:3px;">"Checkout merge requests assigned to me"</div></div>
+        <div class="databox" style="font-size:.62em;padding:11px 14px;">URL = current_url(state)
+exact_match(URL,
+  ".../merge_requests?assignee_username=byteblaze")</div>
+      </div>
+    </div>
+    <div class="card tint-green" style="padding:14px 18px;">
+      <div class="cols s60" style="gap:22px;align-items:center;">
+        <div><div class="num" style="color:var(--green);">CONTENT &amp; CONFIG &middot; state check</div><div style="color:var(--ink);font-weight:600;margin-top:3px;">"Post to ask 'whether I need a car in NYC'"</div></div>
+        <div class="databox" style="font-size:.62em;padding:11px 14px;">must_include(post_url, "/f/nyc")
+must_include(post_body, "a car in NYC")</div>
+      </div>
+    </div>
+  </div>
+  <div class="cite"><a href="https://arxiv.org/abs/2307.13854" target="_blank" rel="noopener">Zhou et al. 2024</a>, Table 1 (examples of the three scoring functions). A fluent description of the intended action earns no credit; the checker inspects the actual end state (DB, URL, or DOM).</div>
+</section>
+
+<!-- VWA + OSWorld -->
+<section class="standard" data-background-color="#ffffff">
+  <div class="eyebrow">VisualWebArena &amp; OSWorld</div>
+  <h2>From text pages to pixels, and beyond the browser</h2>
+  <div class="cols c2" style="margin-top:8px;align-items:start;">
+    <div>
+      <div class="fig bordered"><img src="lecture-8-images/vwa-fig1.png" alt="VisualWebArena" style="width:100%;"></div>
+      <p class="small" style="color:var(--gray);margin-top:8px;"><strong>VisualWebArena</strong>: 910 <strong>visually grounded</strong> web tasks; many need image understanding. Text-only agents do poorly; even GPT-4V with set-of-marks reaches only <strong>16.4%</strong> vs. <strong>88.7%</strong> for humans.</p>
+    </div>
+    <div>
+      <div class="fig bordered"><img src="lecture-8-images/osworld-demo.png" alt="OSWorld" style="width:100%;"></div>
+      <p class="small" style="color:var(--gray);margin-top:8px;"><strong>OSWorld</strong>: a real <strong>computer</strong> environment (Ubuntu, Windows, macOS), 369 tasks across real apps, with execution-based grading. Best agent <strong>12.2%</strong> vs. <strong>72.4%</strong> for humans.</p>
+    </div>
+  </div>
+  <div class="cite"><a href="https://arxiv.org/abs/2401.13649" target="_blank" rel="noopener">Koh et al., VisualWebArena, ACL 2024</a> · <a href="https://arxiv.org/abs/2404.07972" target="_blank" rel="noopener">Xie et al., OSWorld, NeurIPS 2024</a>. Both grade by the resulting state, and both expose a wide human gap.</div>
+</section>
+
+<!-- WebVoyager -->
+<section class="standard" data-background-color="#ffffff">
+  <div class="eyebrow">WebVoyager · the multimodal turn</div>
+  <h2>Seeing the page, not parsing the HTML</h2>
+  <div class="cols s40" style="margin-top:8px;">
+    <div>
+      <p class="lead wide">Early web agents read raw HTML or accessibility trees. <strong>WebVoyager</strong> is an <strong>end-to-end agent</strong> built on a <strong>large multimodal model</strong>: it observes the rendered page as a <strong>screenshot</strong> with interactive elements marked, and acts on <strong>15 real, live websites</strong>. It reaches <strong>59.1%</strong> success.</p>
+      <div class="card tint-blue" style="margin-top:12px;padding:13px 16px;"><h3 style="font-size:.96em;">Benchmark vs. agent</h3><p>VisualWebArena is a <strong>reproducible, sandboxed benchmark</strong> graded by exact programmatic checks. WebVoyager is an <strong>agent on the live web</strong>. Its 643-task test set has no ground-truth checker: success is scored by an <strong>automatic GPT-4V judge</strong>.</p></div>
+    </div>
+    <div class="fig bordered">
+      <img src="lecture-8-images/webvoyager-fig1.png" alt="WebVoyager multimodal web agent" style="width:100%;max-width:660px;">
+      <div class="figcap">Observation = screenshot + marked elements; the model reasons, then acts (click / type / scroll).</div>
+    </div>
+  </div>
+  <div class="cite"><a href="https://arxiv.org/abs/2401.13919" target="_blank" rel="noopener">He et al., "WebVoyager: Building an End-to-End Web Agent with Large Multimodal Models", ACL 2024</a>.</div>
+</section>
+
+<!-- ============ SECTION: Connecting agents ============ -->
+<section class="divider" data-background-color="#ffffff">
+  <div class="kicker">Part 6 · Connecting agents to the world</div>
+  <div class="rule"></div>
+  <h2>Protocols &amp; skills</h2>
+  <div class="dsub">Two recent ideas for scaling agents: a standard way to connect to tools and data (MCP), and a portable way to package expertise (Skills).</div>
+</section>
+
+<!-- MCP 1 -->
+<section class="standard" data-background-color="#ffffff">
+  <div class="eyebrow">Model Context Protocol</div>
+  <h2>The M&times;N integration problem</h2>
+  <div class="cols c2" style="margin-top:12px;align-items:center;">
+    <div>
+      <p class="lead wide">You have <strong>M</strong> AI apps (Claude Desktop, Cursor, ChatGPT) and want to reach <strong>N</strong> systems (Drive, Slack, GitHub, Postgres). What matters is <strong>how many integrations you build and maintain</strong>, not how many links are possible.</p>
+      <div class="cards c2" style="margin-top:12px;">
+        <div class="card tint-red" style="padding:13px 16px;"><h3 style="font-size:.96em;">Before: M &times; N</h3><p>A separate connector for <strong>every app&ndash;tool pair</strong>. 3 apps &times; 4 tools = <strong>12</strong> connectors to build; a Slack one written for Cursor did nothing for Claude.</p></div>
+        <div class="card tint-green" style="padding:13px 16px;"><h3 style="font-size:.96em;">With MCP: M + N</h3><p>Build <strong>one client per app</strong> + <strong>one server per tool</strong> = 3 + 4 = <strong>7</strong> reusable pieces. Any client then talks to any server, with no per-pair glue.</p></div>
+      </div>
+      <p class="small" style="color:var(--gray);margin-top:9px;">The old per-pair connectors were app-specific: ChatGPT plugins, LangChain tool wrappers, function-calling glue.</p>
+    </div>
+    <div>
+      <div class="flow" style="flex-direction:column;gap:8px;">
+        <div class="node"><div class="t">AI applications (clients)</div><div class="d">Claude Desktop, IDEs, agents</div></div>
+        <div class="arr" style="justify-content:center;transform:rotate(90deg);">↕</div>
+        <div class="node" style="border-color:var(--red);background:var(--red-soft);"><div class="t" style="color:var(--red)">MCP</div><div class="d">one open protocol</div></div>
+        <div class="arr" style="justify-content:center;transform:rotate(90deg);">↕</div>
+        <div class="node"><div class="t">Data &amp; tools (servers)</div><div class="d">Drive, Slack, GitHub, Postgres</div></div>
+      </div>
+      <div class="figcap" style="margin-top:10px;">Like a <strong>USB-C port for AI</strong>: one standard plug, so any app connects to any source.</div>
+    </div>
+  </div>
+  <div class="cite"><a href="https://www.anthropic.com/news/model-context-protocol" target="_blank" rel="noopener">Anthropic, "Introducing the Model Context Protocol", Nov 2024</a>. The USB-C analogy is Anthropic's own framing.</div>
+</section>
+
+<!-- MCP 2 -->
+<section class="standard" data-background-color="#ffffff">
+  <div class="eyebrow">MCP · client / server</div>
+  <h2>A standard interface, three primitives</h2>
+  <div class="cols c2" style="margin-top:10px;align-items:start;">
+    <div>
+      <p class="lead wide">A bidirectional client-server model: an <strong>MCP server</strong> exposes a system's capabilities; an <strong>MCP client</strong> (the AI app) connects to it. The server exposes three kinds of primitive:</p>
+      <div class="cards" style="grid-template-columns:1fr;margin-top:14px;">
+        <div class="card tint-blue" style="padding:13px 16px;"><h3 style="font-size:.96em;">Tools</h3><p>Actions the model can invoke (functions with arguments).</p></div>
+        <div class="card tint-green" style="padding:13px 16px;"><h3 style="font-size:.96em;">Resources</h3><p>Data the model can read (files, records, context).</p></div>
+        <div class="card tint-amber" style="padding:13px 16px;"><h3 style="font-size:.96em;">Prompts</h3><p>Reusable prompt templates the server offers.</p></div>
+      </div>
+    </div>
+    <div>
+      <p class="lead wide">Anthropic open-sourced the spec, SDKs, and a set of <strong>pre-built servers</strong>: Google Drive, Slack, GitHub, Git, Postgres, Puppeteer.</p>
+      <div class="note" style="margin-top:14px;"><h3>Why standardize</h3><p>One uniform interface means an agent reaches every system the same way, so its <strong>working context carries across tools</strong> (read from Postgres, then act in Slack) instead of through siloed, tool-specific glue. Add a new system by adding a <strong>server</strong>, not by rebuilding the agent.</p></div>
+      <div class="note" style="margin-top:10px;"><h3>A real cross-vendor standard</h3><p>Launched by Anthropic (Nov 2024), then adopted by <strong>OpenAI</strong>, <strong>Google DeepMind</strong>, and <strong>Microsoft</strong> in 2025, plus a large ecosystem of community servers. "Build once" only pays off because everyone now speaks it.</p></div>
+    </div>
+  </div>
+  <div class="cite"><a href="https://www.anthropic.com/news/model-context-protocol" target="_blank" rel="noopener">Anthropic 2024</a>. The three primitives (tools, resources, prompts) are defined in the MCP specification. Security implications are covered next lecture.</div>
+</section>
+
+<!-- Skills 1 -->
+<section class="standard" data-background-color="#ffffff">
+  <div class="eyebrow">Agent Skills</div>
+  <h2>Package expertise as a folder</h2>
+  <div class="cols s40" style="margin-top:8px;">
+    <div>
+      <p class="lead wide">A model is a generalist: it does not know your team's procedures, formats, and conventions. A <strong>Skill</strong> packages that know-how as a plain folder, a <strong>SKILL.md</strong> file plus any scripts it needs, turning a general agent into a specialist.</p>
+      <ul class="tight" style="margin-top:9px;">
+        <li>Each <code>SKILL.md</code> opens with a short YAML header: a <strong>name</strong> and a <strong>description</strong> (both required).</li>
+        <li>It can bundle <strong>runnable scripts</strong>, so exact steps (parse a PDF, sort data) run as code, not regenerated each time.</li>
+        <li>Skills are portable and <strong>pair well with MCP</strong>: the skill captures the workflow, which can then call MCP tools.</li>
+      </ul>
+    </div>
+    <div class="fig bordered">
+      <img src="lecture-8-images/skills-anatomy.jpg" alt="Anatomy of a SKILL.md" style="width:100%;max-width:680px;">
+      <div class="figcap">A SKILL.md: YAML frontmatter (name, description) followed by instructions.</div>
+    </div>
+  </div>
+  <div class="cite"><a href="https://www.anthropic.com/engineering/equipping-agents-for-the-real-world-with-agent-skills" target="_blank" rel="noopener">Anthropic, "Equipping agents for the real world with Agent Skills", 2025</a>.</div>
+</section>
+
+<!-- Skills 2 -->
+<section class="standard" data-background-color="#ffffff">
+  <div class="eyebrow">Agent Skills · progressive disclosure</div>
+  <h2>Load only what you need, when you need it</h2>
+  <p class="lead wide" style="max-width:64em;margin-top:4px;">A finite context window cannot hold every skill in full. <strong>Progressive disclosure</strong> loads a skill in levels, like a well-organized manual, so its effective size is essentially unbounded: the agent pays context only for what it actually opens.</p>
+  <div class="steps" style="margin-top:24px;">
+    <div class="step"><div class="n">1</div><h3>Metadata</h3><p>Only the <strong>name and description</strong> are preloaded, so the agent knows the skill exists and when to reach for it.</p></div>
+    <div class="step"><div class="n">2</div><h3>SKILL.md body</h3><p>The full instructions load into context <strong>only when</strong> the agent decides the skill is relevant to the task.</p></div>
+    <div class="step" style="border-color:var(--red);"><div class="n" style="background:var(--ink)">3</div><h3>Bundled files</h3><p>Extra reference files and scripts are <strong>read or executed only as needed</strong>, never all at once.</p></div>
+  </div>
+  <div class="note" style="margin-top:22px;"><p style="color:var(--gray);">Net effect: a skill can carry far more material than fits in context, because each level is pulled in on demand. The same idea a human uses with a reference manual: skim the index, open only the chapter you need.</p></div>
+  <div class="cite"><a href="https://www.anthropic.com/engineering/equipping-agents-for-the-real-world-with-agent-skills" target="_blank" rel="noopener">Anthropic, "Equipping agents for the real world with Agent Skills", 2025</a>.</div>
+</section>
+
+<!-- ============ CONCLUSION: stack ============ -->
+<section class="standard" data-background-color="#ffffff">
+  <div class="eyebrow">Wrapping up</div>
+  <h2>The agent capability stack</h2>
+  <table style="margin-top:14px;">
+    <thead><tr><th>Capability</th><th>Key idea</th><th>Landmark work</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Reasoning</strong></td><td>Elicit step-by-step thinking; interleave it with actions</td><td>CoT; ReAct</td></tr>
+      <tr><td><strong>Tool use</strong></td><td>Call APIs; train for it; write code instead of menus</td><td>Toolformer, ToolLLM, CodeAct</td></tr>
+      <tr><td><strong>Tool design</strong></td><td>Build fewer, ergonomic, eval-driven tools for agents</td><td>Writing tools for agents</td></tr>
+      <tr><td><strong>Deep research</strong></td><td>Autonomous multi-step browsing with citations; multi-agent</td><td>WebGPT, Deep Research, multi-agent</td></tr>
+      <tr><td><strong>Coding</strong></td><td>Real issues + executable tests; sandboxed iterative agents</td><td>SWE-bench, Codex</td></tr>
+      <tr><td><strong>Web / computer use</strong></td><td>Realistic environments; HTML &rarr; pixels (multimodal)</td><td>WebArena, OSWorld, WebVoyager</td></tr>
+      <tr><td><strong>Connection</strong></td><td>Standard protocol for tools/data; portable skill folders</td><td>MCP, Agent Skills</td></tr>
+    </tbody>
+  </table>
+  <div class="cite">Modern agents compose all of these: a reasoning model, in a loop, with well-designed tools, in a realistic environment, connected by open standards.</div>
+</section>
+
+<!-- takeaways -->
+<section class="standard" data-background-color="#ffffff">
+  <div class="eyebrow">Takeaways</div>
+  <h2>Three things to remember</h2>
+  <div class="cards c3" style="margin-top:22px;">
+    <div class="card"><div class="num">01</div><h3>An agent is a loop, not a model</h3><p>Reasoning, tools, and environment feedback turn a predictor into a system that acts. Start simple; add agency only when needed.</p></div>
+    <div class="card"><div class="num">02</div><h3>Capability comes from acting in the world</h3><p>The biggest gains came from grounding: browsing, running tests, seeing the screen. The environment supplies the ground truth.</p></div>
+    <div class="card"><div class="num">03</div><h3>The trajectory is toward autonomy</h3><p>Scripted tool loops became trained, autonomous, multi-agent systems, connected by shared standards. Capability and risk grow together.</p></div>
+  </div>
+  <div class="cite">Reasoning &rarr; tool use &rarr; deep research &rarr; coding &rarr; computer use &rarr; protocols and skills.</div>
+</section>
+
+<!-- recap -->
+<section class="standard" data-background-color="#ffffff">
+  <div class="eyebrow">Recap</div>
+  <h2>What we covered, and where to read more</h2>
+  <div class="recap">
+    <div class="recap-row"><div class="stage">Framing</div><div class="m">Workflows vs. agents; composable patterns</div><div class="p"><a href="https://www.anthropic.com/engineering/building-effective-agents" target="_blank" rel="noopener">Anthropic 2024</a></div></div>
+    <div class="recap-row"><div class="stage">Reasoning</div><div class="m">Chain-of-thought; ReAct (reason + act)</div><div class="p"><a href="https://arxiv.org/abs/2201.11903" target="_blank" rel="noopener">Wei 2022</a>, <a href="https://arxiv.org/abs/2210.03629" target="_blank" rel="noopener">Yao 2023</a></div></div>
+    <div class="recap-row"><div class="stage">Tool use</div><div class="m">Toolformer; ToolLLM (16k APIs); CodeAct (code actions)</div><div class="p"><a href="https://arxiv.org/abs/2302.04761" target="_blank" rel="noopener">Schick 2023</a>, <a href="https://arxiv.org/abs/2307.16789" target="_blank" rel="noopener">Qin 2024</a>, <a href="https://arxiv.org/abs/2402.01030" target="_blank" rel="noopener">Wang 2024</a></div></div>
+    <div class="recap-row"><div class="stage">Tool design</div><div class="m">Building ergonomic, eval-driven tools for agents</div><div class="p"><a href="https://www.anthropic.com/engineering/writing-tools-for-agents" target="_blank" rel="noopener">Anthropic 2025</a></div></div>
+    <div class="recap-row"><div class="stage">Deep research</div><div class="m">WebGPT; OpenAI deep research; multi-agent research</div><div class="p"><a href="https://arxiv.org/abs/2112.09332" target="_blank" rel="noopener">Nakano 2021</a>, <a href="https://openai.com/index/introducing-deep-research/" target="_blank" rel="noopener">OpenAI 2025</a>, <a href="https://www.anthropic.com/engineering/multi-agent-research-system" target="_blank" rel="noopener">Anthropic 2025</a></div></div>
+    <div class="recap-row"><div class="stage">Coding</div><div class="m">SWE-bench; Codex (sandboxed cloud SWE agent)</div><div class="p"><a href="https://arxiv.org/abs/2310.06770" target="_blank" rel="noopener">Jimenez 2024</a>, <a href="https://openai.com/index/introducing-codex/" target="_blank" rel="noopener">OpenAI 2025</a></div></div>
+    <div class="recap-row"><div class="stage">Computer use</div><div class="m">WebArena, VisualWebArena, OSWorld; WebVoyager (multimodal)</div><div class="p"><a href="https://arxiv.org/abs/2307.13854" target="_blank" rel="noopener">Zhou 2024</a>, <a href="https://arxiv.org/abs/2404.07972" target="_blank" rel="noopener">Xie 2024</a>, <a href="https://arxiv.org/abs/2401.13919" target="_blank" rel="noopener">He 2024</a></div></div>
+    <div class="recap-row"><div class="stage">Connection</div><div class="m">Model Context Protocol; Agent Skills</div><div class="p"><a href="https://www.anthropic.com/news/model-context-protocol" target="_blank" rel="noopener">MCP 2024</a>, <a href="https://www.anthropic.com/engineering/equipping-agents-for-the-real-world-with-agent-skills" target="_blank" rel="noopener">Skills 2025</a></div></div>
+  </div>
+  <div class="cite">Next lecture turns from what agents can do to how they fail and can be attacked.</div>
+</section>
+
+<!-- THANK YOU + FEEDBACK -->
+<section class="standard" data-background-color="#ffffff">
+  <h2>Thank you. Questions?</h2>
+  <p class="lead wide" style="margin-top:.4em;"><strong style="color:var(--ink)">Next lecture:</strong> <span style="color:var(--gray)">Agent &amp; LLM security. Prompt injection, jailbreaks in agentic settings, and the security implications of tool use and MCP.</span></p>
+  <div class="feedback">
+    <div class="qr">
+      <img src="lecture-7-images/qr_feedback.png" alt="QR code linking to the course feedback form">
+      <div class="cap">Scan to open the form</div>
+    </div>
+    <div class="ftext">
+      <div class="lab">We'd love your feedback</div>
+      <div class="big">Tell us how this lecture went</div>
+      <div class="link"><a href="https://forms.gle/5JF3H6zhP795HhpD8" target="_blank" rel="noopener">forms.gle/5JF3H6zhP795HhpD8</a></div>
+    </div>
+  </div>
+  <div class="cite">AI Safety · Master's Course, Summer Semester 2026 · University of Tübingen.</div>
+</section>
+
+</div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/reveal.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+<script>
+Reveal.initialize({
+  width:1280, height:800, margin:0.04,
+  minScale:0.2, maxScale:2.0,
+  hash:true, slideNumber:'c/t', transition:'none', transitionSpeed:'fast',
+  controls:true, progress:true, center:false
+});
+
+// Render KaTeX
+function renderMath(){
+  document.querySelectorAll('[data-katex]').forEach(function(el){
+    try{ katex.render(el.textContent.replace(/^\$\$|\$\$$/g,''), el, {displayMode:true, throwOnError:false}); }catch(e){}
+  });
+  renderMathInElement(document.body, {delimiters:[
+    {left:'$$',right:'$$',display:true},
+    {left:'$',right:'$',display:false}
+  ], throwOnError:false});
+}
+renderMath();
+
+// Interactive ReAct trace stepper
+(function(){
+  var btn = document.getElementById('reactStep');
+  if(!btn) return;
+  var lines = Array.prototype.slice.call(document.querySelectorAll('#reactTrace .line'));
+  var shown = 1;
+  function render(){
+    lines.forEach(function(l,i){ l.classList.toggle('on', i < shown); });
+    btn.textContent = shown >= lines.length ? 'Reset ↺' : 'Step ▶';
+  }
+  btn.addEventListener('click', function(){
+    shown = shown >= lines.length ? 1 : shown + 1;
+    render();
+  });
+  render();
+})();
+
+// Interactive Codex task-lifecycle stepper
+(function(){
+  var root = document.getElementById('codex');
+  var btn = document.getElementById('codexStep');
+  if(!root || !btn) return;
+  var items = Array.prototype.slice.call(root.querySelectorAll('.si'));
+  var panels = Array.prototype.slice.call(root.querySelectorAll('.panel'));
+  var titles = ['task','sandbox · network off','editor + terminal','test runner','pull request'];
+  var ttl = document.getElementById('codexTtl');
+  var cur = 0;
+  function render(){
+    items.forEach(function(it,i){
+      it.classList.toggle('on', i <= cur);
+      it.classList.toggle('active', i === cur);
+      it.classList.toggle('done', i < cur);
+    });
+    panels.forEach(function(p,i){ p.classList.toggle('show', i === cur); });
+    if(ttl) ttl.textContent = 'codex — ' + titles[cur];
+    btn.textContent = cur >= items.length - 1 ? 'Reset ↺' : 'Step ▶';
+  }
+  btn.addEventListener('click', function(){
+    cur = cur >= items.length - 1 ? 0 : cur + 1;
+    render();
+  });
+  render();
+})();
+</script>
+</body>
+</html>
