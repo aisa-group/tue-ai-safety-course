@@ -272,6 +272,9 @@ ul.tight li strong{ color:var(--ink); }
 .tcard h3{ font-size:.9em; margin:1px 0 .25em; }
 .tcard p{ color:var(--gray); font-size:.72em; margin:0; line-height:1.32; }
 
+/* optional-reading flag (e.g. on a section divider) */
+.optflag{ display:inline-block; align-self:flex-start; background:var(--amber-soft); color:#9a6a00; border:1px solid #f0e3c4; border-radius:20px; padding:4px 15px; font-size:.6em; font-weight:700; letter-spacing:.09em; text-transform:uppercase; margin-bottom:20px; }
+
 /* fragment cleanliness */
 .reveal .fragment.fade-in-then-semi-out.visible.current-fragment{ opacity:1; }
 
@@ -327,7 +330,7 @@ ul.tight li strong{ color:var(--ink); }
   <div class="cards c3" style="margin-top:18px;">
     <div class="card tint-red"><div class="num">PART 1 · 2</div><h3>The threat</h3><p>Why agents are exploitable (the lethal trifecta, a real CVE), and what prompt injection actually is: direct and indirect.</p></div>
     <div class="card tint-amber"><div class="num">PART 3</div><h3>Measuring it</h3><p>Benchmarks that turn anecdotes into numbers: AgentDojo, InjecAgent, and a large adaptive-attacker challenge.</p></div>
-    <div class="card tint-blue"><div class="num">PART 4</div><h3>Defenses, and their limits</h3><p>Training-side privilege, design-by-construction (CaMeL, six patterns), and an argument for why no fixed defense fully wins.</p></div>
+    <div class="card tint-blue"><div class="num">PART 4</div><h3>Defenses, and their limits</h3><p>Training-side privilege, design-by-construction (CaMeL, six patterns), and security-utility trade-offs.</p></div>
     <div class="card tint-green" style="grid-column:span 2;"><div class="num">PART 5</div><h3>Contextual privacy</h3><p>From "do not get hijacked" to "what information <em>should</em> flow, to whom?" Contextual integrity, benchmarks, and privacy-conscious agents.</p></div>
     <div class="card outline-red"><div class="num" style="color:var(--red)">BRIDGE</div><h3>Information flow</h3><p>Both halves are about appropriate information flow. Can we tie them together?</p></div>
   </div>
@@ -963,7 +966,7 @@ send_email(to=to, body=doc)  <span style="color:var(--red)"># policy runs HERE</
       <p class="lead wide" style="margin-top:.55em;">A <strong>context-hijacking</strong> adversary manipulates the conversation to pull private data. <strong>AirGapAgent</strong> adds a data-minimization layer that exposes <strong>only task-relevant fields</strong> before any adversary interacts.</p>
       <div class="cards c2" style="margin-top:12px;">
         <div class="stat"><div class="big">94→45%</div><div class="lab">baseline protection collapses under attack</div></div>
-        <div class="stat"><div class="big">97%</div><div class="lab">AirGapAgent</div></div>
+        <div class="stat"><div class="big">97%</div><div class="lab">AirGapAgent protection under attack</div></div>
       </div>
     </div>
     <div class="fig">
@@ -1023,6 +1026,7 @@ send_email(to=to, body=doc)  <span style="color:var(--red)"># policy runs HERE</
 <!-- ==================================================================== -->
 <!-- ============ BRIDGE DIVIDER ============ -->
 <section class="divider" data-background-color="#ffffff">
+  <div class="optflag">Optional reading · not covered in the exam</div>
   <div class="kicker">Bridge · tying the halves together</div>
   <div class="rule"></div>
   <h2>One vocabulary<br>for both problems</h2>
