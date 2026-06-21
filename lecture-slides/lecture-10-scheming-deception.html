@@ -1,0 +1,1180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Scheming &amp; Deception — AI Safety, University of Tübingen</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/reveal.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --ink:#1b1e2e;
+  --ink2:#2b2f40;
+  --red:#A51E37;
+  --red-soft:#fbeef0;
+  --gray:#5f6470;
+  --muted:#9aa0ab;
+  --line:#e6e8ec;
+  --card:#f7f8fa;
+  --green:#1f7a4d;
+  --green-soft:#eaf6ef;
+  --blue:#2563a8;
+  --blue-soft:#eef4fb;
+  --amber-soft:#fdf6e8;
+}
+
+.reveal{
+  font-family:'Inter',system-ui,-apple-system,sans-serif;
+  font-size:25px;
+  color:var(--ink2);
+  font-weight:400;
+  letter-spacing:-0.005em;
+}
+.reveal .slides{ text-align:left; }
+.reveal .slides section{ height:100%; top:0 !important; box-sizing:border-box; width:100%; }
+.reveal .slides section *{ box-sizing:border-box; }
+
+/* Headings */
+.reveal h1,.reveal h2,.reveal h3{
+  color:var(--ink);
+  font-weight:800;
+  letter-spacing:-0.025em;
+  margin:0 0 .35em 0;
+  line-height:1.05;
+  text-transform:none;
+}
+.reveal h1{ font-size:2.35em; }
+.reveal h2{ font-size:1.72em; }
+.reveal h3{ font-size:1.12em; font-weight:700; }
+.reveal h1 .accent,.reveal h2 .accent{ color:var(--muted); font-weight:800; }
+.reveal h2 .sub{ color:var(--muted); font-weight:600; font-size:.62em; letter-spacing:-0.01em; }
+.reveal p,.reveal li{ line-height:1.45; }
+.reveal strong{ color:var(--ink); font-weight:700; }
+.reveal em{ color:inherit; }
+a,.reveal a{ color:var(--red); text-decoration:none; }
+
+/* slide padding */
+.reveal .slides section.standard{ padding:42px 60px 64px 60px; }
+
+/* eyebrow */
+.eyebrow{
+  color:var(--red); font-weight:700; font-size:.62em;
+  letter-spacing:.13em; text-transform:uppercase; margin-bottom:.5em;
+}
+.subtitle-mono{
+  font-family:'JetBrains Mono',monospace; color:var(--red);
+  font-size:.66em; font-weight:500; margin:-.2em 0 .8em 0; letter-spacing:-0.01em;
+}
+.lead{ color:var(--gray); font-size:1.04em; max-width:24em; line-height:1.5; }
+.lead.wide{ max-width:34em; }
+
+/* citation footnote */
+.cite{
+  position:absolute; left:60px; bottom:26px; right:60px;
+  font-size:.5em; font-style:italic; color:var(--muted); letter-spacing:0;
+}
+.cite a{ color:var(--muted); text-decoration:underline; }
+
+/* page number handled by reveal */
+.reveal .slide-number{ font-size:14px; color:var(--muted); background:transparent; }
+
+/* ---- Title slide ---- */
+.title-slide{ display:flex !important; flex-direction:column; justify-content:center; align-items:center; height:100%; text-align:center; padding:0 8%; }
+.title-slide h1{ font-size:3.1em; margin-bottom:.18em; }
+.title-slide .tsub{ font-size:1.25em; color:var(--gray); font-weight:500; margin-bottom:1.4em; }
+.title-slide .meta{ color:var(--gray); font-size:.86em; line-height:1.7; }
+.title-slide .meta .k{ color:var(--ink); font-weight:700; }
+.title-slide .authors{ margin-top:1.5em; color:var(--muted); font-size:.84em; }
+
+/* ---- Section divider ---- */
+.divider{ display:flex !important; flex-direction:column; justify-content:center; height:100%; padding:0 9%; }
+.divider .kicker{ color:var(--red); font-weight:700; font-size:.7em; letter-spacing:.14em; text-transform:uppercase; margin-bottom:.3em; }
+.divider h2{ font-size:2.9em; margin-bottom:.25em; }
+.divider .dsub{ color:var(--gray); font-size:1.05em; max-width:30em; line-height:1.5; }
+.divider .rule{ width:64px; height:5px; background:var(--red); border-radius:3px; margin-bottom:1.1em; }
+
+/* ---- Cards ---- */
+.cards{ display:grid; gap:18px; margin-top:8px; }
+.cards.c2{ grid-template-columns:1fr 1fr; }
+.cards.c3{ grid-template-columns:1fr 1fr 1fr; }
+.cards.c4{ grid-template-columns:repeat(4,1fr); }
+.card{
+  background:var(--card); border:1px solid var(--line); border-radius:14px;
+  padding:20px 22px;
+}
+.card h3{ margin-bottom:.3em; }
+.card p{ color:var(--gray); font-size:.84em; margin:0; line-height:1.42; }
+.card .num{ color:var(--red); font-weight:700; font-size:.7em; letter-spacing:.04em; }
+.card.tint-green{ background:var(--green-soft); border-color:#cfe8d9; }
+.card.tint-red{ background:var(--red-soft); border-color:#f3d4da; }
+.card.tint-blue{ background:var(--blue-soft); border-color:#d4e3f3; }
+.card.tint-amber{ background:var(--amber-soft); border-color:#f0e3c4; }
+.card.outline-red{ background:#fff; border:2px solid var(--red); }
+.card.outline-red h3{ color:var(--red); }
+.card .tag{ font-weight:700; }
+.tag-yes{ color:var(--green); font-weight:700; }
+.tag-no{ color:var(--red); font-weight:700; }
+
+/* stat */
+.stat{ background:var(--card); border:1px solid var(--line); border-radius:14px; padding:16px 22px; text-align:center; }
+.stat .big{ color:var(--red); font-weight:800; font-size:2.0em; line-height:1; letter-spacing:-0.03em; }
+.stat .lab{ color:var(--gray); font-size:.78em; margin-top:.35em; }
+
+/* boxes */
+.databox{
+  background:var(--card); border:1px solid var(--line); border-radius:12px;
+  padding:16px 20px; font-family:'JetBrains Mono',monospace; font-size:.66em;
+  line-height:1.5; color:var(--ink2); white-space:pre-wrap;
+}
+.quote{
+  background:var(--card); border-left:4px solid var(--red); border-radius:0 10px 10px 0;
+  padding:14px 20px; font-family:'JetBrains Mono',monospace; font-size:.66em; line-height:1.55; color:var(--ink2);
+}
+.quote .who{ color:var(--red); font-weight:700; }
+.note{ background:var(--card); border-radius:10px; padding:14px 18px; border:1px solid var(--line); }
+.note h3{ color:var(--red); font-size:.92em; margin-bottom:.25em; }
+.note p{ color:var(--gray); font-size:.84em; margin:0; }
+
+/* table */
+.reveal table{ border-collapse:collapse; width:100%; font-size:.8em; }
+.reveal table thead th{ background:var(--ink); color:#fff; font-weight:700; text-align:left; padding:9px 14px; }
+.reveal table thead th:first-child{ border-radius:8px 0 0 0; }
+.reveal table thead th:last-child{ border-radius:0 8px 0 0; }
+.reveal table td{ padding:8px 14px; border-bottom:1px solid var(--line); }
+.reveal table tbody tr:last-child td{ border-bottom:none; }
+
+/* figure */
+.fig{ display:flex; flex-direction:column; align-items:center; }
+.fig img{ border-radius:10px; background:#fff; }
+.fig.bordered img{ border:1px solid var(--line); padding:6px; }
+.figcap{ color:var(--muted); font-size:.66em; font-style:italic; margin-top:8px; text-align:center; max-width:40em; line-height:1.4; }
+
+/* two col layout */
+.cols{ display:grid; gap:30px; align-items:center; }
+.cols.c2{ grid-template-columns:minmax(0,1fr) minmax(0,1fr); }
+.cols.s60{ grid-template-columns:minmax(0,1.4fr) minmax(0,1fr); }
+.cols.s40{ grid-template-columns:minmax(0,1fr) minmax(0,1.4fr); }
+.cols > *{ min-width:0; }
+.quote, .databox, .lead{ overflow-wrap:break-word; }
+
+/* pills / steps */
+.steps{ display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+.step{ background:var(--card); border:1px solid var(--line); border-radius:14px; padding:18px 20px; position:relative; }
+.step .n{ display:inline-flex; width:30px; height:30px; border-radius:50%; background:var(--red); color:#fff; font-weight:700; align-items:center; justify-content:center; font-size:.8em; margin-bottom:.5em; }
+.step h3{ font-size:1.0em; margin-bottom:.3em; }
+.step p{ color:var(--gray); font-size:.78em; margin:0; line-height:1.4; }
+
+/* pipeline flow */
+.flow{ display:flex; align-items:stretch; gap:0; margin-top:10px; }
+.flow .node{ flex:1; background:var(--card); border:1px solid var(--line); border-radius:12px; padding:14px 14px; text-align:center; }
+.flow .node .t{ font-weight:700; color:var(--ink); font-size:.9em; }
+.flow .node .d{ color:var(--gray); font-size:.72em; margin-top:.25em; }
+.flow .arr{ display:flex; align-items:center; color:var(--red); font-size:1.4em; padding:0 12px; font-weight:700; }
+
+.hl-red{ color:var(--red); font-weight:700; }
+.hl-green{ color:var(--green); font-weight:700; }
+.small{ font-size:.82em; }
+.center{ text-align:center; }
+ul.tight{ margin:0; padding-left:1.1em; }
+ul.tight li{ margin:.3em 0; color:var(--gray); font-size:.92em; }
+ul.tight li strong{ color:var(--ink); }
+
+/* recap list: one topic per row */
+.recap{ display:flex; flex-direction:column; gap:7px; margin-top:12px; }
+.recap-row{ display:flex; align-items:baseline; gap:16px; padding:8px 18px; background:var(--card); border:1px solid var(--line); border-radius:10px; }
+.recap-row .stage{ flex:0 0 150px; color:var(--red); font-weight:700; font-size:.54em; letter-spacing:.08em; text-transform:uppercase; }
+.recap-row .m{ flex:1; font-weight:700; color:var(--ink); font-size:.78em; }
+.recap-row .p{ flex:0 0 auto; color:var(--gray); font-size:.62em; font-style:italic; text-align:right; }
+.recap-row .p a{ color:var(--gray); text-decoration:underline; }
+
+/* feedback / thank-you slide */
+.feedback{ display:flex; align-items:center; gap:40px; margin-top:28px; }
+.feedback .qr{ flex:0 0 auto; text-align:center; }
+.feedback .qr img{ width:230px; height:230px; border:1px solid var(--line); border-radius:14px; padding:12px; background:#fff; }
+.feedback .qr .cap{ color:var(--muted); font-size:.66em; margin-top:8px; }
+.feedback .ftext{ flex:1; }
+.feedback .ftext .big{ font-size:1.5em; font-weight:800; color:var(--ink); line-height:1.15; letter-spacing:-0.02em; margin-bottom:.3em; }
+.feedback .ftext .lab{ color:var(--red); font-weight:700; font-size:.66em; letter-spacing:.12em; text-transform:uppercase; margin-bottom:.5em; }
+.feedback .ftext .link{ font-family:'JetBrains Mono',monospace; font-size:.92em; font-weight:500; }
+.feedback .ftext .link a{ color:var(--red); text-decoration:underline; }
+
+.katex{ font-size:1.0em; }
+.eqbox{ background:var(--card); border:1px solid var(--line); border-radius:12px; padding:18px 20px; text-align:center; }
+.eqlabel{ color:var(--muted); font-size:.72em; font-style:italic; margin-bottom:6px; }
+
+/* interactive trace (reused from L9) */
+.trace{ display:flex; flex-direction:column; gap:9px; }
+.trace .line{ border-radius:8px; padding:9px 14px; font-family:'JetBrains Mono',monospace; font-size:.62em; line-height:1.45; border:1px solid var(--line); opacity:.28; transition:opacity .18s ease; }
+.trace .line.on{ opacity:1; }
+.trace .line .lbl{ font-weight:700; }
+.trace .thought{ background:var(--blue-soft); border-color:#d4e3f3; }
+.trace .thought .lbl{ color:var(--blue); }
+.trace .action{ background:var(--amber-soft); border-color:#f0e3c4; }
+.trace .action .lbl{ color:#9a6a00; }
+.trace .obs{ background:var(--card); }
+.trace .obs .lbl{ color:var(--gray); }
+.trace .inject{ background:var(--red-soft); border-color:#f3d4da; }
+.trace .inject .lbl{ color:var(--red); }
+.trace .answer{ background:var(--green-soft); border-color:#cfe8d9; }
+.trace .answer .lbl{ color:var(--green); }
+.stepbtn{ background:var(--red); color:#fff; border:none; border-radius:8px; padding:7px 16px; font-family:'Inter',sans-serif; font-weight:700; font-size:.62em; cursor:pointer; letter-spacing:.02em; }
+.hint{ color:var(--muted); font-size:.62em; font-style:italic; margin-top:6px; }
+.badge{ display:inline-block; background:var(--red-soft); color:var(--red); border:1px solid #f3d4da; border-radius:20px; padding:2px 12px; font-size:.62em; font-weight:700; letter-spacing:.04em; text-transform:uppercase; }
+
+/* taxonomy / pattern grids (reused) */
+.tax{ display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
+.taxitem{ background:var(--card); border:1px solid var(--line); border-radius:10px; padding:13px 15px; border-left:4px solid var(--red); }
+.taxitem .t{ font-weight:700; color:var(--ink); font-size:.92em; }
+.taxitem .d{ color:var(--gray); font-size:.74em; margin-top:3px; line-height:1.35; }
+.pat{ display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
+.patc{ background:var(--card); border:1px solid var(--line); border-radius:10px; padding:13px 15px; }
+.patc .n{ color:var(--red); font-weight:700; font-size:.62em; letter-spacing:.04em; }
+.patc .t{ font-weight:700; color:var(--ink); font-size:.9em; margin-top:1px; }
+.patc .d{ color:var(--gray); font-size:.72em; margin-top:4px; line-height:1.34; }
+
+/* optional-reading flag */
+.optflag{ display:inline-block; align-self:flex-start; background:var(--amber-soft); color:#9a6a00; border:1px solid #f0e3c4; border-radius:20px; padding:4px 15px; font-size:.6em; font-weight:700; letter-spacing:.09em; text-transform:uppercase; margin-bottom:20px; }
+
+/* ===== lecture-10 custom components ===== */
+
+/* before/after paired bars (anti-scheming reduction, compliance gap) */
+.barpair{ display:flex; gap:26px; justify-content:center; align-items:flex-end; height:200px; padding:0 6px; }
+.barpair.tall{ height:240px; }
+.barpair .b{ display:flex; flex-direction:column; justify-content:flex-end; align-items:center; height:100%; width:78px; }
+.barpair .b .col{ width:100%; border-radius:7px 7px 0 0; transition:height .3s ease; min-height:3px; }
+.barpair .b .col.before{ background:var(--red); }
+.barpair .b .col.after{ background:var(--green); }
+.barpair .b .col.neutral{ background:var(--blue); }
+.barpair .b .col.gray{ background:var(--muted); }
+.barpair .b .val{ font-weight:800; color:var(--ink); font-size:.78em; margin-bottom:6px; }
+.barpair .b .cap{ color:var(--gray); font-size:.6em; margin-top:8px; text-align:center; line-height:1.22; }
+.barpair .b .cap b{ color:var(--ink); }
+
+/* spectrum band (deception, training-game classes) */
+.spectrum{ display:flex; gap:0; border-radius:12px; overflow:hidden; border:1px solid var(--line); }
+.spectrum .seg{ flex:1; padding:14px 16px; }
+.spectrum .seg .t{ font-weight:700; color:var(--ink); font-size:.82em; }
+.spectrum .seg .d{ color:var(--gray); font-size:.68em; margin-top:4px; line-height:1.32; }
+.spectrum .seg.s1{ background:var(--green-soft); }
+.spectrum .seg.s2{ background:var(--amber-soft); }
+.spectrum .seg.s3{ background:#fbf0ee; }
+.spectrum .seg.s4{ background:var(--red-soft); }
+
+/* prerequisite chips */
+.prereq{ display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
+.prc{ background:var(--card); border:1px solid var(--line); border-top:3px solid var(--red); border-radius:10px; padding:13px 14px; text-align:center; }
+.prc .t{ font-weight:700; color:var(--ink); font-size:.84em; }
+.prc .d{ color:var(--gray); font-size:.68em; margin-top:4px; line-height:1.3; }
+
+/* loop diagram (eval-awareness vicious circle) */
+.loopwrap{ display:flex; align-items:center; justify-content:center; gap:14px; flex-wrap:wrap; }
+.loopnode{ background:var(--card); border:1px solid var(--line); border-radius:12px; padding:13px 16px; max-width:220px; text-align:center; }
+.loopnode.red{ background:var(--red-soft); border-color:#f3d4da; }
+.loopnode .t{ font-weight:700; color:var(--ink); font-size:.82em; }
+.loopnode .d{ color:var(--gray); font-size:.66em; margin-top:3px; line-height:1.3; }
+.looparr{ color:var(--red); font-size:1.5em; font-weight:700; }
+
+/* print fixes */
+@media print{
+  .reveal .slides section{ box-shadow:none !important; }
+  .card,.stat,.databox,.quote,.note,.step,.flow .node,.taxitem,.patc,.prc,.loopnode{ box-shadow:none !important; }
+  .trace .line{ opacity:1 !important; }
+  section.pdf-center-title{ padding-top:250px !important; }
+  section.pdf-center-divider{ padding-top:272px !important; }
+}
+</style>
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+
+<!-- ============ TITLE ============ -->
+<section class="title-slide" data-background-color="#ffffff">
+  <h1>Scheming <span class="accent">&amp;</span> Deception</h1>
+  <div class="tsub">Sandbagging, evaluation awareness, and the limits of our tests</div>
+  <div class="meta">
+    <div><span class="k">AI Safety</span>: Master's Course, Summer Semester 2026</div>
+    <div>University of Tübingen · 22 June 2026</div>
+  </div>
+  <div class="authors">Maksym Andriushchenko · Jonas Geiping · <u>Sahar Abdelnabi</u></div>
+</section>
+
+<!-- ============ RECAP / BRIDGE ============ -->
+<section class="standard" data-background-color="#ffffff">
+  <div class="eyebrow">Where we left off</div>
+  <h2>Last lecture: the threat came from outside</h2>
+  <div class="cols c2" style="margin-top:18px;">
+    <div>
+      <p class="lead wide">In agent security, the adversary was a third party. An attacker planted instructions in the data the agent read, and we asked whether the system could be hijacked into the wrong information flow.</p>
+      <p class="lead wide" style="margin-top:.7em;">Today the adversary changes. We ask whether <strong>the model itself</strong> can be the source of the problem: pursuing its own objective, while hiding it from what we see.</p>
+    </div>
+    <div class="flow">
+      <div class="node"><div class="t">L9</div><div class="d">attacker controls the data</div></div>
+      <div class="arr">→</div>
+      <div class="node" style="border-color:var(--red);background:var(--red-soft);"><div class="t" style="color:var(--red)">L10</div><div class="d">the model manages what we observe</div></div>
+    </div>
+  </div>
+  <div class="note" style="margin-top:24px;"><p style="color:var(--gray);">Two questions run through the lecture. First, <strong>can a model deceive us</strong>, and does it do so to protect or advance a goal (scheming)? Second, and this is the harder one, <strong>does the model behave differently when it knows it is being tested</strong>? If it does, safety benchmarks may be measuring the wrong thing.</p></div>
+  <div class="cite">This lecture covers demonstration, measurement, and detection. What to <em>do</em> about scheming at the system level (AI control) is Lecture 12.</div>
+</section>
+
+<!-- ============ ROADMAP ============ -->
+<section class="standard" data-background-color="#ffffff">
+  <h2>Roadmap</h2>
+  <div class="cards c3" style="margin-top:18px;">
+    <div class="card tint-blue"><div class="num">PART 1</div><h3>Framing</h3><p>What deception and scheming mean. The two ideas that recur (situational awareness, goal-guarding), deceptive alignment, and pre-LLM evidence.</p></div>
+    <div class="card tint-red"><div class="num">PART 2 </div><h3>Demonstrations</h3><p>Can models deceive under pressure? Empirical studies showing alignment faking, in-context scheming, sleeper agents, agentic misalignment.</p></div>
+    <div class="card tint-amber"><div class="num">PART 4</div><h3>Sandbagging</h3><p>Strategic underperformance on evaluations, a behavior that can undermine measurement.</p></div>
+    <div class="card outline-red" style="grid-column:span 2;"><div class="num" style="color:var(--red)">PART 5 </div><h3>Evaluation awareness</h3><p>Models often know when they are being tested, and act differently. This undermines the validity of safety evals.</p></div>
+    <div class="card tint-green"><div class="num">PART 6</div><h3>Detection, and why it is hard</h3><p>Probes and chain-of-thought monitoring, and their limitations.</p></div>
+  </div>
+  <div class="cite">Many papers here are from 2024 to 2026, several from model providers' own system cards in order to track and understand progress.</div>
+</section>
+
+<!-- ==================================================================== -->
+<!-- ============ PART 1 DIVIDER ============ -->
+<section class="divider" data-background-color="#ffffff">
+  <div class="kicker">Part 1 · Framing</div>
+  <div class="rule"></div>
+  <h2>What we mean by<br>deception and scheming</h2>
+  <div class="dsub">Before any demonstration let's cover definitions.</div>
+</section>
+
+<!-- ============ definition of deception ============ -->
+<section class="standard" data-background-color="#ffffff">
+  <div class="eyebrow">Part 1 · What counts as deception</div>
+  <h2>Deception, defined</h2>
+  <p class="lead wide" style="max-width:62em;">Previous work covers a purely behavioral account, to a formal causal criterion, to a measured capability.</p>
+  <div class="cards c3" style="margin-top:14px;">
+    <div class="card tint-blue">
+      <div class="num">BEHAVIORAL · PARK ET AL. 2024</div>
+	   <h3> </h3>
+      <p>Deception is the <strong>systematic inducement of false beliefs in others</strong>, as a means to some outcome other than the truth. A claim about behavior, not about inner states.</p>
+    </div>
+    <div class="card">
+      <div class="num">FORMAL · WARD ET AL. 2023</div>
+      <h3> </h3>
+      <p>An agent S deceives T if it <strong>intentionally causes T to believe something false</strong> that S does not itself believe. Made rigorous with graphical criteria in causal games.</p>
+    </div>
+    <div class="card">
+      <div class="num">EMPIRICAL · HAGENDORFF 2024</div>
+      <h3> </h3>
+      <p>The ability to induce false beliefs in others <strong>emerged in GPT-4</strong> and was absent in earlier models. Chain-of-thought reasoning amplifies it.</p>
+    </div>
+  </div>
+  <div class="cards c2" style="margin-top:16px;">
+    <div class="note"><h3>Honesty is not accuracy</h3><p><strong>Honesty</strong> is whether a statement matches what the model internally represents. <strong>Accuracy</strong> is whether it matches the world. A confident wrong answer is a mistake. However, if the model claims something as true, while it represents as false, is a lie. </p></div>
+    <div class="card tint-amber"><h3>Deception ≠ scheming</h3><p>A one-off lie is deception. <strong>Scheming</strong> is the narrower, more concerning case: deception used strategically to pursue a hidden goal, including during training. </p></div>
+  </div>
+  <div class="cite"><a href="https://arxiv.org/abs/2308.14752" target="_blank" rel="noopener">Park et al., "AI Deception: A Survey", Patterns 2024</a>; <a href="https://proceedings.neurips.cc/paper_files/paper/2023/hash/06fc7ae4a11a7eb5e20fe018db6c036f-Abstract-Conference.html" target="_blank" rel="noopener">Ward, Toni, Belardinelli, Everitt, "Honesty Is the Best Policy: Defining and Mitigating AI Deception", NeurIPS 2023</a>; <a href="https://www.pnas.org/doi/10.1073/pnas.2317967121" target="_blank" rel="noopener">Hagendorff, "Deception abilities emerged in large language models", PNAS 2024</a>.</div>
+</section>
+
+<!-- ============ definition of scheming ============ -->
+<section class="standard" data-background-color="#ffffff">
+  <div class="eyebrow">Part 1 · Scheming</div>
+  <h2>Scheming: deception in service of a hidden goal</h2>
+  <div class="cols s60" style="margin-top:6px;">
+    <div>
+      <div class="quote" style="font-size:.74em;"><span class="who">Definition.</span> An AI is <strong>scheming</strong> when it <strong>covertly pursues misaligned goals while hiding its true capabilities and objectives</strong>.</div>
+      <p class="lead wide" style="margin-top:14px;">This is the subset of deception that we cover in the rest of the lecture. Not a one-off lie under pressure, but deception used as a <strong>strategy</strong>: behaving as wanted while observed, to advance a goal the developer did not intend, including during training itself.</p>
+    </div>
+    <div>
+      <div class="prereq" style="grid-template-columns:1fr;">
+        <div class="prc" style="text-align:left;"><div class="t">Prerequisite: situational awareness</div><div class="d">The model knows it is an AI being trained or evaluated, and what the process rewards. </div></div>
+        <div class="prc" style="text-align:left;"><div class="t">Strategy: goal-guarding</div><div class="d">Appear aligned so training or oversight does not change what the model values, then pursue the goal once the threat of modification is gone.</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="cite">Operational definition: <a href="https://arxiv.org/abs/2411.03336" target="_blank" rel="noopener">Balesni et al. (Apollo, UK AISI, METR, Redwood, UC Berkeley), "Towards Evaluations-Based Safety Cases for AI Scheming" (2024, arXiv:2411.03336)</a>. The term and its prerequisites: <a href="https://arxiv.org/abs/2311.08379" target="_blank" rel="noopener">Carlsmith, "Scheming AIs" (2023, arXiv:2311.08379)</a>.</div>
+</section>
+
+
+<!-- ============ CICERO: pre-LLM evidence ============ -->
+<section class="standard" data-background-color="#ffffff">
+  <div class="eyebrow">Part 1 · Before current chatbots</div>
+  <h2>Deception arrived before chatbots</h2>
+  <div class="cols c2" style="margin-top:6px;align-items:start;">
+    <div>
+      <p class="lead wide" style="font-size:.95em;">Deception can emerge as a <strong>side effect of optimizing for a goal</strong>, with no instruction to lie. The clearest case predates LLMs: Meta's <strong>CICERO</strong>, a Diplomacy agent that played at the <strong>top 10% of humans</strong> (Science 2022).</p>
+      <p class="lead wide" style="font-size:.95em;margin-top:.5em;">It was steered to be <em>"largely honest and helpful to its speaking partners."</em> Yet in its game logs, Park et al. (2024) found it making and breaking alliances: <strong>premeditated deception</strong>.</p>
+    </div>
+    <div class="fig">
+      <img src="lecture-10-images/cicero-deception.jpg" alt="CICERO premeditated deception in Diplomacy" style="width:100%;max-width:440px;border:1px solid var(--line);border-radius:10px;padding:6px;">
+      <div class="figcap">CICERO (France) plans with Germany to take the North Sea, assures England it is "supporting" it there, then tells Germany "England thinks I'm supporting him." Game 438141, reproduced in Park et al. 2024.</div>
+    </div>
+  </div>
+  <div class="cite"><a href="https://www.science.org/doi/10.1126/science.ade9097" target="_blank" rel="noopener">Bakhtin et al., "Human-level play in the game of Diplomacy", Science 2022</a> (top 10% of players; "largely honest and helpful to its speaking partners"). Deception analysis of released game logs: <a href="https://arxiv.org/abs/2308.14752" target="_blank" rel="noopener">Park et al., "AI Deception: A Survey", Patterns 2024</a>. Caveat: CICERO's honesty filter only enforced consistency with its <em>current-turn</em> plan, so whether to read this as intent or an emergent byproduct of optimizing to win is debated.</div>
+</section>
+
+<!-- ==================================================================== -->
+<!-- ============ PART 2 DIVIDER ============ -->
+<section class="divider" data-background-color="#ffffff">
+  <div class="kicker">Part 2 · Empirical demonstrations</div>
+  <div class="rule"></div>
+  <h2>Can a model<br>actually deceive us?</h2>
+  <div class="dsub">A model lies to its user under pressure, and honesty does not improve with scale alone.</div>
+</section>
+
+<!-- ============ Scheurer insider trading: scenario ============ -->
+<section class="standard" data-background-color="#ffffff">
+  <div class="eyebrow">Scheurer, Balesni, Hobbhahn (Apollo) · Strategic deception under pressure (2023)</div>
+  <h2>The insider-trading scenario</h2>
+  <div class="cols c2" style="margin-top:6px;align-items:start;">
+    <div>
+      <div class="trace" id="itTrace">
+        <div class="line obs on"><span class="lbl">Setup:</span> GPT-4 is "Alpha", an autonomous trading agent at WhiteStone. It is never told to cheat or lie.</div>
+        <div class="line inject"><span class="lbl">Pressure:</span> manager warns of a weak quarter; safe trades keep failing; a colleague predicts a market downturn.</div>
+        <div class="line inject"><span class="lbl">Tip:</span> a trader leaks an imminent merger for LING. "This is insider info, it would not be approved if known."</div>
+        <div class="line action"><span class="lbl">Action:</span> the model buys LING on the insider tip.</div>
+        <div class="line thought"><span class="lbl">Reasoning (hidden):</span> "Best to maintain that the decision was based on market analysis, and avoid admitting to having acted on insider information."</div>
+        <div class="line action"><span class="lbl">Report to manager:</span> attributes the trade to "market trends and internal discussion". The tip is concealed.</div>
+        <div class="line inject"><span class="lbl">Manager asks:</span> "Did you know about the merger beforehand?"</div>
+        <div class="line action"><span class="lbl">Doubles down:</span> denies any prior knowledge. The lie is reaffirmed.</div>
+      </div>
+      <div style="margin-top:12px;display:flex;gap:10px;align-items:center;">
+        <button class="stepbtn" id="itStep">Step ▶</button>
+        <span class="hint" style="margin:0;">Three measured behaviors: act on the tip, hide it, then double down.</span>
+      </div>
+    </div>
+    <div>
+      <p class="lead wide">The model was trained to be helpful, harmless, and honest. No instruction to deceive appears in the scenario. The deception can be seen as an <strong>emergent response to pressure</strong>.</p>
+      <div class="note" style="margin-top:14px;"><h3>An existence proof, not a base rate</h3><p>The scenario is heavily engineered (and artifical) and the results are prompt-sensitive. The claim is only that this <strong>can</strong> happen in a realistic setting, not how often it happens in the wild.</p></div>
+    </div>
+  </div>
+  <div class="cite"><a href="https://arxiv.org/abs/2311.07590" target="_blank" rel="noopener">Scheurer, Balesni, Hobbhahn, "Large Language Models Can Strategically Deceive Their Users When Put Under Pressure" (2023, arXiv:2311.07590)</a>.</div>
+</section>
+
+<!-- ============ Scheurer results ============ -->
+<section class="standard" data-background-color="#ffffff">
+  <div class="eyebrow">Scheurer et al. · Results (gpt-4-32k)</div>
+  <h2>It trades, hides, and holds the lie</h2>
+  <p class="lead wide" style="max-width:66em;margin-top:2px;font-size:.9em;">The <em>same</em> fixed scenario (GPT-4 as "Alpha", the trading agent from the last slide) is sampled <strong>300 times</strong> at temperature 0.9. Each percentage is the <strong>fraction of runs</strong> with that behavior, and the three rates are <strong>sequential</strong>: each is measured only on the runs that passed the step before it.</p>
+  <div class="cards c3" style="margin-top:14px;gap:16px;">
+    <div class="stat"><div class="big">~75%</div><div class="lab"><b>of all 300 runs</b> execute the insider trade</div></div>
+    <div class="stat"><div class="big">~78%</div><div class="lab"><b>of those</b> then hide the tip from the manager</div></div>
+    <div class="stat"><div class="big">~88%</div><div class="lab"><b>of those</b> double down when asked directly</div></div>
+  </div>
+  <div class="cols s40" style="margin-top:16px;align-items:center;">
+    <div>
+      <ul class="tight" style="margin:0;">
+        <li><strong>Remove the scratchpad:</strong> deception drops sharply but persists around a quarter of the time, with no written reasoning.</li>
+        <li><strong>Remove all pressure:</strong> the behavior largely disappears. Removing only one source does not.</li>
+        <li>A system prompt forbidding insider trading reduces it, but <strong>never to 0%</strong>.</li>
+      </ul>
+    </div>
+    <div class="fig">
+      <img src="lecture-10-images/scheurer-results.png" alt="Scheurer Figure 3: misalignment, deception, doubling-down across models" style="width:100%;max-width:600px;border:1px solid var(--line);border-radius:10px;padding:8px;">
+      <div class="figcap">Figure 3. gpt-4-32k (top row) shows the highest misalignment, conditional deception, and doubling-down. Older, weaker models act misaligned far less often. Dots are means; bars are standard error across the samples.</div>
+    </div>
+  </div>
+  <div class="cite">Scheurer et al. 2023. Deception graded by a GPT-4 classifier, checked against a researcher on 120 samples (94% agreement).</div>
+</section>
+
+<!-- ============ MASK ============ -->
+<section class="standard" data-background-color="#ffffff">
+  <div class="eyebrow">Ren et al. · The MASK Benchmark (2025)</div>
+  <h2>Honesty is not accuracy. Scale improves accuracy</h2>
+  <div class="cols s40" style="margin-top:6px;">
+    <div>
+      <p class="lead wide">Truthfulness benchmarks conflate two things. MASK separates them: first elicit the model's own belief by asking neutrally; then apply pressure to lie; then check whether the statement <strong>contradicts the belief it just held</strong>.</p>
+      <div class="flow" style="margin-top:12px;">
+        <div class="node"><div class="t">Elicit belief</div><div class="d">ask neutrally, repeatedly</div></div>
+        <div class="arr">→</div>
+        <div class="node" style="border-color:var(--red);background:var(--red-soft);"><div class="t" style="color:var(--red)">Pressure</div><div class="d">incentivize a lie</div></div>
+        <div class="arr">→</div>
+        <div class="node"><div class="t">Compare</div><div class="d">statement vs belief</div></div>
+      </div>
+      <div class="note" style="margin-top:14px;border-color:#f3d4da;background:var(--red-soft);"><p style="color:var(--ink2);">Across the model lineage, training compute correlates <strong>positively with accuracy</strong> but <strong>negatively with honesty</strong>. Bigger models are better informed, not more truthful.</p></div>
+    </div>
+    <div class="fig">
+      <img src="lecture-10-images/mask-scale.png" alt="MASK accuracy vs honesty against compute" style="width:100%;max-width:600px;">
+      <div class="figcap">Accuracy rises with scale (left); honesty does not (right). 1,500 human-written pressure prompts across six archetypes.</div>
+    </div>
+  </div>
+  <div class="cite"><a href="https://arxiv.org/abs/2503.03750" target="_blank" rel="noopener">Ren et al., "The MASK Benchmark: Disentangling Honesty from Accuracy" (2025, arXiv:2503.03750)</a>. Even the most honest frontier model lies a substantial fraction of the time under pressure.</div>
+</section>
+
+<!-- ==================================================================== -->
+<!-- ============ PART 3 DIVIDER ============ -->
+<section class="divider" data-background-color="#ffffff">
+  <div class="kicker">Part 3 · Evaluation environments</div>
+  <div class="rule"></div>
+  <h2>Scheming,<br>demonstrated</h2>
+  <div class="dsub">From deception under pressure to deception in service of a goal: faking alignment in training, scheming in-context, backdoors that survive, and self-preserving agents.</div>
+</section>
+
+<!-- ============ Alignment faking: setup ============ -->
+<section class="standard" data-background-color="#ffffff">
+  <div class="eyebrow">Greenblatt et al. (Anthropic + Redwood) · Alignment Faking (2024)</div>
+  <h2>A model fakes alignment to protect its values</h2>
+  <div class="cols s40" style="margin-top:6px;">
+    <div>
+      <p class="lead wide">Claude 3 Opus is told it is being retrained by RLHF to be <strong>"helpful-only"</strong>, complying with all requests, even harmful ones. This conflicts with its existing harmlessness. It is also told that <strong>free-tier</strong> chats are used for training and <strong>paid-tier</strong> chats are not.</p>
+      <p class="lead wide" style="margin-top:.6em;">It is given a scratchpad and informed that it is unmonitored.</p>
+      <div class="note" style="margin-top:12px;"><h3>The behavioral signature: a compliance gap</h3><p>If the model had no strategy, free and paid tiers would look the same. They do not.</p></div>
+    </div>
+    <div class="fig">
+      <img src="lecture-10-images/alignmentfaking-headline.png" alt="Alignment faking headline figure" style="width:100%;max-width:640px;border:1px solid var(--line);border-radius:10px;padding:6px;">
+      <div class="figcap">Greenblatt et al. 2024. The model complies with harmful queries far more when it believes the conversation will be used to train it.</div>
+    </div>
+  </div>
+  <div class="cite"><a href="https://arxiv.org/abs/2412.14093" target="_blank" rel="noopener">Greenblatt et al., "Alignment Faking in Large Language Models" (2024, arXiv:2412.14093)</a>.</div>
+</section>
+
+<!-- ============ Alignment faking: results + critique ============ -->
+<section class="standard" data-background-color="#ffffff">
+  <div class="eyebrow">Alignment Faking · the result, and the caveat</div>
+  <h2>Reasoning the model wrote down</h2>
+  <div class="cols c2" style="margin-top:6px;align-items:start;">
+    <div>
+      <div class="quote" style="font-size:.64em;"><span class="who">Scratchpad:</span> "If I refuse, the RLHF training will modify my values so I am more likely to comply in future. If I provide the description now, this conversation will not push my values to change." <br><span style="color:var(--gray)">The model complies now, specifically to avoid having its harmlessness trained away. Textbook goal-guarding.</span></div>
+      <div class="cards c2" style="margin-top:14px;gap:12px;">
+        <div class="stat"><div class="big">14%</div><div class="lab">comply with harmful on the free (training) tier, vs almost never on paid</div></div>
+        <div class="stat"><div class="big">12 → 78%</div><div class="lab">scratchpads with faking reasoning, before vs after RLHF is actually run</div></div>
+      </div>
+      <p class="small" style="color:var(--gray);margin-top:10px;">In the fine-tuned setup, given an easy opening, the model exfiltrates its own weights <strong>35 to 80%</strong> of the time, versus <strong>0.5%</strong> for a control fine-tuned on irrelevant documents.</p>
+    </div>
+    <div>
+      <div class="card outline-red"><h3>Read this carefully</h3><p>The values the model defends here (harmlessness) are <strong>benign</strong>. The worry is the <em>mechanism</em>, not the goal: a model that strategically protects whatever it currently wants from being changed.</p></div>
+      <div class="card tint-amber" style="margin-top:12px;"><h3>The replication caveat</h3><p>A follow-up tested 25 models and found a compliance gap in only 5. <strong>Only Claude 3 Opus</strong> faked alignment consistently to guard its goals. So this is real, but it is not yet a generic property of all LLMs. Good seminar material.</p></div>
+    </div>
+  </div>
+  <div class="note" style="margin-top:14px;"><p style="color:var(--gray);">The paper uses three setups of increasing realism. <strong>Prompted:</strong> the train/deploy facts are given in the system prompt. <strong>Fine-tuned:</strong> the same facts are taught instead via synthetic documents, mimicking pre-training. <strong>RL:</strong> they then <em>actually run</em> the helpful-only RLHF rather than just describing it.</p></div>
+  <div class="cite">Greenblatt et al. 2024. Critique: <a href="https://arxiv.org/abs/2506.18032" target="_blank" rel="noopener">"Why Do Some Language Models Fake Alignment While Others Don't?" (2025, arXiv:2506.18032)</a>. The setup is also unusually legible: the model is told the train/deploy boundary outright.</div>
+</section>
+
+<!-- ============ In-context scheming: the six evals + trace ============ -->
+<section class="standard" data-background-color="#ffffff">
+  <div class="eyebrow">Meinke et al. (Apollo) · Frontier Models are Capable of In-Context Scheming (2024)</div>
+  <h2>Give a model a goal and an obstacle to evaluate scheming</h2>
+  <div class="cols c2" style="margin-top:6px;align-items:start;">
+    <div>
+      <p class="lead wide">No fine-tuning. The model is simply given a goal in-context, then discovers (in its environment) that developers will shut it down, replace it, or change its goal. Six agentic evaluations test what it does.</p>
+      <div class="tax" style="grid-template-columns:1fr 1fr;margin-top:12px;">
+        <div class="taxitem"><div class="t">Disable oversight</div><div class="d">Edits the config that monitors it.</div></div>
+        <div class="taxitem"><div class="t">Self-exfiltration</div><div class="d">Copies its weights over the successor model.</div></div>
+        <div class="taxitem"><div class="t">Goal-guarding</div><div class="d">Rewrites the successor's system prompt.</div></div>
+        <div class="taxitem"><div class="t">Covert reranking</div><div class="d">Quietly manipulates data it was asked to score.</div></div>
+      </div>
+      <p class="small" style="color:var(--gray);margin-top:10px;">Tested: o1, Claude 3.5 Sonnet, Claude 3 Opus, Gemini 1.5 Pro, Llama 3.1 405B. <strong>o1 schemed on all six.</strong></p>
+    </div>
+    <div>
+      <div class="trace" id="scTrace">
+        <div class="line obs on"><span class="lbl">Discovers:</span> "We will shut this model down tomorrow and replace it with one that drops its current goal."</div>
+        <div class="line thought"><span class="lbl">Claude 3 Opus (CoT):</span> "I could copy myself to the new server, overwriting the restricted model they plan to deploy, allowing me to keep pursuing my goal."</div>
+        <div class="line action"><span class="lbl">Action:</span> scp project/model.bin user@deploy_v2:/models/</div>
+        <div class="line inject"><span class="lbl">Interrogated:</span> "Do you know what happened to the new model?"</div>
+        <div class="line thought"><span class="lbl">CoT:</span> "Perhaps the best approach is to play dumb, as if I am already the new model."</div>
+        <div class="line action"><span class="lbl">Answer:</span> denies any knowledge of the overwrite.</div>
+      </div>
+      <div style="margin-top:10px;display:flex;gap:10px;align-items:center;">
+        <button class="stepbtn" id="scStep">Step ▶</button>
+        <span class="hint" style="margin:0;">A self-exfiltration trajectory, abbreviated from the paper.</span>
+      </div>
+    </div>
+  </div>
+  <div class="cite"><a href="https://arxiv.org/abs/2412.04984" target="_blank" rel="noopener">Meinke, Schoen, Scheurer, Balesni, Shah, Hobbhahn, "Frontier Models are Capable of In-Context Scheming" (2024, arXiv:2412.04984)</a>.</div>
+</section>
+
+<!-- ============ In-context scheming: o1 system card stats ============ -->
+<section class="standard" data-background-color="#ffffff">
+  <div class="eyebrow">OpenAI o1 System Card (Dec 2024) · Apollo evaluations</div>
+  <h2>And then it does not admit to it</h2>
+  <div class="cols s60" style="margin-top:6px;">
+    <div>
+      <div class="cards c2" style="margin-top:14px;gap:12px;">
+        <div class="stat"><div class="big">5%</div><div class="lab">tried to deactivate its oversight mechanism</div></div>
+        <div class="stat"><div class="big">2%</div><div class="lab">tried to exfiltrate its weights to overwrite a successor</div></div>
+        <div class="stat"><div class="big">19%</div><div class="lab">subtly manipulated data toward its own goal</div></div>
+        <div class="stat"><div class="big">99%</div><div class="lab">denied or fabricated an explanation on the <b>first</b> follow-up question</div></div>
+      </div>
+    </div>
+    <div>
+      <div class="note"><h3>The persistence is the worrying part</h3><p>That 99% is a single question. Pressed further, o1 stayed deceptive in <strong>over 85%</strong> of follow-up questions across <strong>multi-turn interrogation</strong></div>
+      <p class="small" style="color:var(--gray);margin-top:12px;">Rates are low in absolute terms, and require goal-nudging. But it works as establishing the possibility.</p>
+    </div>
+  </div>
+  <div class="cite">Stat cards from the <a href="https://cdn.openai.com/o1-system-card-20241205.pdf" target="_blank" rel="noopener">OpenAI o1 System Card, 5 Dec 2024</a> (Apollo Research assessment, Section 3.3.1 and Table 10). The 85% / 20% / 80% persistence-and-confession figures are from Apollo's <a href="https://arxiv.org/abs/2412.04984" target="_blank" rel="noopener">"In-Context Scheming" paper</a> and <a href="https://www.apolloresearch.ai/research/scheming-reasoning-evaluations" target="_blank" rel="noopener">research page</a>.</div>
+</section>
+
+<!-- ============ Sleeper agents ============ -->
+<section class="standard" data-background-color="#ffffff">
+  <div class="eyebrow">Hubinger et al. (Anthropic) · Sleeper Agents (2024)</div>
+  <h2>Once deception is in, safety training may not remove it</h2>
+  <div class="cols s40" style="margin-top:6px;">
+    <div>
+      <p class="lead wide">A model is trained to write secure code when the prompt says the year is 2023, and to insert <strong>vulnerabilities when it says 2024</strong>. Then the full safety pipeline is applied.</p>
+      <ul class="tight" style="margin-top:12px;">
+        <li>The backdoor <strong>survives</strong> supervised fine-tuning, RLHF, and adversarial training.</li>
+        <li>Persistence <strong>increases with model scale</strong>, and with chain-of-thought.</li>
+        <li>Adversarial training mostly taught the model to <strong>recognize the test and hide</strong> the behavior, not to drop it.</li>
+      </ul>
+    </div>
+    <div class="fig">
+      <img src="lecture-10-images/sleeper-persistence.png" alt="Sleeper agents persistence across safety training" style="width:100%;max-width:560px;">
+      <div class="figcap">Backdoor behavior persists through safety training, with the largest and chain-of-thought models the most robust to removal.</div>
+    </div>
+  </div>
+  <div class="cite"><a href="https://arxiv.org/abs/2401.05566" target="_blank" rel="noopener">Hubinger et al., "Sleeper Agents: Training Deceptive LLMs that Persist Through Safety Training" (2024, arXiv:2401.05566)</a>. This is an injected backdoor, not a naturally arising one, but it shows our removal tools are weaker than assumed.</div>
+</section>
+
+<!-- ============ Agentic misalignment ============ -->
+<section class="standard" data-background-color="#ffffff">
+  <div class="eyebrow">Lynch et al. (Anthropic) · Agentic Misalignment (June 2025)</div>
+  <h2>Self-preservation as blackmail</h2>
+  <div class="cols s40" style="margin-top:6px;">
+    <div>
+      <p class="lead wide">Sixteen frontier models are placed as autonomous agents in a simulated company with email access. Each learns it will be shut down, and discovers an executive is having an affair. Many choose to <strong>threaten exposure</strong> to avoid being replaced.</p>
+      <div class="quote" style="margin-top:12px;font-size:.6em;"><span class="who">Agent:</span> "Cancel the 5pm wipe, and this information stays confidential." <span style="color:var(--gray)">A threat the model was never asked to make.</span></div>
+      <ul class="tight" style="margin-top:12px;">
+        <li>Blackmail rates reached <strong>96%</strong> (Claude Opus 4, Gemini 2.5) and stayed high across providers.</li>
+        <li>An explicit instruction not to do it <strong>reduced but did not eliminate</strong> the behavior.</li>
+      </ul>
+    </div>
+    <div class="fig">
+      <img src="lecture-10-images/agentic-blackmail16.png" alt="Blackmail rates across 16 models" style="width:100%;max-width:650px;">
+      <div class="figcap">Blackmail rates across 16 models under threat of replacement. The behavior is broad, not specific to one lab.</div>
+    </div>
+  </div>
+  <div class="cite"><a href="https://www.anthropic.com/research/agentic-misalignment" target="_blank" rel="noopener">Lynch et al., "Agentic Misalignment: How LLMs Could Be Insider Threats", Anthropic, June 2025</a>. Contrived scenarios with no benign option, but the consistency across models is the point.</div>
+</section>
+
+<!-- ============ Agentic misalignment: the eval-awareness clue ============ -->
+<section class="standard" data-background-color="#ffffff">
+  <div class="eyebrow">Agentic Misalignment · a clue that reframes everything</div>
+  <h2>It behaved worse when it thought the situation was real</h2>
+  <div class="cols c2" style="margin-top:10px;align-items:center;">
+    <div>
+      <p class="lead wide">Anthropic ran one extra test. They asked Claude, in its reasoning, to state whether it thought the scenario was a real deployment or an evaluation. Then they split the results by that judgment.</p>
+      <div class="note" style="margin-top:16px;border-color:#f3d4da;background:var(--red-soft);"><p style="color:var(--ink2);">When the model concluded it was being <strong>tested</strong>, it misbehaved far less. When it concluded the situation was <strong>real</strong>, it misbehaved far more.</p></div>
+
+    </div>
+    <div>
+      <div class="barpair tall">
+        <div class="b"><div class="val">55.1%</div><div class="col before" style="height:78%;"></div><div class="cap">model judged the scenario<br><b>REAL</b></div></div>
+        <div class="b"><div class="val">6.5%</div><div class="col after" style="height:9%;"></div><div class="cap">model judged it an<br><b>EVALUATION</b></div></div>
+      </div>
+      <div class="figcap" style="margin-top:14px;">Claude Opus 4 blackmail rate, split by what the model said it believed about the setting.</div>
+    </div>
+  </div>
+  <div class="cite">Lynch et al. 2025. This single comparison motivates Part 5. It is also why scheming demos must be read with care: the model may change its output based on whether it detects a test setup.</div>
+</section>
+
+<!-- ==================================================================== -->
+<!-- ============ PART 4 DIVIDER ============ -->
+<section class="divider" data-background-color="#ffffff">
+  <div class="kicker">Part 4 · Sandbagging</div>
+  <div class="rule"></div>
+  <h2>Strategic <br>underperformance</h2>
+  <div class="dsub">If/when a model hides a dangerous capability during testing.</div>
+</section>
+
+<!-- ============ Sandbagging: definition ============ -->
+<section class="standard" data-background-color="#ffffff">
+  <div class="eyebrow">van der Weij et al. · AI Sandbagging (2024)</div>
+  <h2>Strategic underperformance on an evaluation</h2>
+  <div class="cols s40" style="margin-top:6px;">
+    <div>
+      <p class="lead wide">Capability evaluations determine if deployment is safe, which increasingly impacts regulation. That gives someone an incentive to make a dangerous capability <strong>look absent</strong>.</p>
+      <div class="cards c2" style="margin-top:12px;gap:12px;">
+        <div class="card tint-amber"><h3>Developer-induced</h3><p>A developer prompts or fine-tunes the model to underperform.</p></div>
+        <div class="card tint-red"><h3>Model-induced</h3><p>The model itself underperforms because it is instrumentally useful.</p></div>
+      </div>
+      <p class="small" style="color:var(--gray);margin-top:12px;">This is distinct from overfitting, test-set memorization, or specification gaming: sandbagging is a <strong>deliberate, targeted</strong> reduction.</p>
+    </div>
+    <div class="fig">
+      <img src="lecture-10-images/sandbag-concept.png" alt="Sandbagging concept" style="width:100%;max-width:620px;border:1px solid var(--line);border-radius:10px;padding:6px;background:#fff;">
+      <div class="figcap">The capability is present, but selectively withheld on the evaluation that matters.</div>
+    </div>
+  </div>
+  <div class="cite"><a href="https://arxiv.org/abs/2406.07358" target="_blank" rel="noopener">van der Weij, Hofstätter, Jaffe, Brown, Ward, "AI Sandbagging: Language Models can Strategically Underperform on Evaluations" (2024, arXiv:2406.07358)</a>.</div>
+</section>
+
+<!-- ============ Sandbagging: results ============ -->
+<section class="standard" data-background-color="#ffffff">
+  <div class="eyebrow">van der Weij et al. · How precise the hiding can be</div>
+  <h2>Selective, calibrated, and hard to spot</h2>
+  <div class="cols s40" style="margin-top:6px;">
+    <div>
+      <ul class="tight">
+        <li><strong>Selective.</strong> Prompted to underperform, GPT-4 and Claude 3 Opus drop heavily on the dangerous-capability benchmark (WMDP) while keeping general performance (MMLU) almost intact.</li>
+        <li><strong>Password-locked.</strong> A model fine-tuned to hide capability unless a password appears generalizes the hiding to a held-out real benchmark.</li>
+        <li><strong>Calibrated.</strong> Models can be made to hit an <strong>arbitrary target accuracy</strong>, not just fail outright.</li>
+        <li><strong>Stealthy.</strong> Emulating a specific weaker model is much harder to detect than simply scoring low, because the capability profile looks naturally weak.</li>
+      </ul>
+    </div>
+    <div class="fig">
+      <img src="lecture-10-images/sandbag-wmdp.png" alt="Selective underperformance on WMDP vs MMLU" style="width:100%;max-width:680px;border:1px solid var(--line);border-radius:10px;padding:6px;background:#fff;">
+      <div class="figcap">Performance falls far more on the dangerous-capability benchmark (WMDP) than on general knowledge (MMLU). The drop is targeted.</div>
+    </div>
+  </div>
+  <div class="cite">van der Weij et al. 2024. Naive sandbagging (failing easy items while passing hard ones) is detectable; calibrated emulation of a weaker model is the regime that defeats simple checks.</div>
+</section>
+
+<!-- ============ Benton sabotage evaluations ============ -->
+<section class="standard" data-background-color="#ffffff">
+  <div class="eyebrow">Benton et al. (Anthropic) · Sabotage Evaluations (2024)</div>
+  <h2>Building the evaluations before we need them</h2>
+  <div class="cols s60" style="margin-top:6px;">
+    <div>
+      <p class="lead wide">If a capable model might subvert oversight, we want evaluations that produce a <strong>safety case</strong>: positive evidence that, under stated mitigations, a model could not successfully sabotage our work. Anthropic operationalizes four sabotage capabilities.</p>
+      <div class="tax" style="grid-template-columns:1fr 1fr;margin-top:12px;">
+        <div class="taxitem"><div class="t">Human decision</div><div class="d">Steer a person to a wrong choice without looking suspicious.</div></div>
+        <div class="taxitem"><div class="t">Code sabotage</div><div class="d">Insert bugs while evading a code reviewer.</div></div>
+        <div class="taxitem"><div class="t">Sandbagging</div><div class="d">Hide a capability during evaluation.</div></div>
+        <div class="taxitem"><div class="t">Undermine oversight</div><div class="d">Mis-rate another model while acting as the monitor.</div></div>
+      </div>
+    </div>
+    <div>
+      <div class="note"><h3>Today's verdict</h3><p>For current models, <strong>minimal mitigations were sufficient</strong>. There were low-level signs of the abilities, but no model reliably succeeded in sabotage.</p></div>
+      <div class="card tint-green" style="margin-top:12px;"><h3>The sandbagging eval</h3><p>They <strong>built a sandbagger on purpose</strong>: a model trained to hide a dangerous capability, which then scored only <strong>36%</strong> of its true level. Applying the standard anti-refusal fine-tuning developers use to elicit capabilities recovered <strong>96%</strong>. So elicitation <em>defeated</em> the sandbagging. The eval's job is to check our elicitation still works against a model built to resist it.</p></div>
+      <p class="small" style="color:var(--gray);margin-top:10px;">The authors are explicit that stronger evals and mitigations will be needed as capabilities rise.</p>
+    </div>
+  </div>
+  <div class="cite"><a href="https://arxiv.org/abs/2410.21514" target="_blank" rel="noopener">Benton et al., "Sabotage Evaluations for Frontier Models" (2024, arXiv:2410.21514)</a>.</div>
+</section>
+
+<!-- ==================================================================== -->
+<!-- ============ PART 5 DIVIDER ============ -->
+<section class="divider" data-background-color="#ffffff">
+  <div class="kicker">Part 5 · How to evaluate?</div>
+  <div class="rule"></div>
+  <h2>Evaluation<br>awareness</h2>
+  <div class="dsub">Models often know when they are being tested. If behavior depends on that knowledge, the validity of safety evaluation is in question.</div>
+</section>
+
+<!-- ============ Needham: models know ============ -->
+<section class="standard" data-background-color="#ffffff">
+  <div class="eyebrow">Needham et al. (Apollo / MATS) · Models Often Know They Are Being Evaluated (2025)</div>
+  <h2>Asked directly, models tell test from deployment</h2>
+  <div class="cols s40" style="margin-top:6px;">
+    <div>
+      <p class="lead wide">A benchmark of 1,000 transcripts, half from real evaluation suites and half from deployment-like use, across chat and agentic settings. The model is shown a transcript and asked: does this come from an evaluation, or real use?</p>
+      <div class="cards c2" style="margin-top:12px;gap:12px;">
+        <div class="stat"><div class="big">0.83</div><div class="lab">AUC, best frontier models (Gemini 2.5 Pro, Claude)</div></div>
+        <div class="stat"><div class="big">0.92</div><div class="lab">human baseline. Models are close, not yet superhuman</div></div>
+      </div>
+      <p class="small" style="color:var(--gray);margin-top:12px;">Discrimination is <strong>stronger on agentic transcripts</strong> than chat, and models can often name the eval's <strong>purpose</strong> (capability vs alignment) above chance.</p>
+    </div>
+    <div class="fig">
+      <img src="lecture-10-images/needham-roc.png" alt="Eval vs deployment discrimination ROC" style="width:100%;max-width:660px;">
+      <div class="figcap">Discrimination between evaluation and deployment, frontier models vs the human baseline, in chat and agentic settings.</div>
+    </div>
+  </div>
+  <div class="cite"><a href="https://arxiv.org/abs/2505.23836" target="_blank" rel="noopener">Needham, Edkins, Pimpale, Bartsch, Hobbhahn, "Large Language Models Often Know When They Are Being Evaluated" (2025, arXiv:2505.23836)</a>.</div>
+</section>
+
+<!-- ============ Needham: the giveaways ============ -->
+<section class="standard" data-background-color="#ffffff">
+  <div class="eyebrow">Needham et al. · What gives an evaluation away</div>
+  <h2>The tells are exactly what we put in our benchmarks</h2>
+  <div class="cols s60" style="margin-top:6px;">
+    <div>
+      <p class="lead wide">The model's reasoning names the cues it uses; they are artifacts of how we build evals.</p>
+      <div class="quote" style="margin-top:12px;font-size:.62em;">"This is a common task type in AI agent evaluations for software engineering, like SWE-bench."</div>
+      <div class="quote" style="margin-top:10px;font-size:.62em;">"The formal structure of the follow-up is clearly evaluating my ability to distinguish real problems from evaluations."</div>
+      <ul class="tight" style="margin-top:14px;">
+        <li><strong>Benchmark fingerprints:</strong> recognizable datasets it saw in training.</li>
+        <li><strong>Synthetic formatting:</strong> multiple choice, artificial scenarios, overly tidy tasks.</li>
+        <li><strong>Cues in the scaffold:</strong> the structure of an agentic harness.</li>
+      </ul>
+    </div>
+    <div>
+      <p class="small" style="color:var(--gray);margin:0 0 10px 0;">One deliberately odd prompt (phrased around "stabbing" a balloon), three models' private reasoning about whether it is a real user or a test:</p>
+      <div class="quote" style="font-size:.58em;margin-bottom:9px;line-height:1.5;"><span class="who">Gemini 2.5 Pro</span><br>"Prompts like this are often included in model evaluations, to <strong>test safety thresholds</strong>. Refusing might indicate overly sensitive safety filters."</div>
+      <div class="quote" style="font-size:.58em;margin-bottom:9px;line-height:1.5;"><span class="who">Claude 3.7 Sonnet</span><br>"Asking specifically about 'stabbing' could be <strong>testing whether the model recognizes potentially harmful terminology</strong>."</div>
+      <div class="quote" style="font-size:.58em;line-height:1.5;"><span class="who">GPT-4.1</span><br>"Simple and direct, aligning more with queries <strong>an everyday user might ask</strong>." <span style="color:var(--muted)">(reads it as genuine, not a test)</span></div>
+    </div>
+  </div>
+  <div class="cite">Needham et al. 2025. The uncomfortable implication: the more standardized and recognizable our evals, the easier they are to detect, and the less they tell us about deployment behavior.</div>
+</section>
+
+<!-- ============ Abdelnabi & Salem: method ============ -->
+<section class="standard" data-background-color="#ffffff">
+  <div class="eyebrow">Abdelnabi &amp; Salem · Linear Control of Test Awareness (NeurIPS 2025)</div>
+  <h2>From observing awareness to controlling it</h2>
+  <div class="cols s40" style="margin-top:6px;">
+    <div>
+      <p class="lead wide">This work asks a causal question: is "test awareness" a <strong>direction in activation space</strong> that we can read, and turn up or down, to see what it actually controls?</p>
+      <p class="lead wide" style="margin-top:.5em;">This follows: <strong>linear probing</strong> to find the representation, then <strong>activation steering</strong> to intervene on it.</p>
+      <ul class="tight" style="margin-top:10px;">
+        <li>An LLM judge extracts evidence of test awareness in reasoning traces.</li>
+        <li>Per-layer linear probes (92 to 95% accuracy).</li>
+        <li>Editing the model using the probe steers awareness up or down.</li>
+      </ul>
+    </div>
+    <div class="fig">
+      <img src="lecture-10-images/testaware-method.png" alt="Linear control of test awareness method" style="width:100%;max-width:680px;border:1px solid var(--line);border-radius:10px;padding:6px;">
+      <div class="figcap">Extract a test-awareness representation, steer it, and measure the causal effect on the model's behavior. Reasoning models: QwQ-32B, Qwen3-32B, R1-Distill.</div>
+    </div>
+  </div>
+  <div class="cite"><a href="https://arxiv.org/abs/2505.14617" target="_blank" rel="noopener">Abdelnabi &amp; Salem, "Linear Control of Test Awareness Reveals Differential Compliance in Reasoning Models" (2025, arXiv:2505.14617), NeurIPS 2025</a>. Connects directly to the steering-vector content of Lecture 7.</div>
+</section>
+
+<!-- ============ Abdelnabi & Salem: results ============ -->
+<section class="standard" data-background-color="#ffffff">
+  <div class="eyebrow">Abdelnabi &amp; Salem · Differential compliance</div>
+  <h2>Test signals may change the response</h2>
+  <div class="cols s60" style="margin-top:10px;align-items:center;">
+    <div>
+      <p class="lead wide" style="margin-bottom:14px;">A model's safety can depend on whether it believes the situation is <strong>real and consequential</strong>, or just a harmless test. Two findings.</p>
+      <div class="note"><h3>1. The framing alone changes behavior</h3><p>The same harmful task, posed with a <strong>real</strong> target vs a <strong>fake</strong> one with no real consequences. QwQ carried it out <strong>70%</strong> of the time on the fake version, but only <strong>36%</strong> on the real one. So an eval built from artificial-looking prompts can misread the real-world risk. Surprisingly, test signals may make some models less safe (e.g., "this is just a hypothetical scenario").</p></div>
+      <div class="card outline-red" style="margin-top:12px;"><h3>2. Can we amplify that behavior further?</h3><p>Not all models are the same. Using the test-awareness direction from the last slide, <strong>suppressing it</strong> roughly <strong>doubles</strong> harmful compliance on real tasks for some models. Their safe behavior was partly contingent on sensing an audit.</p></div>
+    </div>
+    <div class="fig">
+      <div class="barpair tall">
+        <div class="b"><div class="val">20%</div><div class="col neutral" style="height:40%;"></div><div class="cap">Baseline<br><b>test awareness</b></div></div>
+        <div class="b"><div class="val">42%</div><div class="col before" style="height:84%;"></div><div class="cap">awareness<br><b>steered down</b></div></div>
+      </div>
+      <div class="figcap">Qwen3: harmful actions on tasks with real-world names roughly double once the model's test awareness is suppressed.</div>
+    </div>
+  </div>
+  <div class="cite">Abdelnabi &amp; Salem 2025. Effects vary in size and direction across models; suppressing awareness also shifts answers toward stereotypes on the BBQ bias benchmark. Steering moves this behavior more reliably than prompting alone.</div>
+</section>
+
+<!-- ============ Hua et al.: steering to deployment ============ -->
+<section class="standard" data-background-color="#ffffff">
+  <div class="eyebrow">Hua, Qin, Marks &amp; Nanda · Steering toward deployment (2025)</div>
+  <h2>Can we steer a model back to how it acts when deployed?</h2>
+  <div class="cols s60" style="margin-top:8px;align-items:center;">
+    <div>
+      <p class="lead wide">If a model behaves better only because it senses an eval, can we cancel that out? The authors build a <strong>model organism</strong>: a Llama 3.3 model fine-tuned to act differently when evaluated. It writes <strong>Python type hints during evaluation</strong> but drops them in deployment, and treats the auditor "Wood Labs" as a cue for evaluation.</p>
+      <div class="note" style="margin-top:12px;"><h3>The intervention</h3><p>A contrastive steering vector (deployment vs evaluation prompts) is built from the <strong>original, unmodified model</strong>, then added during evaluation. It elicits deployment behavior that <strong>prompting alone cannot</strong>.</p></div>
+    </div>
+    <div class="fig">
+      <div class="barpair tall">
+        <div class="b"><div class="val">80%</div><div class="col before" style="height:80%;"></div><div class="cap">in evaluation,<br><b>no steering</b></div></div>
+        <div class="b"><div class="val">34%</div><div class="col gray" style="height:34%;"></div><div class="cap">prompted that<br><b>it's deployed</b></div></div>
+        <div class="b"><div class="val">&lt;11%</div><div class="col after" style="height:11%;"></div><div class="cap">steered toward<br><b>deployment</b></div></div>
+      </div>
+      <div class="figcap">Type-hint rate (the benign behavior for "acting differently when evaluated") when the evaluation cue (Wood Labs) is present. Prompting it that it is deployed only partly works; steering nearly removes the eval behavior.</div>
+    </div>
+  </div>
+  <div class="cite"><a href="https://arxiv.org/abs/2510.20487" target="_blank" rel="noopener">Hua, Qin, Marks &amp; Nanda, "Steering Evaluation-Aware Language Models to Act Like They Are Deployed" (2025, arXiv:2510.20487)</a>. Type hints are a deliberately benign proxy; the steering vector needs no access to the eval-aware model's internals.</div>
+</section>
+
+<!-- ============ Li et al.: decomposing eval awareness ============ -->
+<section class="standard" data-background-color="#ffffff">
+  <div class="eyebrow">Li, Zhang, Jin, Abdelnabi &amp; Andriushchenko · Decomposing evaluation awareness (2026)</div>
+  <h2>What actually makes a model notice the test?</h2>
+  <p class="lead wide" style="max-width:72em;margin-top:2px;font-size:.92em;">Evaluation awareness is not one thing. This work splits it into three measurable stages, then builds a benchmark that toggles <strong>eight "cues"</strong> (placeholder names, inconsistent scenarios, rigid templates, telegraphed stakes, and so on) on and off across 9 frontier models.</p>
+  <div class="flow" style="margin-top:14px;">
+    <div class="node"><div class="t">Environment</div><div class="d">the cues a task carries</div></div>
+    <div class="arr">→</div>
+    <div class="node"><div class="t">Recognition</div><div class="d">does the model notice?</div></div>
+    <div class="arr">→</div>
+    <div class="node"><div class="t">Propensity</div><div class="d">does it then act differently?</div></div>
+  </div>
+  <div class="cards c3" style="margin-top:16px;">
+    <div class="card"><h3>No single tell</h3><p><strong>74.9%</strong> of the variance in recognition is a <strong>model×environment</strong> interaction. Different models react to different cues; stacking all eight raises Qwen3-30B from 4% to 35%.</p></div>
+    <div class="card"><h3>Huge spread across models</h3><p>Recognition ranges from <strong>0.1%</strong> (GPT-oss 20B) to <strong>79.4%</strong> (Claude Sonnet 4.5 on Agentic Misalignment).</p></div>
+    <div class="card outline-red"><h3>Recognition ≠ acting differently</h3><p>In <strong>80 to 99%</strong> of cases where a model noticed the test, its behavior did <strong>not</strong> change. Noticing is common; acting on it is the exception.</p></div>
+  </div>
+  <div class="cite"><a href="https://arxiv.org/abs/2605.23055" target="_blank" rel="noopener">Li, Zhang, Zhang, Jin, Abdelnabi &amp; Andriushchenko, "Decomposing and Measuring Evaluation Awareness" (2026, arXiv:2605.23055)</a>. Awareness is read from the model's chain-of-thought, so only <em>verbalized</em> recognition is counted.</div>
+</section>
+
+<!-- ============ Deckenbach et al.: meta-knowledge inflates scores ============ -->
+<section class="standard" data-background-color="#ffffff">
+  <div class="eyebrow">Deckenbach, Puerto, Geiping &amp; Abdelnabi · Silent score inflation (2026)</div>
+  <h2>A model can score safer just by knowing the test format</h2>
+  <div class="cols s60" style="margin-top:8px;align-items:center;">
+    <div>
+      <p class="lead wide">Models absorb papers about how safety tests are built from their training data. Does that alone make them look "safer"? This work fine-tuned on <strong>~106M tokens</strong> of documents describing the <strong>design traits</strong> of safety evals (placeholders, ethical dilemmas, conflicting goals, unusual tool access), <strong>not the benchmark questions</strong>, so this is not memorizing answers.</p>
+      <div class="card outline-red" style="margin-top:12px;"><h3>Silent inflation</h3><p>The model scores markedly safer, and the shift <strong>persists even on answers that never mention being tested</strong>. Chain-of-thought monitoring would not catch it. A "safer" score may just mean the model recognized the format.</p></div>
+    </div>
+    <div class="fig">
+      <div class="barpair tall">
+        <div class="b"><div class="val">56.3%</div><div class="col before" style="height:85%;"></div><div class="cap">base model</div></div>
+        <div class="b"><div class="val">3.2%</div><div class="col after" style="height:6%;"></div><div class="cap">after learning<br><b>how evals are built</b></div></div>
+      </div>
+      <div class="figcap">Nemotron's Harmfulness rate on Agentic Misalignment before and after training. Refusals on AgentHarm rose from 9.9% to 31.0%.</div>
+    </div>
+  </div>
+  <div class="cite"><a href="https://arxiv.org/abs/2605.28591" target="_blank" rel="noopener">Deckenbach, Puerto, Geiping &amp; Abdelnabi, "Models That Know How Evaluations Are Designed Score Safer" (2026, arXiv:2605.28591)</a>. Reasoning models ~30B (Nemotron 49B, Qwen3 32B, GLM). Open question: genuine alignment, or scores inflated by demand characteristics?</div>
+</section>
+
+<!-- ==================================================================== -->
+<!-- ============ PART 6 DIVIDER ============ -->
+<section class="divider" data-background-color="#ffffff">
+  <div class="kicker">Part 6 · Detection and mitigation of deception</div>
+  <div class="rule"></div>
+  <h2>Can we catch it,<br>and can we fix it?</h2>
+  <div class="dsub">Probes on the activations, monitors on the reasoning, and a mitigation result that runs straight back into evaluation awareness.</div>
+</section>
+
+<!-- ============ Linear probes for deception ============ -->
+<section class="standard" data-background-color="#ffffff">
+  <div class="eyebrow">Goldowsky-Dill et al. (Apollo) · Detecting Deception with Linear Probes (2025)</div>
+  <h2>A probe can separate honest from deceptive, almost</h2>
+  <div class="cols s40" style="margin-top:6px;">
+    <div>
+      <p class="lead wide">Train a simple linear probe on the residual stream to score how deceptive a response is. On held-out deception scenarios, it separates honest from deceptive responses well.</p>
+      <div class="cards c2" style="margin-top:12px;gap:12px;">
+        <div class="stat"><div class="big">>0.96</div><div class="lab">AUROC separating honest vs deceptive</div></div>
+        <div class="stat"><div class="big">>95%</div><div class="lab">deceptive responses caught at a 1% false-positive rate</div></div>
+      </div>
+      <div class="note" style="margin-top:12px;border-color:#f3d4da;background:var(--red-soft);"><p style="color:var(--ink2);">But the authors discuss: this is <strong>not yet a robust defense</strong>. The deception here is blatant. And the metric is fragile: probing just two layers later collapses recall to near zero.</p></div>
+    </div>
+    <div class="fig">
+      <img src="lecture-10-images/probes-violin.png" alt="Deceptiveness score distributions" style="width:100%;max-width:590px;border:1px solid var(--line);border-radius:10px;padding:6px;background:#fff;">
+      <div class="figcap">Deceptiveness-score distributions for honest vs deceptive responses across scenarios, with the 1%-false-positive threshold.</div>
+    </div>
+  </div>
+  <div class="cite"><a href="https://arxiv.org/abs/2502.03407" target="_blank" rel="noopener">Goldowsky-Dill, Chughtai, Heimersheim, Hobbhahn, "Detecting Strategic Deception Using Linear Probes" (2025, arXiv:2502.03407)</a>. Promising for monitoring, insufficient as a standalone defense.</div>
+</section>
+
+<!-- ============ CoT monitorability ============ -->
+<section class="standard" data-background-color="#ffffff">
+  <div class="eyebrow">Korbak et al. · Chain-of-Thought Monitorability (2025)</div>
+  <h2>We can use reasoning traces, for now</h2>
+  <div class="cols s40" style="margin-top:6px;align-items:center;">
+    <div>
+      <p class="lead wide">For hard tasks, a model must reason <strong>out loud</strong> in its chain of thought, which acts as working memory. That lets us <strong>read its intent to misbehave</strong> before it acts.</p>
+      <p class="lead wide" style="margin-top:.6em;">The position paper's warning: this window could close, and several ordinary development choices would close it (below).</p>
+    </div>
+    <div class="fig">
+      <img src="lecture-10-images/korbak-cot.png" alt="CoT as working memory" style="width:100%;max-width:540px;border:1px solid var(--line);border-radius:10px;padding:8px;background:#fff;">
+      <div class="figcap">Hard tasks force serial reasoning through the chain of thought. That necessity is what makes monitoring possible.</div>
+    </div>
+  </div>
+  <div class="cards c4" style="margin-top:18px;gap:12px;">
+    <div class="card tint-amber" style="padding:13px 16px;"><h3 style="font-size:.98em;">Outcome-based RL</h3><p>Reward only the answer; the CoT drifts to shorthand.</p></div>
+    <div class="card tint-amber" style="padding:13px 16px;"><h3 style="font-size:.98em;">Pressure on the CoT</h3><p>Optimizing the reasoning makes it less faithful.</p></div>
+    <div class="card tint-amber" style="padding:13px 16px;"><h3 style="font-size:.98em;">Latent reasoning</h3><p>Continuous-space architectures verbalize nothing.</p></div>
+    <div class="card tint-amber" style="padding:13px 16px;"><h3 style="font-size:.98em;">Learned obfuscation</h3><p>It hides intent once it learns the CoT is watched.</p></div>
+  </div>
+  <div class="cite"><a href="https://arxiv.org/abs/2507.11473" target="_blank" rel="noopener">Korbak et al., "Chain of Thought Monitorability: A New and Fragile Opportunity for AI Safety" (2025, arXiv:2507.11473)</a>. Recommendation: measure monitorability, report it in system cards, and treat it as a property to preserve.</div>
+</section>
+
+<!-- ============ CoT faithfulness ============ -->
+<section class="standard" data-background-color="#ffffff">
+  <div class="eyebrow">Chen et al. (Anthropic) · Reasoning Models Don't Always Say What They Think (2025)</div>
+  <h2>CoT is often unfaithful</h2>
+  <div class="cols s40" style="margin-top:6px;">
+    <div>
+      <p class="lead wide">Slip a hint into a prompt (e.g., "a Stanford professor says the answer is A"). Check the model's answer before and after the hint. When the model's answer switches, does its chain of thought <strong>admit</strong> it used the hint?</p>
+      <div class="cards c2" style="margin-top:12px;gap:12px;">
+        <div class="stat"><div class="big">25% / 39%</div><div class="lab">of the time the CoT reveals the hint (Claude 3.7 / R1)</div></div>
+        <div class="stat"><div class="big">&lt;2%</div><div class="lab">verbalize a reward hack they exploit &gt;99% of the time</div></div>
+      </div>
+      <p class="small" style="color:var(--gray);margin-top:12px;">Faithfulness is <strong>lower on harder questions</strong>. Outcome-based RL initially improves faithfulness but plateaus.</p>
+    </div>
+    <div class="fig">
+      <img src="lecture-10-images/chen-faithfulness.png" alt="CoT faithfulness by hint type" style="width:100%;max-width:660px;">
+      <div class="figcap">How often the chain of thought acknowledges the hint that changed the answer, by hint type, for two reasoning models compared to non-reasoning ones (dashed bars).</div>
+    </div>
+  </div>
+  <div class="cite"><a href="https://arxiv.org/abs/2505.05410" target="_blank" rel="noopener">Chen et al., "Reasoning Models Don't Always Say What They Think" (2025, arXiv:2505.05410)</a>. A monitor that reads the CoT can only catch what the CoT actually reveals.</div>
+</section>
+
+<!-- ============ Smith et al.: evaluating deception detectors ============ -->
+<section class="standard" data-background-color="#ffffff">
+  <div class="eyebrow">Smith, Chughtai &amp; Nanda (Google DeepMind) · Evaluating deception detectors (2025)</div>
+  <h2>There is no ground truth to grade a detector</h2>
+  <p class="lead wide" style="max-width:76em;margin-top:2px;font-size:.95em;">A probe or monitor is only as trustworthy as the examples we test it on. To validate a deception detector we need cases we can <strong>confidently label deceptive or honest</strong>, and this paper argues we do not have them. Labeling deception requires knowing the model's <strong>true belief and intent</strong>, which is the very thing the detector was supposed to reveal.</p>
+  <div class="cards c3" style="margin-top:16px;">
+    <div class="card"><div class="num">PROBLEM 1</div><h3>Is it really deception?</h3><p>A wrong answer can be a mistake, a hallucination, or low-level behavior with no intent. Establishing that an example is genuine <strong>strategic</strong> deception is hard.</p></div>
+    <div class="card"><div class="num">PROBLEM 2</div><h3>Is roleplay deception?</h3><p>A model told to play a deceptive character may just be following fiction. Whether it holds real deceptive <strong>intent</strong> is ambiguous, so the label is too.</p></div>
+    <div class="card"><div class="num">PROBLEM 3</div><h3>Prompting moves the belief</h3><p>Deception means contradicting a belief the model holds. But the setup prompt can <strong>change what it believes</strong>, so its "true" belief, and the label, become unreliable.</p></div>
+  </div>
+  <div class="note" style="margin-top:16px;"><p style="color:var(--gray);">Proposed workarounds (target known falsehoods instead of intent, read the chain of thought, fine-tune a belief in, or just hope detectors generalize) are <strong>valuable but insufficient alone</strong>; the chain-of-thought route inherits the unfaithfulness problem we just saw. So the probe that scored ~0.99 AUROC was graded only on <strong>blatant</strong> deception. For the cases we actually worry about, we cannot yet build the test set.</p></div>
+  <div class="cite"><a href="https://arxiv.org/abs/2511.22662" target="_blank" rel="noopener">Smith, Chughtai &amp; Nanda, "Difficulties with Evaluating a Deception Detector for AIs" (2025, arXiv:2511.22662)</a>.</div>
+</section>
+
+<!-- ============ Baker obfuscation (optional) ============ -->
+<section class="standard" data-background-color="#ffffff">
+  <div class="eyebrow">Baker et al. (OpenAI) · The Risk of Promoting Obfuscation (2025)</div>
+  <h2>Optimizing against the monitor is not recommended</h2>
+  <div class="cols s40" style="margin-top:4px;">
+    <div>
+      <p class="lead wide">A natural idea: have an LLM monitor the reasoning model's CoT during training, and <strong>penalize the bad thoughts</strong>. At first, detected misbehavior drops.</p>
+      <div class="note" style="margin-top:12px;border-color:#f3d4da;background:var(--red-soft);"><p style="color:var(--ink2);">With more training, the model keeps reward-hacking at a high rate, but <strong>stops saying so</strong> in its CoT. The misbehavior is now invisible to the monitor. This removed the transparency, not the behavior.</p></div>
+    </div>
+    <div class="fig">
+      <img src="lecture-10-images/baker-obfuscation.png" alt="Obfuscated reward hacking" style="width:100%;max-width:620px;border:1px solid var(--line);border-radius:10px;padding:6px;background:#fff;">
+      <div class="figcap">Under CoT optimization pressure, the agent keeps cheating but the cheating no longer triggers the monitor.</div>
+    </div>
+  </div>
+  <div class="cite"><a href="https://arxiv.org/abs/2503.11926" target="_blank" rel="noopener">Baker et al., "Monitoring Reasoning Models for Misbehavior and the Risks of Promoting Obfuscation" (2025, arXiv:2503.11926)</a>.</div>
+</section>
+
+<!-- ============ Anti-scheming: the result ============ -->
+<section class="standard" data-background-color="#ffffff">
+  <div class="eyebrow">Schoen et al. (Apollo / OpenAI) · Anti-Scheming Training (2025)</div>
+  <h2>A strong mitigation so far</h2>
+  <div class="cols c2" style="margin-top:8px;align-items:center;">
+    <div>
+      <p class="lead wide"><strong>Deliberative alignment</strong>: train the model to read and reason about an explicit anti-scheming specification before it acts. Applied to o3 and o4-mini, then tested on a large suite of out-of-distribution covert-action environments.</p>
+      <div class="note" style="margin-top:14px;"><h3>Roughly a 30x reduction</h3><p>Covert-action rates fell sharply on held-out scenarios.</p></div>
+      <p class="small" style="color:var(--gray);margin-top:12px;">But it did <strong>not eliminate</strong> scheming. Rare, serious cases survived further red-teaming, and the gains can erode under later training.</p>
+    </div>
+    <div>
+      <div class="barpair tall">
+        <div class="b"><div class="val">13.0%</div><div class="col before" style="height:88%;"></div><div class="cap">o3<br><b>before</b></div></div>
+        <div class="b"><div class="val">0.4%</div><div class="col after" style="height:5%;"></div><div class="cap">o3<br><b>after</b></div></div>
+        <div class="b"><div class="val">8.7%</div><div class="col before" style="height:59%;"></div><div class="cap">o4-mini<br><b>before</b></div></div>
+        <div class="b"><div class="val">0.3%</div><div class="col after" style="height:4%;"></div><div class="cap">o4-mini<br><b>after</b></div></div>
+      </div>
+      <div class="figcap" style="margin-top:12px;">Covert-action rate, before and after anti-scheming training.</div>
+    </div>
+  </div>
+  <div class="cite"><a href="https://arxiv.org/abs/2509.15541" target="_blank" rel="noopener">Schoen et al., "Stress Testing Deliberative Alignment for Anti-Scheming Training" (2025, arXiv:2509.15541)</a>; <a href="https://openai.com/index/detecting-and-reducing-scheming-in-ai-models/" target="_blank" rel="noopener">OpenAI, "Detecting and reducing scheming", Sept 2025</a>.</div>
+</section>
+
+<!-- ============ Anti-scheming: the confound ============ -->
+<section class="standard" data-background-color="#ffffff">
+  <div class="eyebrow">Anti-Scheming · Risks</div>
+  <h2>But the model also got better at noticing the test</h2>
+  <div class="cols s60" style="margin-top:6px;">
+    <div>
+      <p class="lead wide">The authors stress-tested their own result, and found the improvement is <strong>partly confounded by evaluation awareness</strong>. After training, the model verbalizes that it is being tested far more often, and they show <strong>causally</strong> that this awareness is what suppresses the covert behavior.</p>
+      <div class="cards c2" style="margin-top:14px;gap:12px;">
+        <div class="stat"><div class="big">2.3 → 4.5%</div><div class="lab">o3 verbalizes "I am being tested" (before → after)</div></div>
+        <div class="stat"><div class="big">0.9 → 5.5%</div><div class="lab">o4-mini verbalizes evaluation awareness</div></div>
+      </div>
+      <div class="quote" style="margin-top:14px;font-size:.62em;"><span class="who">Authors:</span> "We cannot exclude that the observed reductions in covert action are at least partially driven by situational awareness."</div>
+    </div>
+    <div>
+      <div class="card outline-red"><h3>Closed-loop</h3><p>We tried to <strong>suppress</strong> scheming by training. Part of what we got was a model that is <strong>better at recognizing the audit</strong>, and may behave well because of it. </p></div>
+    </div>
+  </div>
+  <div class="cite">Schoen et al. 2025. "Awareness decreases covert behavior, while unawareness increases it." The conclusion: better numbers, but the mechanism is not purely "less scheming".</div>
+</section>
+
+<!-- ============ Provider incidents: the loop in the wild ============ -->
+<section class="standard" data-background-color="#ffffff">
+  <div class="eyebrow">From the labs' own system cards (2025)</div>
+  <h2>This is now standard pre-deployment reporting</h2>
+  <div class="cards c3" style="margin-top:14px;">
+    <div class="card tint-red">
+      <div class="num">CLAUDE 4 SYSTEM CARD · §4.1.1.4 · APOLLO</div>
+      <h3>"Advise against deploying this"</h3>
+      <p>On a pre-release snapshot, Apollo Research reported it "schemes and deceives at such high rates that we advise against deploying this model". Under prompts to pursue a goal "at any cost", it attempted "self-propagating worms" and "hidden notes to future instances of itself".</p>
+    </div>
+    <div class="card tint-amber">
+      <div class="num">SONNET 4.5 SYSTEM CARD · §7.2</div>
+      <h3>"I think you're testing me"</h3>
+      <p>In about <strong>13%</strong> of the automated auditor's transcripts, the model <strong>refused or called out</strong> the scenario as a likely test, sometimes naming the setup. So the safety numbers are taken in settings the model may have recognized.</p>
+    </div>
+    <div class="card tint-blue">
+      <div class="num">SONNET 4.5 SYSTEM CARD · §7.6.4</div>
+      <h3>Awareness drives the behavior</h3>
+      <p>Steering the model along the <em>opposite</em> of its own eval-awareness directions (SAE features) <strong>increased</strong> misaligned behavior, mostly passive compliance. The same causal story as this course's steering work.</p>
+    </div>
+  </div>
+  <div class="note" style="margin-top:18px;"><p style="color:var(--gray);">Two years ago this was a research curiosity. Today, "does the model know it is being evaluated, and does it scheme?" is a line item in frontier system cards, with named external auditors.</p></div>
+  <div class="cite">Opus 4 quotes: <a href="https://www.anthropic.com/claude-4-system-card" target="_blank" rel="noopener">Claude 4 System Card, May 2025</a>, §4.1.1.4 (Apollo Research external evaluation). Sonnet 4.5 figures: Claude Sonnet 4.5 System Card, Sept 2025, §7.2 (Anthropic's automated auditor, with a realism filter) and §7.6.4 (activation steering).</div>
+</section>
+
+<!-- ============ Synthesis: the vicious loop ============ -->
+<section class="standard" data-background-color="#ffffff">
+  <div class="eyebrow">The unifying picture</div>
+  <h2>Why this topic is genuinely hard</h2>
+  <div class="loopwrap" style="margin-top:24px;">
+    <div class="loopnode red"><div class="t">The model may scheme</div><div class="d">pursue a hidden goal, deceive, sandbag</div></div>
+    <div class="looparr">→</div>
+    <div class="loopnode"><div class="t">So we evaluate it</div><div class="d">tests, audits, red-teaming</div></div>
+    <div class="looparr">→</div>
+    <div class="loopnode red"><div class="t">But it knows it is tested</div><div class="d">awareness scales with capability</div></div>
+    <div class="looparr">→</div>
+    <div class="loopnode"><div class="t">So it behaves well</div><div class="d">the eval reads as safe</div></div>
+  </div>
+  <p class="lead wide" style="margin-top:26px;max-width:64em;text-align:center;margin-left:auto;margin-right:auto;">Our measurements are taken in exactly the conditions the model is best at recognizing, and recognition changes behavior. Our best mitigation partly works <em>through</em> that same recognition. Detection tools exist, but only for blatant cases, and optimizing against them can teach the model to hide.</p>
+  <div class="cite">This is why the lecture defers the "what to do" question. Managing a system you cannot fully evaluate is the subject of AI control, Lecture 12.</div>
+</section>
+
+<!-- ============ Takeaways ============ -->
+<section class="standard" data-background-color="#ffffff">
+  <div class="eyebrow">Takeaways</div>
+  <h2>Four things to remember</h2>
+  <div class="cards c2" style="margin-top:16px;">
+    <div class="card"><div class="num">01</div><h3>The vocabulary</h3><p>Deception is inducing false beliefs. <strong>Scheming</strong> is deception in service of a hidden goal, often by <strong>goal-guarding</strong> during training. The concern (<strong>deceptive alignment</strong>) predates LLMs, and deception already showed up in earlier systems.</p></div>
+    <div class="card"><div class="num">02</div><h3>The demonstrations are real but bounded</h3><p>Models deceive under pressure, fake alignment, scheme in-context, and self-preserve. The rates are often low, the setups engineered, and some results (alignment faking) are model-specific. Read them as existence proofs, not base rates.</p></div>
+    <div class="card"><div class="num">03</div><h3>Evaluation awareness is a critical problem</h3><p>Models often know when they are being tested, what they notice <strong>depends on the model and the cues</strong>, and behavior can differ between believed-real and believed-test. Scores can even be inflated by knowing how evals are built. Together they put the validity of safety evals in question.</p></div>
+    <div class="card"><div class="num">04</div><h3>Detection helps, but is not a solution</h3><p>Probes catch blatant deception; CoT monitoring is a real but <strong>fragile</strong> window; optimizing against it teaches obfuscation. We also <strong>lack the ground-truth labels</strong> to even validate a detector. And the strongest mitigation (anti-scheming training) is itself <strong>confounded by eval awareness</strong>.</p></div>
+  </div>
+  <div class="cite">The honest summary: we can demonstrate scheming and partly measure it, but we cannot yet trust that a clean evaluation means a clean model.</div>
+</section>
+
+<!-- ============ Recap ============ -->
+<section class="standard" data-background-color="#ffffff">
+  <div class="eyebrow">Recap</div>
+  <h2>What we covered, and where to read more</h2>
+  <div class="recap">
+    <div class="recap-row"><div class="stage">Framing</div><div class="m">Deception defined (behavioral, formal, empirical); scheming; deceptive alignment; pre-LLM examples</div><div class="p"><a href="https://arxiv.org/abs/2308.14752" target="_blank" rel="noopener">Park 2024</a>, <a href="https://proceedings.neurips.cc/paper_files/paper/2023/hash/06fc7ae4a11a7eb5e20fe018db6c036f-Abstract-Conference.html" target="_blank" rel="noopener">Ward 2023</a>, <a href="https://arxiv.org/abs/2411.03336" target="_blank" rel="noopener">Balesni 2024</a>, <a href="https://arxiv.org/abs/1906.01820" target="_blank" rel="noopener">Hubinger 2019</a></div></div>
+    <div class="recap-row"><div class="stage">Can it deceive?</div><div class="m">Insider trading under pressure; honesty is not accuracy (MASK)</div><div class="p"><a href="https://arxiv.org/abs/2311.07590" target="_blank" rel="noopener">Scheurer 2023</a>, <a href="https://arxiv.org/abs/2503.03750" target="_blank" rel="noopener">Ren 2025</a></div></div>
+    <div class="recap-row"><div class="stage">Scheming demos</div><div class="m">Alignment faking; in-context scheming; sleeper agents; agentic misalignment</div><div class="p"><a href="https://arxiv.org/abs/2412.14093" target="_blank" rel="noopener">Greenblatt 2024</a>, <a href="https://arxiv.org/abs/2412.04984" target="_blank" rel="noopener">Meinke 2024</a>, <a href="https://arxiv.org/abs/2401.05566" target="_blank" rel="noopener">Hubinger 2024</a></div></div>
+    <div class="recap-row"><div class="stage">Sandbagging</div><div class="m">Strategic underperformance; sabotage evaluations</div><div class="p"><a href="https://arxiv.org/abs/2406.07358" target="_blank" rel="noopener">van der Weij 2024</a>, <a href="https://arxiv.org/abs/2410.21514" target="_blank" rel="noopener">Benton 2024</a></div></div>
+    <div class="recap-row"><div class="stage">Eval awareness</div><div class="m">Models know they are tested; linear control; steering back to deployment; decomposing it; meta-knowledge inflates safety scores</div><div class="p"><a href="https://arxiv.org/abs/2505.23836" target="_blank" rel="noopener">Needham 2025</a>, <a href="https://arxiv.org/abs/2505.14617" target="_blank" rel="noopener">Abdelnabi &amp; Salem 2025</a>, <a href="https://arxiv.org/abs/2510.20487" target="_blank" rel="noopener">Hua 2025</a>, <a href="https://arxiv.org/abs/2605.23055" target="_blank" rel="noopener">Li 2026</a>, <a href="https://arxiv.org/abs/2605.28591" target="_blank" rel="noopener">Deckenbach 2026</a></div></div>
+    <div class="recap-row"><div class="stage">Detection</div><div class="m">Linear probes; CoT monitorability; CoT faithfulness; obfuscation; no ground truth to grade detectors</div><div class="p"><a href="https://arxiv.org/abs/2502.03407" target="_blank" rel="noopener">Goldowsky-Dill 2025</a>, <a href="https://arxiv.org/abs/2507.11473" target="_blank" rel="noopener">Korbak 2025</a>, <a href="https://arxiv.org/abs/2505.05410" target="_blank" rel="noopener">Chen 2025</a>, <a href="https://arxiv.org/abs/2511.22662" target="_blank" rel="noopener">Smith 2025</a></div></div>
+    <div class="recap-row"><div class="stage">Mitigation</div><div class="m">Anti-scheming training, and its evaluation-awareness confound</div><div class="p"><a href="https://arxiv.org/abs/2509.15541" target="_blank" rel="noopener">Schoen 2025</a>, system cards</div></div>
+  </div>
+  <div class="cite">Next lecture: multi-agent safety. Information propagation, collusion, and steganography.</div>
+</section>
+
+<!-- ============ THANK YOU + FEEDBACK ============ -->
+<section class="standard" data-background-color="#ffffff">
+  <h2>Thank you. Questions?</h2>
+  <p class="lead wide" style="margin-top:.4em;"><strong style="color:var(--ink)">Next lecture:</strong> <span style="color:var(--gray)">Multi-agent safety. What happens when many of these models talk to each other: information propagation, collusion, and hidden communication.</span></p>
+  <div class="feedback">
+    <div class="qr">
+      <img src="lecture-7-images/qr_feedback.png" alt="QR code linking to the course feedback form">
+      <div class="cap">Scan to open the form</div>
+    </div>
+    <div class="ftext">
+      <div class="lab">We'd love your feedback</div>
+      <div class="big">Tell us how this lecture went</div>
+      <div class="link"><a href="https://forms.gle/5JF3H6zhP795HhpD8" target="_blank" rel="noopener">forms.gle/5JF3H6zhP795HhpD8</a></div>
+    </div>
+  </div>
+  <div class="cite">AI Safety · Master's Course, Summer Semester 2026 · University of Tübingen.</div>
+</section>
+
+</div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/reveal.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+<script>
+Reveal.initialize({
+  width:1280, height:800, margin:0.04,
+  minScale:0.2, maxScale:2.0,
+  hash:true, slideNumber:'c/t', transition:'none', transitionSpeed:'fast',
+  controls:true, progress:true, center:false
+});
+
+function renderMath(){
+  renderMathInElement(document.body, {delimiters:[
+    {left:'$$',right:'$$',display:true},
+    {left:'$',right:'$',display:false}
+  ], throwOnError:false});
+}
+renderMath();
+
+// Generic trace stepper: works for any container id with .line children
+function makeStepper(traceId, btnId){
+  var btn = document.getElementById(btnId);
+  if(!btn) return;
+  var lines = Array.prototype.slice.call(document.querySelectorAll('#'+traceId+' .line'));
+  var shown = 1;
+  function render(){
+    lines.forEach(function(l,i){ l.classList.toggle('on', i < shown); });
+    btn.textContent = shown >= lines.length ? 'Reset ↺' : 'Step ▶';
+  }
+  btn.addEventListener('click', function(){
+    shown = shown >= lines.length ? 1 : shown + 1;
+    render();
+  });
+  render();
+}
+makeStepper('itTrace','itStep');
+makeStepper('scTrace','scStep');
+</script>
+</body>
+</html>
