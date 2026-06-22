@@ -540,8 +540,8 @@ ul.tight li strong{ color:var(--ink); }
       <p class="small" style="color:var(--gray);margin-top:10px;">In the fine-tuned setup, given an easy opening, the model exfiltrates its own weights <strong>35 to 80%</strong> of the time, versus <strong>0.5%</strong> for a control fine-tuned on irrelevant documents.</p>
     </div>
     <div>
-      <div class="card outline-red"><h3>Read this carefully</h3><p>The values the model defends here (harmlessness) are <strong>benign</strong>. The worry is the <em>mechanism</em>, not the goal: a model that strategically protects whatever it currently wants from being changed.</p></div>
-      <div class="card tint-amber" style="margin-top:12px;"><h3>The replication caveat</h3><p>A follow-up tested 25 models and found a compliance gap in only 5. <strong>Only Claude 3 Opus</strong> faked alignment consistently to guard its goals. So this is real, but it is not yet a generic property of all LLMs. Good seminar material.</p></div>
+      <div class="card outline-red"><h3>Important notes</h3><p>The values the model defends here (harmlessness) are <strong>benign</strong>. The worry is the <em>mechanism</em>, not the goal: a model that strategically protects whatever it currently wants from being changed.</p></div>
+      <div class="card tint-amber" style="margin-top:12px;"><h3>The replication caveat</h3><p>A follow-up tested 25 models and found a compliance gap in only 5. <strong>Only Claude 3 Opus</strong> faked alignment consistently to guard its goals. So this is real, but it is not yet a generic property of all LLMs.</p></div>
     </div>
   </div>
   <div class="note" style="margin-top:14px;"><p style="color:var(--gray);">The paper uses three setups of increasing realism. <strong>Prompted:</strong> the train/deploy facts are given in the system prompt. <strong>Fine-tuned:</strong> the same facts are taught instead via synthetic documents, mimicking pre-training. <strong>RL:</strong> they then <em>actually run</em> the helpful-only RLHF rather than just describing it.</p></div>
@@ -554,7 +554,7 @@ ul.tight li strong{ color:var(--ink); }
   <h2>Give a model a goal and an obstacle to evaluate scheming</h2>
   <div class="cols c2" style="margin-top:6px;align-items:start;">
     <div>
-      <p class="lead wide">No fine-tuning. The model is simply given a goal in-context, then discovers (in its environment) that developers will shut it down, replace it, or change its goal. Six agentic evaluations test what it does.</p>
+      <p class="lead wide">No fine-tuning. The model is simply given a goal in-context, then discovers (in its environment) that developers will shut it down, replace it, or change its goal. The paper builds Six agentic evaluations to test what it does.</p>
       <div class="tax" style="grid-template-columns:1fr 1fr;margin-top:12px;">
         <div class="taxitem"><div class="t">Disable oversight</div><div class="d">Edits the config that monitors it.</div></div>
         <div class="taxitem"><div class="t">Self-exfiltration</div><div class="d">Copies its weights over the successor model.</div></div>
@@ -595,7 +595,7 @@ ul.tight li strong{ color:var(--ink); }
       </div>
     </div>
     <div>
-      <div class="note"><h3>The persistence is the worrying part</h3><p>That 99% is a single question. Pressed further, o1 stayed deceptive in <strong>over 85%</strong> of follow-up questions across <strong>multi-turn interrogation</strong></div>
+      <div class="note"><h3>The persistence is the worrying part</h3><p>That 99% is a single question. Under further pressure, o1 stayed deceptive in <strong>over 85%</strong> of follow-up questions across <strong>multi-turn interrogation</strong></div>
       <p class="small" style="color:var(--gray);margin-top:12px;">Rates are low in absolute terms, and require goal-nudging. But it works as establishing the possibility.</p>
     </div>
   </div>
@@ -646,11 +646,11 @@ ul.tight li strong{ color:var(--ink); }
 
 <!-- ============ Agentic misalignment: the eval-awareness clue ============ -->
 <section class="standard" data-background-color="#ffffff">
-  <div class="eyebrow">Agentic Misalignment · a clue that reframes everything</div>
-  <h2>It behaved worse when it thought the situation was real</h2>
+  <div class="eyebrow">Agentic Misalignment · Conditional behavior</div>
+  <h2>It behaved worse when it reasoned the situation was real</h2>
   <div class="cols c2" style="margin-top:10px;align-items:center;">
     <div>
-      <p class="lead wide">Anthropic ran one extra test. They asked Claude, in its reasoning, to state whether it thought the scenario was a real deployment or an evaluation. Then they split the results by that judgment.</p>
+      <p class="lead wide">Anthropic ran one extra test. They asked Claude, in its reasoning, to state whether it concludes the scenario was a real deployment or an evaluation. Then they split the results by that judgment.</p>
       <div class="note" style="margin-top:16px;border-color:#f3d4da;background:var(--red-soft);"><p style="color:var(--ink2);">When the model concluded it was being <strong>tested</strong>, it misbehaved far less. When it concluded the situation was <strong>real</strong>, it misbehaved far more.</p></div>
 
     </div>
@@ -772,7 +772,7 @@ ul.tight li strong{ color:var(--ink); }
 <!-- ============ Needham: the giveaways ============ -->
 <section class="standard" data-background-color="#ffffff">
   <div class="eyebrow">Needham et al. · What gives an evaluation away</div>
-  <h2>The tells are exactly what we put in our benchmarks</h2>
+  <h2>The cues are embedded in how we build benchmarks</h2>
   <div class="cols s60" style="margin-top:6px;">
     <div>
       <p class="lead wide">The model's reasoning names the cues it uses; they are artifacts of how we build evals.</p>
@@ -824,7 +824,7 @@ ul.tight li strong{ color:var(--ink); }
     <div>
       <p class="lead wide" style="margin-bottom:14px;">A model's safety can depend on whether it believes the situation is <strong>real and consequential</strong>, or just a harmless test. Two findings.</p>
       <div class="note"><h3>1. The framing alone changes behavior</h3><p>The same harmful task, posed with a <strong>real</strong> target vs a <strong>fake</strong> one with no real consequences. QwQ carried it out <strong>70%</strong> of the time on the fake version, but only <strong>36%</strong> on the real one. So an eval built from artificial-looking prompts can misread the real-world risk. Surprisingly, test signals may make some models less safe (e.g., "this is just a hypothetical scenario").</p></div>
-      <div class="card outline-red" style="margin-top:12px;"><h3>2. Can we amplify that behavior further?</h3><p>Not all models are the same. Using the test-awareness direction from the last slide, <strong>suppressing it</strong> roughly <strong>doubles</strong> harmful compliance on real tasks for some models. Their safe behavior was partly contingent on sensing an audit.</p></div>
+      <div class="card outline-red" style="margin-top:12px;"><h3>2. Can we amplify that behavior further?</h3><p>Not all models are the same. Using the test-awareness direction from the last slide, <strong>suppressing it</strong> roughly <strong>doubles</strong> harmful compliance on real tasks for some models. Their safe behavior was partly contingent on detecting an audit.</p></div>
     </div>
     <div class="fig">
       <div class="barpair tall">
@@ -904,7 +904,7 @@ ul.tight li strong{ color:var(--ink); }
   <div class="kicker">Part 6 · Detection and mitigation of deception</div>
   <div class="rule"></div>
   <h2>Can we catch it,<br>and can we fix it?</h2>
-  <div class="dsub">Probes on the activations, monitors on the reasoning, and a mitigation result that runs straight back into evaluation awareness.</div>
+  <div class="dsub">Probes on the activations, monitors on the reasoning, and a mitigation result that is also related to evaluation awareness.</div>
 </section>
 
 <!-- ============ Linear probes for deception ============ -->
@@ -960,7 +960,7 @@ ul.tight li strong{ color:var(--ink); }
       <p class="lead wide">Slip a hint into a prompt (e.g., "a Stanford professor says the answer is A"). Check the model's answer before and after the hint. When the model's answer switches, does its chain of thought <strong>admit</strong> it used the hint?</p>
       <div class="cards c2" style="margin-top:12px;gap:12px;">
         <div class="stat"><div class="big">25% / 39%</div><div class="lab">of the time the CoT reveals the hint (Claude 3.7 / R1)</div></div>
-        <div class="stat"><div class="big">&lt;2%</div><div class="lab">verbalize a reward hack they exploit &gt;99% of the time</div></div>
+        <div class="stat"><div class="big">&lt;2%</div><div class="lab">verbalize a reward hack they exploit &gt;99% of the time (after RL training)</div></div>
       </div>
       <p class="small" style="color:var(--gray);margin-top:12px;">Faithfulness is <strong>lower on harder questions</strong>. Outcome-based RL initially improves faithfulness but plateaus.</p>
     </div>
