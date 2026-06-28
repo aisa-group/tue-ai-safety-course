@@ -69,7 +69,7 @@ Lecture recordings can be found [here](https://drive.google.com/drive/folders/1P
 | 8 | 08.06  | Sahar     | [**LLM agents.**](https://github.com/aisa-group/tue-ai-safety-course/blob/main/lecture-slides/lecture-8-agents.html) Reasoning and planning, deep research, coding and browser/computer-use agents, MCP, agent skills &nbsp;*— Mini-project 3 due this week* |
 | 9 | 15.06  | Sahar     | [**Agent security.**](lecture-slides/lecture-9-agent-security.html) Prompt injections and contextual privacy                               |
 | 10 | 22.06 | Sahar     | [**Scheming & deception.**](lecture-slides/lecture-10-scheming-deception.html) Deception, scheming, sandbagging, evaluation awareness, and mitigations and their limitations &nbsp;*— Final project starts* |
-| 11 | 29.06 | Sahar     | **Multi-agent safety.** Information propagation, collusion, steganography                  |
+| 11 | 29.06 | Sahar     | [**Multi-agent safety.**](lecture-slides/lecture-11-multi-agent-safety.html) Information propagation, collusion, steganography                  |
 | 12 | 06.07 | Maksym    | **Scalable oversight.** AI control and AI R&D                                              |
 | 13 | 13.07 | Jonas     | **Forecasting AI progress.** Scaling laws, the METR time-horizon plot, AI 2027             |
 | 14 | 20.07 | —         | **Final presentations** &nbsp;*— Final project due*                                        |

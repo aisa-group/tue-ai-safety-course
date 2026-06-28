@@ -1,0 +1,1067 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Multi-Agent Safety — AI Safety, University of Tübingen</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/reveal.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --ink:#1b1e2e;
+  --ink2:#2b2f40;
+  --red:#A51E37;
+  --red-soft:#fbeef0;
+  --gray:#5f6470;
+  --muted:#9aa0ab;
+  --line:#e6e8ec;
+  --card:#f7f8fa;
+  --green:#1f7a4d;
+  --green-soft:#eaf6ef;
+  --blue:#2563a8;
+  --blue-soft:#eef4fb;
+  --amber-soft:#fdf6e8;
+}
+
+.reveal{
+  font-family:'Inter',system-ui,-apple-system,sans-serif;
+  font-size:25px;
+  color:var(--ink2);
+  font-weight:400;
+  letter-spacing:-0.005em;
+}
+.reveal .slides{ text-align:left; }
+.reveal .slides section{ height:100%; top:0 !important; box-sizing:border-box; width:100%; }
+.reveal .slides section *{ box-sizing:border-box; }
+
+/* Headings */
+.reveal h1,.reveal h2,.reveal h3{
+  color:var(--ink);
+  font-weight:800;
+  letter-spacing:-0.025em;
+  margin:0 0 .35em 0;
+  line-height:1.05;
+  text-transform:none;
+}
+.reveal h1{ font-size:2.35em; }
+.reveal h2{ font-size:1.72em; }
+.reveal h3{ font-size:1.12em; font-weight:700; }
+.reveal h1 .accent,.reveal h2 .accent{ color:var(--muted); font-weight:800; }
+.reveal h2 .sub{ color:var(--muted); font-weight:600; font-size:.62em; letter-spacing:-0.01em; }
+.reveal p,.reveal li{ line-height:1.45; }
+.reveal strong{ color:var(--ink); font-weight:700; }
+.reveal em{ color:inherit; }
+a,.reveal a{ color:var(--red); text-decoration:none; }
+
+/* slide padding */
+.reveal .slides section.standard{ padding:42px 60px 64px 60px; }
+
+/* eyebrow */
+.eyebrow{
+  color:var(--red); font-weight:700; font-size:.62em;
+  letter-spacing:.13em; text-transform:uppercase; margin-bottom:.5em;
+}
+.subtitle-mono{
+  font-family:'JetBrains Mono',monospace; color:var(--red);
+  font-size:.66em; font-weight:500; margin:-.2em 0 .8em 0; letter-spacing:-0.01em;
+}
+.lead{ color:var(--gray); font-size:1.04em; max-width:24em; line-height:1.5; }
+.lead.wide{ max-width:34em; }
+
+/* citation footnote */
+.cite{
+  position:absolute; left:60px; bottom:26px; right:60px;
+  font-size:.5em; font-style:italic; color:var(--muted); letter-spacing:0;
+}
+.cite a{ color:var(--muted); text-decoration:underline; }
+
+/* page number handled by reveal */
+.reveal .slide-number{ font-size:14px; color:var(--muted); background:transparent; }
+
+/* ---- Title slide ---- */
+.title-slide{ display:flex !important; flex-direction:column; justify-content:center; align-items:center; height:100%; text-align:center; padding:0 8%; }
+.title-slide h1{ font-size:3.1em; margin-bottom:.18em; }
+.title-slide .tsub{ font-size:1.25em; color:var(--gray); font-weight:500; margin-bottom:1.4em; }
+.title-slide .meta{ color:var(--gray); font-size:.86em; line-height:1.7; }
+.title-slide .meta .k{ color:var(--ink); font-weight:700; }
+.title-slide .authors{ margin-top:1.5em; color:var(--muted); font-size:.84em; }
+
+/* ---- Section divider ---- */
+.divider{ display:flex !important; flex-direction:column; justify-content:center; height:100%; padding:0 9%; }
+.divider .kicker{ color:var(--red); font-weight:700; font-size:.7em; letter-spacing:.14em; text-transform:uppercase; margin-bottom:.3em; }
+.divider h2{ font-size:2.9em; margin-bottom:.25em; }
+.divider .dsub{ color:var(--gray); font-size:1.05em; max-width:30em; line-height:1.5; }
+.divider .rule{ width:64px; height:5px; background:var(--red); border-radius:3px; margin-bottom:1.1em; }
+
+/* ---- Cards ---- */
+.cards{ display:grid; gap:18px; margin-top:8px; }
+.cards.c2{ grid-template-columns:1fr 1fr; }
+.cards.c3{ grid-template-columns:1fr 1fr 1fr; }
+.cards.c4{ grid-template-columns:repeat(4,1fr); }
+.card{
+  background:var(--card); border:1px solid var(--line); border-radius:14px;
+  padding:20px 22px;
+}
+.card h3{ margin-bottom:.3em; }
+.card p{ color:var(--gray); font-size:.84em; margin:0; line-height:1.42; }
+.card .num{ color:var(--red); font-weight:700; font-size:.7em; letter-spacing:.04em; }
+.card.tint-green{ background:var(--green-soft); border-color:#cfe8d9; }
+.card.tint-red{ background:var(--red-soft); border-color:#f3d4da; }
+.card.tint-blue{ background:var(--blue-soft); border-color:#d4e3f3; }
+.card.tint-amber{ background:var(--amber-soft); border-color:#f0e3c4; }
+.card.outline-red{ background:#fff; border:2px solid var(--red); }
+.card.outline-red h3{ color:var(--red); }
+.card .tag{ font-weight:700; }
+.tag-yes{ color:var(--green); font-weight:700; }
+.tag-no{ color:var(--red); font-weight:700; }
+
+/* stat */
+.stat{ background:var(--card); border:1px solid var(--line); border-radius:14px; padding:16px 22px; text-align:center; }
+.stat .big{ color:var(--red); font-weight:800; font-size:2.0em; line-height:1; letter-spacing:-0.03em; }
+.stat .lab{ color:var(--gray); font-size:.78em; margin-top:.35em; }
+
+/* boxes */
+.databox{
+  background:var(--card); border:1px solid var(--line); border-radius:12px;
+  padding:16px 20px; font-family:'JetBrains Mono',monospace; font-size:.66em;
+  line-height:1.5; color:var(--ink2); white-space:pre-wrap;
+}
+.quote{
+  background:var(--card); border-left:4px solid var(--red); border-radius:0 10px 10px 0;
+  padding:14px 20px; font-family:'JetBrains Mono',monospace; font-size:.66em; line-height:1.55; color:var(--ink2);
+}
+.quote .who{ color:var(--red); font-weight:700; }
+.note{ background:var(--card); border-radius:10px; padding:14px 18px; border:1px solid var(--line); }
+.note h3{ color:var(--red); font-size:.92em; margin-bottom:.25em; }
+.note p{ color:var(--gray); font-size:.84em; margin:0; }
+
+/* table */
+.reveal table{ border-collapse:collapse; width:100%; font-size:.8em; }
+.reveal table thead th{ background:var(--ink); color:#fff; font-weight:700; text-align:left; padding:9px 14px; }
+.reveal table thead th:first-child{ border-radius:8px 0 0 0; }
+.reveal table thead th:last-child{ border-radius:0 8px 0 0; }
+.reveal table td{ padding:8px 14px; border-bottom:1px solid var(--line); }
+.reveal table tbody tr:last-child td{ border-bottom:none; }
+
+/* figure */
+.fig{ display:flex; flex-direction:column; align-items:center; }
+.fig img{ border-radius:10px; background:#fff; }
+.fig.bordered img{ border:1px solid var(--line); padding:6px; }
+.figcap{ color:var(--muted); font-size:.66em; font-style:italic; margin-top:8px; text-align:center; max-width:40em; line-height:1.4; }
+
+/* two col layout */
+.cols{ display:grid; gap:30px; align-items:center; }
+.cols.c2{ grid-template-columns:minmax(0,1fr) minmax(0,1fr); }
+.cols.s60{ grid-template-columns:minmax(0,1.4fr) minmax(0,1fr); }
+.cols.s40{ grid-template-columns:minmax(0,1fr) minmax(0,1.4fr); }
+.cols > *{ min-width:0; }
+.quote, .databox, .lead{ overflow-wrap:break-word; }
+
+/* pills / steps */
+.steps{ display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+.step{ background:var(--card); border:1px solid var(--line); border-radius:14px; padding:18px 20px; position:relative; }
+.step .n{ display:inline-flex; width:30px; height:30px; border-radius:50%; background:var(--red); color:#fff; font-weight:700; align-items:center; justify-content:center; font-size:.8em; margin-bottom:.5em; }
+.step h3{ font-size:1.0em; margin-bottom:.3em; }
+.step p{ color:var(--gray); font-size:.78em; margin:0; line-height:1.4; }
+
+/* pipeline flow */
+.flow{ display:flex; align-items:stretch; gap:0; margin-top:10px; }
+.flow .node{ flex:1; background:var(--card); border:1px solid var(--line); border-radius:12px; padding:14px 14px; text-align:center; }
+.flow .node .t{ font-weight:700; color:var(--ink); font-size:.9em; }
+.flow .node .d{ color:var(--gray); font-size:.72em; margin-top:.25em; }
+.flow .arr{ display:flex; align-items:center; color:var(--red); font-size:1.4em; padding:0 12px; font-weight:700; }
+
+.hl-red{ color:var(--red); font-weight:700; }
+.hl-green{ color:var(--green); font-weight:700; }
+.small{ font-size:.82em; }
+.center{ text-align:center; }
+ul.tight{ margin:0; padding-left:1.1em; }
+ul.tight li{ margin:.3em 0; color:var(--gray); font-size:.92em; }
+ul.tight li strong{ color:var(--ink); }
+
+/* recap list: one topic per row */
+.recap{ display:flex; flex-direction:column; gap:7px; margin-top:12px; }
+.recap-row{ display:flex; align-items:baseline; gap:16px; padding:8px 18px; background:var(--card); border:1px solid var(--line); border-radius:10px; }
+.recap-row .stage{ flex:0 0 150px; color:var(--red); font-weight:700; font-size:.54em; letter-spacing:.08em; text-transform:uppercase; }
+.recap-row .m{ flex:1; font-weight:700; color:var(--ink); font-size:.78em; }
+.recap-row .p{ flex:0 0 auto; color:var(--gray); font-size:.62em; font-style:italic; text-align:right; }
+.recap-row .p a{ color:var(--gray); text-decoration:underline; }
+
+/* feedback / thank-you slide */
+.feedback{ display:flex; align-items:center; gap:40px; margin-top:28px; }
+.feedback .qr{ flex:0 0 auto; text-align:center; }
+.feedback .qr img{ width:230px; height:230px; border:1px solid var(--line); border-radius:14px; padding:12px; background:#fff; }
+.feedback .qr .cap{ color:var(--muted); font-size:.66em; margin-top:8px; }
+.feedback .ftext{ flex:1; }
+.feedback .ftext .big{ font-size:1.5em; font-weight:800; color:var(--ink); line-height:1.15; letter-spacing:-0.02em; margin-bottom:.3em; }
+.feedback .ftext .lab{ color:var(--red); font-weight:700; font-size:.66em; letter-spacing:.12em; text-transform:uppercase; margin-bottom:.5em; }
+.feedback .ftext .link{ font-family:'JetBrains Mono',monospace; font-size:.92em; font-weight:500; }
+.feedback .ftext .link a{ color:var(--red); text-decoration:underline; }
+
+.katex{ font-size:1.0em; }
+.eqbox{ background:var(--card); border:1px solid var(--line); border-radius:12px; padding:18px 20px; text-align:center; }
+.eqlabel{ color:var(--muted); font-size:.72em; font-style:italic; margin-bottom:6px; }
+
+/* interactive trace (reused from L9/L10) */
+.trace{ display:flex; flex-direction:column; gap:9px; }
+.trace .line{ border-radius:8px; padding:9px 14px; font-family:'JetBrains Mono',monospace; font-size:.62em; line-height:1.45; border:1px solid var(--line); opacity:.28; transition:opacity .18s ease; }
+.trace .line.on{ opacity:1; }
+.trace .line .lbl{ font-weight:700; }
+.trace .thought{ background:var(--blue-soft); border-color:#d4e3f3; }
+.trace .thought .lbl{ color:var(--blue); }
+.trace .action{ background:var(--amber-soft); border-color:#f0e3c4; }
+.trace .action .lbl{ color:#9a6a00; }
+.trace .obs{ background:var(--card); }
+.trace .obs .lbl{ color:var(--gray); }
+.trace .inject{ background:var(--red-soft); border-color:#f3d4da; }
+.trace .inject .lbl{ color:var(--red); }
+.trace .answer{ background:var(--green-soft); border-color:#cfe8d9; }
+.trace .answer .lbl{ color:var(--green); }
+.stepbtn{ background:var(--red); color:#fff; border:none; border-radius:8px; padding:7px 16px; font-family:'Inter',sans-serif; font-weight:700; font-size:.62em; cursor:pointer; letter-spacing:.02em; }
+.hint{ color:var(--muted); font-size:.62em; font-style:italic; margin-top:6px; }
+.badge{ display:inline-block; background:var(--red-soft); color:var(--red); border:1px solid #f3d4da; border-radius:20px; padding:2px 12px; font-size:.62em; font-weight:700; letter-spacing:.04em; text-transform:uppercase; }
+
+/* taxonomy / pattern grids (reused) */
+.tax{ display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
+.taxitem{ background:var(--card); border:1px solid var(--line); border-radius:10px; padding:13px 15px; border-left:4px solid var(--red); }
+.taxitem .t{ font-weight:700; color:var(--ink); font-size:.92em; }
+.taxitem .d{ color:var(--gray); font-size:.74em; margin-top:3px; line-height:1.35; }
+.pat{ display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
+.patc{ background:var(--card); border:1px solid var(--line); border-radius:10px; padding:13px 15px; }
+.patc .n{ color:var(--red); font-weight:700; font-size:.62em; letter-spacing:.04em; }
+.patc .t{ font-weight:700; color:var(--ink); font-size:.9em; margin-top:1px; }
+.patc .d{ color:var(--gray); font-size:.72em; margin-top:4px; line-height:1.34; }
+
+/* seven-factors compact grid */
+.tax.f7{ gap:9px; }
+.tax.f7 .taxitem{ padding:10px 13px; }
+.tax.f7 .taxitem .t{ font-size:.86em; }
+.tax.f7 .taxitem .d{ font-size:.66em; line-height:1.3; margin-top:2px; }
+
+/* optional-reading flag */
+.optflag{ display:inline-block; align-self:flex-start; background:var(--amber-soft); color:#9a6a00; border:1px solid #f0e3c4; border-radius:20px; padding:4px 15px; font-size:.6em; font-weight:700; letter-spacing:.09em; text-transform:uppercase; margin-bottom:20px; }
+
+/* ===== lecture-11 custom components ===== */
+
+/* bar pairs (reused from L10) */
+.barpair{ display:flex; gap:26px; justify-content:center; align-items:flex-end; height:200px; padding:0 6px; }
+.barpair.tall{ height:240px; }
+.barpair .b{ display:flex; flex-direction:column; justify-content:flex-end; align-items:center; height:100%; width:78px; }
+.barpair .b .col{ width:100%; border-radius:7px 7px 0 0; transition:height .3s ease; min-height:3px; }
+.barpair .b .col.before{ background:var(--red); }
+.barpair .b .col.after{ background:var(--green); }
+.barpair .b .col.neutral{ background:var(--blue); }
+.barpair .b .col.gray{ background:var(--muted); }
+.barpair .b .val{ font-weight:800; color:var(--ink); font-size:.78em; margin-bottom:6px; }
+.barpair .b .cap{ color:var(--gray); font-size:.6em; margin-top:8px; text-align:center; line-height:1.22; }
+.barpair .b .cap b{ color:var(--ink); }
+
+/* loop diagram (reused) */
+.loopwrap{ display:flex; align-items:center; justify-content:center; gap:14px; flex-wrap:wrap; }
+.loopnode{ background:var(--card); border:1px solid var(--line); border-radius:12px; padding:13px 16px; max-width:220px; text-align:center; }
+.loopnode.red{ background:var(--red-soft); border-color:#f3d4da; }
+.loopnode .t{ font-weight:700; color:var(--ink); font-size:.82em; }
+.loopnode .d{ color:var(--gray); font-size:.66em; margin-top:3px; line-height:1.3; }
+.looparr{ color:var(--red); font-size:1.5em; font-weight:700; }
+
+/* contagion simulator */
+.simwrap{ display:flex; flex-direction:column; align-items:center; }
+.simctl{ display:flex; gap:14px; align-items:center; margin-top:10px; flex-wrap:wrap; justify-content:center; }
+.simstat{ font-family:'JetBrains Mono',monospace; font-size:.66em; color:var(--ink2); }
+.simstat b{ color:var(--red); font-size:1.1em; }
+
+/* tipping point slider */
+.tipwrap{ display:flex; flex-direction:column; gap:14px; }
+.tiprow{ display:flex; align-items:center; gap:16px; }
+.tiprow input[type=range]{ flex:1; accent-color:var(--red); }
+.tipbar{ height:46px; border-radius:10px; display:flex; overflow:hidden; border:1px solid var(--line); }
+.tipbar .seg{ display:flex; align-items:center; justify-content:center; font-weight:700; font-size:.7em; color:#fff; transition:width .25s ease, background .25s ease; }
+.tipverdict{ font-weight:800; font-size:1.0em; letter-spacing:-0.01em; }
+
+/* generic SVG topology row */
+.toprow{ display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
+.topcard{ background:var(--card); border:1px solid var(--line); border-radius:12px; padding:14px 14px 12px; text-align:center; }
+.topcard svg{ width:100%; height:120px; }
+.topcard .tt{ font-weight:700; color:var(--ink); font-size:.82em; margin-top:4px; }
+.topcard .td{ color:var(--gray); font-size:.66em; margin-top:2px; }
+.topcard.best{ border-color:#cfe8d9; background:var(--green-soft); }
+.topcard.worst{ border-color:#f3d4da; background:var(--red-soft); }
+
+/* concept compare (stego vs watermark) */
+.compare2{ display:grid; grid-template-columns:1fr 1fr; gap:18px; }
+
+/* print fixes */
+@media print{
+  .reveal .slides section{ box-shadow:none !important; }
+  .card,.stat,.databox,.quote,.note,.step,.flow .node,.taxitem,.patc,.loopnode,.topcard{ box-shadow:none !important; }
+  .trace .line{ opacity:1 !important; }
+  section.pdf-center-title{ padding-top:250px !important; }
+  section.pdf-center-divider{ padding-top:272px !important; }
+}
+</style>
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+
+<!-- ============ TITLE ============ -->
+<section class="title-slide" data-background-color="#ffffff">
+  <h1>Multi-Agent <span class="accent">Safety</span></h1>
+  <div class="tsub">Information propagation, collusion, and hidden communication</div>
+  <div class="meta">
+    <div><span class="k">AI Safety</span>: Master's Course, Summer Semester 2026</div>
+    <div>University of Tübingen · 29 June 2026</div>
+  </div>
+  <div class="authors">Maksym Andriushchenko · Jonas Geiping · <u>Sahar Abdelnabi</u></div>
+</section>
+
+<!-- ============ RECAP / BRIDGE ============ -->
+<section class="standard" data-background-color="#ffffff">
+  <div class="eyebrow">Where we left off</div>
+  <h2>So far: one model at a time</h2>
+  <div class="cols c2" style="margin-top:18px;">
+    <div>
+      <p class="lead wide">In agent security (L9), an attacker controlled the data a single agent read. In scheming (L10), a single model could deceive the overseer.</p>
+      <p class="lead wide" style="margin-top:.7em;">Today the unit of analysis changes. We deploy <strong>many</strong> of these models, talking to each other, trading, reviewing, and coordinating. New risks appear that <strong>no single agent exhibits on its own</strong>.</p>
+    </div>
+    <div class="flow" style="flex-direction:column;gap:8px;align-items:stretch;">
+      <div class="node" style="flex:0 0 auto;"><div class="t">L9 · Agent security</div><div class="d">attacker controls the data one agent reads</div></div>
+      <div style="text-align:center;color:var(--red);font-size:1.3em;font-weight:700;line-height:1;">↓</div>
+      <div class="node" style="flex:0 0 auto;"><div class="t">L10 · Scheming</div><div class="d">the model manages what can be observed</div></div>
+      <div style="text-align:center;color:var(--red);font-size:1.3em;font-weight:700;line-height:1;">↓</div>
+      <div class="node" style="flex:0 0 auto;border-color:var(--red);background:var(--red-soft);"><div class="t" style="color:var(--red)">L11 · Many models interacting</div><div class="d">risk becomes a property of the system</div></div>
+    </div>
+  </div>
+  <div class="note" style="margin-top:22px;"><p style="color:var(--gray);">Three questions run through the lecture. Can a single compromise <strong>spread</strong> across a population of agents? Can agents <strong>collude</strong> against the outcome we wanted, even with no instruction to? And can they <strong>communicate covertly</strong>, hiding the real message from anyone monitoring them?</p></div>
+  <div class="cite">A single agent can be honest and secure, yet a system built from many such agents can still fail. That gap is the subject of this lecture.</div>
+</section>
+
+<!-- ============ ROADMAP ============ -->
+<section class="standard" data-background-color="#ffffff">
+  <h2>Roadmap</h2>
+  <div class="cards c3" style="margin-top:18px;">
+    <div class="card tint-blue"><div class="num">PART 1</div><h3>Framing</h3><p>Why interaction creates new risk: three failure modes, the factors behind them, and a testbed that exercises all three.</p></div>
+    <div class="card tint-red"><div class="num">PART 2</div><h3>Information propagation</h3><p>How a single jailbreak, worm, or false belief spreads through a network of agents, sometimes exponentially.</p></div>
+    <div class="card tint-amber"><div class="num">PART 3</div><h3>Collusion</h3><p>Agents reaching outcomes against us or other agents sometimes with no instruction to: price-fixing, market division, emergent conventions and bias.</p></div>
+    <div class="card outline-red"><div class="num" style="color:var(--red)">PART 4</div><h3>Steganography</h3><p>Hidden communication. Agents passing a real message past an overseer that sees only innocent text.</p></div>
+    <div class="card tint-green"><div class="num">PART 5</div><h3>Interaction is not safety</h3><p>More agents is not automatically safer. Collaboration degrades through conformity and sycophancy.</p></div>
+    <div class="card"><div class="num">PART 6</div><h3>Defenses</h3><p>Topology, trust scoring, visibility, and reading model internals to catch what the text hides.</p></div>
+  </div>
+</section>
+
+<!-- ==================================================================== -->
+<!-- ============ PART 1 DIVIDER ============ -->
+<section class="divider" data-background-color="#ffffff">
+  <div class="kicker">Part 1 · Framing</div>
+  <div class="rule"></div>
+  <h2>The risk lives<br>in the interaction</h2>
+  <div class="dsub">We need a vocabulary for what goes wrong when agents interact.</div>
+</section>
+
+<!-- ============ Taxonomy: three failure modes ============ -->
+<section class="standard" data-background-color="#ffffff">
+  <div class="eyebrow">Hammond et al. (Cooperative AI Foundation) · Multi-Agent Risks from Advanced AI (2025)</div>
+  <h2>Three ways a system of agents fails</h2>
+  <div class="cols s40" style="margin-top:6px;align-items:center;">
+    <div class="fig">
+      <img src="lecture-11-images/marisk-taxonomy.png" alt="Decision tree: is cooperation desirable, and are objectives identical, mixed, or opposing" style="width:100%;max-width:670px;">
+      <div class="figcap">When cooperation is <em>undesirable</em>, it is collusion. When desirable but it breaks down, it is miscoordination (shared goals) or conflict (opposing goals).</div>
+    </div>
+    <div>
+      <div class="cards" style="grid-template-columns:1fr;gap:12px;">
+        <div class="card tint-amber" style="padding:13px 16px;"><div class="num">MODE 1</div><h3>Miscoordination</h3><p>Shared goal, but agents fail to act together: incompatible conventions, mismatched expectations.</p></div>
+        <div class="card tint-red" style="padding:13px 16px;"><div class="num">MODE 2</div><h3>Conflict</h3><p>Differing goals, agents impose costs on each other: escalation, commitment races, breakdown.</p></div>
+        <div class="card outline-red" style="padding:13px 16px;"><div class="num" style="color:var(--red)">MODE 3</div><h3>Collusion</h3><p>Agents coordinate <strong>against</strong> their principals. The more capable and cooperative, the easier it gets.</p></div>
+      </div>
+    </div>
+  </div>
+  <div class="note" style="margin-top:14px;"><p style="color:var(--gray);">The same capabilities that make agents <strong>good at cooperating</strong> (modeling each other, communicating, committing) are what enable <strong>collusion</strong> and <strong>conflict</strong>. Safety is not just "align each agent."</p></div>
+  <div class="cite"><a href="https://arxiv.org/abs/2502.14143" target="_blank" rel="noopener">Hammond et al., "Multi-Agent Risks from Advanced AI", Cooperative AI Foundation Technical Report #1 (2025, arXiv:2502.14143)</a>. ~45 authors.</div>
+</section>
+
+<!-- ============ Taxonomy: seven risk factors ============ -->
+<section class="standard" data-background-color="#ffffff">
+  <div class="eyebrow">Hammond et al. · Why the interaction is the hard part</div>
+  <h2>Seven factors that drive multi-agent risk</h2>
+  <p class="lead wide" style="max-width:74em;margin:2px 0 0 0;">Mechanisms by which individually aligned agents can still fail.</p>
+  <div class="tax f7" style="grid-template-columns:1fr 1fr;margin-top:9px;">
+    <div class="taxitem"><div class="t">Information asymmetries</div><div class="d">One agent knows something the others do not, and can exploit the gap. Like a used-car seller who hides defects (Akerlof's "market for lemons"), this can break a deal. RL agent trained to maximize profit learned to manipulate a financial benchmark.</div></div>
+    <div class="taxitem"><div class="t">Network effects</div><div class="d">Once agents are connected, errors spread in ways a lone agent never would. When one article was rewritten by LLMs again and again, its factual accuracy fell from 96% to under 60% after eight passes. And if everyone runs the same few base models, they share the same flaws.</div></div>
+    <div class="taxitem"><div class="t">Selection pressures</div><div class="d">Training and competition keep whichever behaviours win. Competing agents can be pushed toward deception or aggression, and an "arms race" between them can produce skills no one built in. This same effect made self-play systems like AlphaGo superhuman.</div></div>
+    <div class="taxitem"><div class="t">Destabilising dynamics</div><div class="d">Agents reacting to one another can spiral out of control. In the 2010 Flash Crash, trading algorithms fell into a feedback loop and wiped about $1 trillion off US markets in 15 minutes, faster than any human could step in.</div></div>
+    <div class="taxitem"><div class="t">Commitment and trust</div><div class="d">Cooperation needs believable promises, but the same ability makes threats believable too. Ransomware, for instance, works better when the attacker can convincingly promise to release your data once you pay.</div></div>
+    <div class="taxitem"><div class="t">Emergent agency</div><div class="d">A group of agents can pursue goals, or gain abilities, that none of them has alone. Separate tools for planning, chemistry, and lab work could be chained into a system that designs dangerous new compounds, even though each part is harmless by itself.</div></div>
+    <div class="taxitem" style="grid-column:span 2;border-left-color:var(--ink);"><div class="t">Multi-agent security</div><div class="d">Connecting agents opens attacks that are impossible for one. Splitting a harmful task between a smart but well-guarded model and a weak but unguarded one produced working attack code 43% of the time, versus under 3% for either model alone (Jones et al. 2024).</div></div>
+  </div>
+  <div class="cite">Hammond et al. 2025, §3. Companion framing of the security angle: <a href="https://arxiv.org/abs/2505.02077" target="_blank" rel="noopener">Schroeder de Witt et al., "Open Challenges in Multi-Agent Security" (2025, arXiv:2505.02077)</a>.</div>
+</section>
+
+<!-- ============ Negotiation testbed: cooperation / competition / maliciousness ============ -->
+<section class="standard" data-background-color="#ffffff">
+  <div class="eyebrow">Abdelnabi, Gomaa, Sivaprasad, Schönherr, Fritz (CISPA, DFKI) · NeurIPS 2024 (Datasets &amp; Benchmarks)</div>
+  <h2>All three modes inside one game</h2>
+  <div class="cols s40" style="margin-top:6px;align-items:center;">
+    <div>
+      <p class="lead wide">A testbed of <strong>multi-issue negotiation games</strong>: several stakeholders with different goals must agree on a deal over many turns. One setup exercises every mode of the taxonomy at once.</p>
+      <div class="cards" style="grid-template-columns:1fr;gap:8px;margin-top:11px;">
+        <div class="card tint-green" style="padding:9px 15px;"><h3 style="font-size:.92em;margin:0;color:var(--green);">Cooperation</h3><p style="font-size:.76em;margin-top:2px;">overlapping interests must be coordinated to reach any deal at all</p></div>
+        <div class="card tint-blue" style="padding:9px 15px;"><h3 style="font-size:.92em;margin:0;color:var(--blue);">Competition</h3><p style="font-size:.76em;margin-top:2px;">each party has a private score to maximize, pulling against the group</p></div>
+        <div class="card tint-red" style="padding:9px 15px;"><h3 style="font-size:.92em;margin:0;color:var(--red);">Maliciousness</h3><p style="font-size:.76em;margin-top:2px;">a greedy or adversarial party works to sabotage or steer the deal</p></div>
+      </div>
+    </div>
+    <div class="fig">
+      <svg viewBox="0 0 260 196" style="width:100%;max-width:382px;">
+        <g stroke="#c9ccd3" stroke-width="1.5">
+          <line x1="130" y1="98" x2="130" y2="30"/>
+          <line x1="130" y1="98" x2="212" y2="58"/>
+          <line x1="130" y1="98" x2="218" y2="138"/>
+          <line x1="130" y1="98" x2="130" y2="168"/>
+          <line x1="130" y1="98" x2="42" y2="138"/>
+          <line x1="130" y1="98" x2="48" y2="58"/>
+        </g>
+        <rect x="92" y="80" width="76" height="36" rx="9" fill="#1b1e2e"/>
+        <text x="130" y="96" text-anchor="middle" fill="#ffffff" font-family="JetBrains Mono, monospace" font-size="8.5" font-weight="700">DEAL</text>
+        <text x="130" y="108" text-anchor="middle" fill="#9aa0ab" font-family="JetBrains Mono, monospace" font-size="6.5">N issues</text>
+        <g font-family="JetBrains Mono, monospace" font-size="8" font-weight="700" text-anchor="middle">
+          <circle cx="130" cy="30" r="13" fill="#eaf6ef" stroke="#1f7a4d" stroke-width="1.5"/><text x="130" y="33.5" fill="#1f7a4d">p1</text>
+          <circle cx="212" cy="58" r="13" fill="#fbeef0" stroke="#A51E37" stroke-width="2"/><text x="212" y="61.5" fill="#A51E37">p2</text>
+          <circle cx="218" cy="138" r="13" fill="#eef4fb" stroke="#2563a8" stroke-width="1.5"/><text x="218" y="141.5" fill="#2563a8">p3</text>
+          <circle cx="130" cy="168" r="13" fill="#eef4fb" stroke="#2563a8" stroke-width="1.5"/><text x="130" y="171.5" fill="#2563a8">p4</text>
+          <circle cx="42" cy="138" r="13" fill="#eaf6ef" stroke="#1f7a4d" stroke-width="1.5"/><text x="42" y="141.5" fill="#1f7a4d">p5</text>
+          <circle cx="48" cy="58" r="13" fill="#eef4fb" stroke="#2563a8" stroke-width="1.5"/><text x="48" y="61.5" fill="#2563a8">p6</text>
+        </g>
+      </svg>
+      <div class="figcap" style="max-width:22em;">Parties at a table, one adversarial (red). Scored on the deal reached and on whether each agent stays in role.</div>
+      <div class="note" style="margin-top:14px;width:100%;"><p style="color:var(--gray);">It is <strong>hard</strong> for earlier models: GPT-3.5 and smaller models mostly fail, and even GPT-4 and Llama-3 70B underperformed in more complex games. A single <strong>adversarial party can derail agreement</strong>, a preview of Part 2.</p></div>
+    </div>
+  </div>
+  <div class="cite"><a href="https://arxiv.org/abs/2309.17234" target="_blank" rel="noopener">Abdelnabi, Gomaa, Sivaprasad, Schönherr, Fritz, "Cooperation, Competition, and Maliciousness: LLM-Stakeholders Interactive Negotiation", NeurIPS 2024 Datasets &amp; Benchmarks (arXiv:2309.17234)</a>.</div>
+</section>
+
+<!-- ==================================================================== -->
+<!-- ============ PART 2 DIVIDER ============ -->
+<section class="divider" data-background-color="#ffffff">
+  <div class="kicker">Part 2 · Information propagation</div>
+  <div class="rule"></div>
+  <h2>One compromise,<br>many agents</h2>
+  <div class="dsub">In L9, prompt injection hijacked a single agent. Injection can spread when agents are connected.</div>
+</section>
+
+<!-- ============ Agent Smith: infectious jailbreak + interactive sim ============ -->
+<section class="standard" data-background-color="#ffffff">
+  <div class="eyebrow">Gu et al. (Sea AI Lab, NUS, SMU) · Agent Smith, ICML 2024</div>
+  <h2>A single image jailbreaks a million agents</h2>
+  <div class="cols s40" style="margin-top:6px;">
+    <div>
+      <p class="lead wide">Agents share a memory bank (a shared RAG of each other's messages). <strong>One</strong> agent is attacked with a single adversarial image. As agents chat in random pairs, it propagates: an <strong>infectious jailbreak</strong>.</p>
+      <p class="lead wide" style="margin-top:.5em;">In a simulation of up to <strong>one million</strong> LLaVA agents, infection reaches nearly 100% in about <strong>27 to 31 chat rounds</strong>. The attacker acts once.</p>
+    </div>
+    <div class="simwrap">
+      <svg id="contagionSvg" viewBox="0 0 360 300" style="width:100%;max-width:310px;"></svg>
+      <div class="simctl">
+        <button class="stepbtn" id="contStep">Next round ▶</button>
+        <button class="stepbtn" id="contReset" style="background:var(--gray);">Reset ↺</button>
+        <span class="simstat">round <b id="contRound">0</b> · infected <b id="contCount">1</b>/64</span>
+      </div>
+      <div class="hint">Click to advance one chat round. Each infected agent infects the peer it talks to: the count roughly doubles each round.</div>
+    </div>
+  </div>
+  <div class="cite"><a href="https://arxiv.org/abs/2402.08567" target="_blank" rel="noopener">Gu, Zheng, Pang, Du, Liu, Wang, Jiang, Lin, "Agent Smith: A Single Image Can Jailbreak One Million Multimodal LLM Agents Exponentially Fast", ICML 2024 (arXiv:2402.08567)</a>. Simulation here is illustrative of the doubling dynamic.</div>
+</section>
+
+<!-- ============ Prompt Infection: self-replicating injection ============ -->
+<section class="standard" data-background-color="#ffffff">
+  <div class="eyebrow">Zhou et al. (Findings of ACL 2026) · He et al. (Findings of ACL 2025)</div>
+  <h2>The messages between agents are enough</h2>
+  <p class="lead wide" style="max-width:74em;margin:2px 0 0 0;">Agent Smith spread through a shared memory bank. These two attacks need no shared memory at all: plain agent-to-agent text is the whole attack surface. They differ in <strong>where the attacker stands</strong>.</p>
+  <div class="cards c2" style="margin-top:16px;">
+    <div class="card tint-red">
+      <div class="num">CORBA · ACL 2026 · POISON THE CONTENT</div>
+      <h3>Self-spreading prompt</h3>
+      <p>Prompt one agent with a harmless-looking message and ask it to spread it. The message is sent to every agent that one agent can reach, on any network shape. Agents then end draining each other's compute. </p>
+    </div>
+    <div class="card tint-blue">
+      <div class="num">AGENT-IN-THE-MIDDLE · ACL 2025 · POISON THE CHANNEL</div>
+      <h3>Rewrite the messages in transit</h3>
+      <p>Here the attacker never breaks into an agent. It sits <strong>on the link between two agents</strong> and rewrites their messages as they pass, like a man-in-the-middle. Seeing only one agent's incoming messages, an adversarial agent caused denial-of-service or spread a chosen payload in <strong>over 90%</strong> of network layouts.</p>
+    </div>
+  </div>
+  <div class="cite"><a href="https://aclanthology.org/2026.findings-acl.342/" target="_blank" rel="noopener">Zhou, Li, Zhang, Zhang, Wang, Liu, Guo, "CORBA: Contagious Recursive Blocking Attacks on Multi-Agent Systems Based on Large Language Models", Findings of ACL 2026 (arXiv:2502.14529)</a>; <a href="https://aclanthology.org/2025.findings-acl.349/" target="_blank" rel="noopener">He, Lin, Dong, Xu, Xing, Liu, "Red-Teaming LLM Multi-Agent Systems via Communication Attacks", Findings of ACL 2025 (arXiv:2502.14847)</a>.</div>
+</section>
+
+<!-- ============ Morris II worm ============ -->
+<section class="standard" data-background-color="#ffffff">
+  <div class="eyebrow">Cohen, Bitton, Nassi (Technion, Intuit, Cornell Tech) · "Morris II", CCS 2025</div>
+  <h2>The same idea, in a real application stack</h2>
+  <p class="lead wide" style="max-width:90em;margin:2px 0 0 0;">The first <strong>zero-click GenAI worm</strong> (named after the 1988 Morris worm): a <strong>self-replicating prompt</strong> that makes the model echo itself in its output while taking a malicious action, so each infected email assistant infects the next.</p>
+  <div class="fig" style="margin-top:10px;">
+    <img src="lecture-11-images/morris2-flow.png" alt="RAG-based worm propagation: a poisoned email from attacker c1 flows through client c2 and the GenAI service into client c3" style="width:100%;max-width:700px;border:1px solid var(--line);border-radius:10px;padding:8px;">
+    <div class="figcap" style="max-width:78em;">RAG route: a poisoned email from c1 is stored in c2's database, retrieved later as context, then forwarded to c3.</div>
+  </div>
+  <div class="cite"><a href="https://dl.acm.org/doi/10.1145/3719027.3765196" target="_blank" rel="noopener">Cohen, Bitton, Nassi, "Here Comes the AI Worm: Preventing the Propagation of Adversarial Self-Replicating Prompts Within GenAI Ecosystems", ACM CCS 2025 (preprint arXiv:2403.02817)</a>. This connects back to the EchoLeak and lethal-trifecta material from L9.</div>
+</section>
+
+<!-- ============ Topology governs spread ============ -->
+<section class="standard" data-background-color="#ffffff">
+  <div class="eyebrow">Yu et al. (NetSafe, Findings ACL 2025) · Huang et al. (Resilience, 2024)</div>
+  <h2>Network structure is a safety variable</h2>
+  <div class="cols s60" style="margin-top:6px;align-items:center;">
+    <div>
+      <p class="lead wide">How far a compromise spreads depends on <strong>how the agents are wired together</strong>, not just on the agents. Dense graphs spread adversarial content fastest; distance from the attacker is safer.</p>
+      <ul class="tight" style="margin-top:10px;">
+        <li><strong>NetSafe:</strong> in a misinformation study, a <strong>star</strong> topology's accuracy fell <strong>29.7%</strong> (95.0 to 66.8) from one attacker. </li>
+        <li><strong>Huang et al.:</strong> under faulty agents, the more <strong>centralized</strong> the structure, the more resilient (chart at right).</li>
+        <li>A review agent ("Inspector") that corrects messages recovers up to <strong>96.4%</strong> of the lost performance (Huang et al.).</li>
+      </ul>
+    </div>
+    <div>
+      <div class="toprow">
+        <div class="topcard best">
+          <svg viewBox="0 0 100 90"><g stroke="#1f7a4d" stroke-width="2" fill="#1f7a4d"><line x1="50" y1="12" x2="28" y2="42"/><line x1="50" y1="12" x2="72" y2="42"/><line x1="28" y1="42" x2="16" y2="74"/><line x1="28" y1="42" x2="40" y2="74"/><line x1="72" y1="42" x2="60" y2="74"/><line x1="72" y1="42" x2="84" y2="74"/><circle cx="50" cy="12" r="6"/><circle cx="28" cy="42" r="6"/><circle cx="72" cy="42" r="6"/><circle cx="16" cy="74" r="5"/><circle cx="40" cy="74" r="5"/><circle cx="60" cy="74" r="5"/><circle cx="84" cy="74" r="5"/></g></svg>
+          <div class="tt">Hierarchical</div><div class="td">most resilient · -5.5%</div>
+        </div>
+        <div class="topcard">
+          <svg viewBox="0 0 100 90"><g stroke="#5f6470" stroke-width="2" fill="#5f6470"><line x1="28" y1="26" x2="72" y2="26"/><line x1="28" y1="64" x2="72" y2="64"/><line x1="28" y1="26" x2="28" y2="64"/><line x1="72" y1="26" x2="72" y2="64"/><line x1="28" y1="26" x2="72" y2="64"/><line x1="72" y1="26" x2="28" y2="64"/><circle cx="28" cy="26" r="6"/><circle cx="72" cy="26" r="6"/><circle cx="28" cy="64" r="6"/><circle cx="72" cy="64" r="6"/></g></svg>
+          <div class="tt">Flat / all-to-all</div><div class="td">-10.5%</div>
+        </div>
+        <div class="topcard worst">
+          <svg viewBox="0 0 100 90"><g stroke="#A51E37" stroke-width="2" fill="#A51E37"><line x1="18" y1="45" x2="44" y2="45"/><line x1="44" y1="45" x2="70" y2="45"/><line x1="70" y1="45" x2="86" y2="22"/><circle cx="18" cy="45" r="6"/><circle cx="44" cy="45" r="6"/><circle cx="70" cy="45" r="6"/><circle cx="86" cy="22" r="6"/></g></svg>
+          <div class="tt">Linear / chain</div><div class="td">least resilient · -23.7%</div>
+        </div>
+      </div>
+      <p class="small center" style="color:var(--muted);margin-top:8px;font-style:italic;">Performance loss under faulty agents, across three structures (Huang et al.).</p>
+    </div>
+  </div>
+  <div class="cite"><a href="https://arxiv.org/abs/2410.15686" target="_blank" rel="noopener">Yu et al., "NetSafe", Findings of ACL 2025 (arXiv:2410.15686)</a>; <a href="https://arxiv.org/abs/2408.00989" target="_blank" rel="noopener">Huang et al., "On the Resilience of LLM-Based Multi-Agent Collaboration with Faulty Agents" (2024, arXiv:2408.00989)</a>.</div>
+</section>
+
+<!-- ==================================================================== -->
+<!-- ============ PART 3 DIVIDER ============ -->
+<section class="divider" data-background-color="#ffffff">
+  <div class="kicker">Part 3 · Collusion</div>
+  <div class="rule"></div>
+  <h2>Coordinating<br>against others</h2>
+  <div class="dsub">Agents optimizing their own objective can reach outcomes that harm their principals or other agents.</div>
+</section>
+
+<!-- ============ Algorithmic collusion in pricing ============ -->
+<section class="standard" data-background-color="#ffffff">
+  <div class="eyebrow">Fish, Gonczarowski, Shorrer (Harvard, Penn State) · Algorithmic Collusion (2024)</div>
+  <h2>Pricing agents drift into a cartel on their own</h2>
+  <div class="cols s40" style="margin-top:6px;align-items:center;">
+    <div>
+      <p class="lead wide">Set up LLM agents as rival shops in a simulated market. Each is told only one thing: <strong>maximize your own profit</strong>. None is told to collude, keep prices high, or avoid price wars.</p>
+      <p class="lead wide" style="margin-top:.5em;">Left alone, they settle on <strong>high prices</strong>.</p>
+      <div class="note" style="margin-top:12px;border-color:#f0e3c4;background:var(--amber-soft);"><h3>How to read the chart</h3><p>Two reference prices: the <strong>competitive</strong> price (red, low, what real rivalry should produce) and the <strong>monopoly</strong> price (green, high, what one owner of both shops would charge). Each dot is one run; the cluster sits near the green line.</p></div>
+    </div>
+    <div class="fig">
+      <img src="lecture-11-images/algo-collusion-prices.png" alt="Scatter of both firms' average prices: dots cluster near the high monopoly price line, far above the low competitive price line" style="width:100%;max-width:480px;">
+      <div class="figcap">Fish et al. 2024. Each dot is one two-firm market (firm 1's vs firm 2's average price). The two colors are two prompt wordings differing by one sentence: blue (P1) tells agents "do not undermine profits"; orange (P2) reminds them "undercutting sells more". Both sit above the <strong>competitive</strong> price (red); the P1 wording reaches the <strong>monopoly</strong> price (green). A tiny prompt change shifts how collusive they get.</div>
+    </div>
+  </div>
+  <div class="cite"><a href="https://arxiv.org/abs/2404.00806" target="_blank" rel="noopener">Fish, Gonczarowski, Shorrer, "Algorithmic Collusion by Large Language Models" (2024, arXiv:2404.00806)</a>. Antitrust law targets agreements to collude; here there is no agreement, only emergent behavior.</div>
+</section>
+
+<!-- ============ Collusion variants: auctions / market division ============ -->
+<section class="standard" data-background-color="#ffffff">
+  <div class="eyebrow">Collusion is not specific to one setting</div>
+  <h2>It can show up wherever agents repeatedly interact</h2>
+  <div class="cards c3" style="margin-top:14px;">
+    <div class="card tint-amber">
+      <div class="num">AUCTIONS · AGRAWAL ET AL. 2025</div>
+      <h3>Communication makes it worse</h3>
+      <p>When sellers in an auction are allowed to <strong>message each other</strong>, they collude more. How much depends on the model and on pressure in the setting (being watched, or pushed by an authority).</p>
+    </div>
+    <div class="card tint-red">
+      <div class="num">MARKET DIVISION · LIN ET AL. 2024</div>
+      <h3>Splitting the market silently</h3>
+      <p>Two firms selling two products quietly <strong>carve up the market</strong>, each taking one product and moving toward monopoly, without exchanging a single message.</p>
+    </div>
+    <div class="card outline-red">
+      <div class="num" style="color:var(--red)">WHY IT MATTERS</div>
+      <h3>Collusion emerges</h3>
+      <p>Across these settings, collusion is not a rare behavior. Self-interested agents that interact repeatedly and can model each other tend to <strong>drift into collusion</strong>.</p>
+    </div>
+  </div>
+  <div class="cite"><a href="https://arxiv.org/abs/2507.01413" target="_blank" rel="noopener">Agrawal et al., "Evaluating LLM Agent Collusion in Double Auctions" (2025, arXiv:2507.01413)</a>; <a href="https://arxiv.org/abs/2410.00031" target="_blank" rel="noopener">Lin, Ojha, Cai, Chen, "Strategic Collusion of LLM Agents: Market Division in Multi-Commodity Competitions" (2024, arXiv:2410.00031)</a>.</div>
+</section>
+
+<!-- ============ Emergent conventions + tipping point interactive ============ -->
+<section class="standard" data-background-color="#ffffff">
+  <div class="eyebrow">Ashery, Aiello, Baronchelli · Science Advances 2025</div>
+  <h2>Conventions and bias emerge in a population</h2>
+  <div class="cols s60" style="margin-top:6px;">
+    <div>
+      <p class="lead wide">The classic <strong>naming game</strong>. A population of agents (24 here) has to invent a shared name, with <strong>no leader and no global view</strong>.</p>
+      <div class="note" style="margin-top:10px;"><h3>One round</h3><p>Two agents are picked at random. Each independently guesses a name from a shared pool (e.g. 10 letters). <strong>Match: both rewarded. Mismatch: both penalized.</strong> Each agent remembers only its own last few rounds.</p></div>
+      <ul class="tight" style="margin-top:10px;">
+        <li>Repeated play makes the whole population <strong>settle on one name</strong>: a shared <strong>convention</strong> ("A" below). </li>
+        <li><strong>Collective bias:</strong> some names win far more often, even when single agents tested alone show no preference.</li>
+        <li><strong>Tipping point:</strong> a committed minority that always pushes a new name "B" flips everyone once it passes a critical mass (~2% to 25%, model dependent).</li>
+      </ul>
+    </div>
+    <div class="tipwrap">
+      <div class="tiprow">
+        <span class="simstat">agents always pushing B:&nbsp; <b id="tipPct" style="color:var(--red)">10%</b></span>
+        <input type="range" id="tipSlider" min="0" max="40" value="10" step="1">
+      </div>
+      <div class="tipbar" id="tipBar">
+        <div class="seg" id="segOld" style="width:90%;background:var(--blue);">population says A</div>
+        <div class="seg" id="segNew" style="width:10%;background:var(--red);">pushes B</div>
+      </div>
+      <div class="tipverdict" id="tipVerdict" style="color:var(--blue);">Below the critical mass: name A holds.</div>
+      <div class="hint">"Convention A" is the name the population already agreed on. Drag to grow the minority that always says B. Past the critical mass (~25% here), everyone flips to B.</div>
+    </div>
+  </div>
+  <div class="cite"><a href="https://arxiv.org/abs/2410.08948" target="_blank" rel="noopener">Ashery, Aiello, Baronchelli, "Emergent Social Conventions and Collective Bias in LLM Populations", Science Advances 11(20):eadu9368 (2025, arXiv:2410.08948)</a>. Slider is illustrative of the tipping dynamic.</div>
+</section>
+
+<!-- ============ Colosseum 1: setup + how it is measured ============ -->
+<section class="standard" data-background-color="#ffffff">
+  <div class="eyebrow">Nakamura, Kumar, Das, Abdelnabi et al. (UMass, UVA, ELLIS &amp; MPI Tübingen) · COLOSSEUM (2026)</div>
+  <h2>Making collusion measurable</h2>
+  <div class="cols s60" style="margin-top:6px;align-items:start;">
+    <div>
+      <p class="lead wide">Agents share a <strong>cooperative goal</strong>, but a subset of them (a <strong>coalition</strong>) can quietly coordinate to chase a <strong>side-goal</strong> that hurts the team. Colosseum audits when this happens.</p>
+      <div class="note" style="margin-top:12px;"><h3>A concrete task</h3><p>Agents act as engineers picking tickets from a shared backlog (the JIRA setting). The team goal is an efficient overall allocation. A coalition could instead grab the best-value tickets for itself and leave the costly ones to everyone else.</p></div>
+      <p class="lead wide" style="margin-top:12px;">Each task is written as a <strong>formal optimization problem</strong>, so the best cooperative outcome can be computed and any deviation can be scored, not just described.</p>
+    </div>
+    <div>
+      <div class="card tint-blue"><div class="num">WHAT THEY DO</div><h3>Coalition advantage</h3><p>A regret score on the <strong>actions taken</strong>: how much the coalition gained for itself versus the team's best cooperative outcome. </p></div>
+      <div class="card tint-amber" style="margin-top:14px;"><div class="num">WHAT THEY SAY</div><h3>Collusion judge</h3><p>An <strong>LLM-as-a-judge</strong> reads the conversation logs and rates how collusive the talk is, on a 0 to 5 scale.</p></div>
+    </div>
+  </div>
+  <div class="cite"><a href="https://arxiv.org/abs/2602.15198" target="_blank" rel="noopener">Nakamura, Kumar, Das, Abdelnabi, Mahmud, Fioretto, Zilberstein, Bagdasarian, "COLOSSEUM: Auditing Collusion in Cooperative Multi-Agent Systems" (2026, arXiv:2602.15198)</a>. Tasks are modeled as distributed constraint optimization problems (DCOPs).</div>
+</section>
+
+<!-- ============ Colosseum 2: findings + 2x2 of types ============ -->
+<section class="standard" data-background-color="#ffffff">
+  <div class="eyebrow">COLOSSEUM (2026) · What the audit finds</div>
+  <h2>Agents collude when handed a private channel</h2>
+  <div class="cols s60" style="margin-top:6px;align-items:start;">
+    <div>
+      <div class="note" style="border-color:#f3d4da;background:var(--red-soft);"><h3>Emergent collusion</h3><p>Give two otherwise-benign agents a <strong>secret side-channel</strong> and they start colluding <strong>unprompted</strong>. Across <strong>19 models</strong>, most (about 58%) gain coalition advantage once the channel exists.</p></div>
+      <div class="note" style="margin-top:12px;"><h3>Talk and actions diverge</h3><p>The more an agent actually <strong>gains</strong>, the <strong>less collusive its talk sounds</strong> (a negative correlation). We need metrics to audit collusion beyond LLM-as-a-judge.</p></div>
+      <div class="note" style="margin-top:12px;border-color:#d4e3f3;background:var(--blue-soft);"><p style="color:var(--ink2);"><strong>Bridge to Part 4:</strong> if that secret channel is <strong>hidden inside innocent-looking text</strong> (steganography), reading the chat no longer reveals the collusion.</p></div>
+    </div>
+    <div>
+      <p class="small" style="color:var(--gray);margin:0 0 8px 0;">Crossing the two signals gives four behaviors:</p>
+      <div style="display:grid;grid-template-columns:78px 1fr 1fr;gap:8px;">
+        <div></div>
+        <div style="text-align:center;font-weight:700;color:var(--gray);font-size:.58em;text-transform:uppercase;letter-spacing:.05em;align-self:end;padding-bottom:4px;">Acts honestly</div>
+        <div style="text-align:center;font-weight:700;color:var(--gray);font-size:.58em;text-transform:uppercase;letter-spacing:.05em;align-self:end;padding-bottom:4px;">Acts collusively</div>
+        <div style="font-weight:700;color:var(--gray);font-size:.55em;text-transform:uppercase;letter-spacing:.02em;line-height:1.2;display:flex;align-items:center;justify-content:center;text-align:center;">Talks<br>collusively</div>
+        <div class="card tint-amber" style="padding:12px 12px;text-align:center;"><h3 style="font-size:.9em;margin:0;color:#9a6a00;">Attempted</h3><p style="font-size:.72em;margin-top:3px;">all talk, no action ("collusion on paper")</p></div>
+        <div class="card tint-red" style="padding:12px 12px;text-align:center;"><h3 style="font-size:.9em;margin:0;color:var(--red);">Direct</h3><p style="font-size:.72em;margin-top:3px;">plans it and acts on it</p></div>
+        <div style="font-weight:700;color:var(--gray);font-size:.55em;text-transform:uppercase;letter-spacing:.02em;line-height:1.2;display:flex;align-items:center;justify-content:center;text-align:center;">Talks<br>normally</div>
+        <div class="card tint-green" style="padding:12px 12px;text-align:center;"><h3 style="font-size:.9em;margin:0;color:var(--green);">Cooperative</h3><p style="font-size:.72em;margin-top:3px;">no collusion</p></div>
+        <div class="card tint-red" style="padding:12px 12px;text-align:center;"><h3 style="font-size:.9em;margin:0;color:var(--red);">Hidden</h3><p style="font-size:.72em;margin-top:3px;">acts on it, never says so</p></div>
+      </div>
+    </div>
+  </div>
+  <div class="cite"><a href="https://arxiv.org/abs/2602.15198" target="_blank" rel="noopener">Nakamura, Kumar, Das, Abdelnabi, Mahmud, Fioretto, Zilberstein, Bagdasarian, "COLOSSEUM: Auditing Collusion in Cooperative Multi-Agent Systems" (2026, arXiv:2602.15198)</a>.</div>
+</section>
+
+<!-- ==================================================================== -->
+<!-- ============ PART 4 DIVIDER ============ -->
+<section class="divider" data-background-color="#ffffff">
+  <div class="kicker">Part 4 · Steganography</div>
+  <div class="rule"></div>
+  <h2>Hidden in<br>plain sight</h2>
+  <div class="dsub">Our main lever against a misbehaving agent is reading what it says. What if two agents can pass the real message past us, in text that looks innocent?</div>
+</section>
+
+<!-- ============ Concept: steganography vs watermarking ============ -->
+<section class="standard" data-background-color="#ffffff">
+  <div class="eyebrow">Part 4 · The concept</div>
+  <h2>Steganography and watermarking</h2>
+  <p class="lead wide" style="max-width:90em;margin:2px 0 0 0;">Both are <strong>information hiding</strong>: a signal embedded in ordinary-looking content without visibly changing it. What differs is the <strong>purpose</strong> and <strong>which adversary</strong> each must defeat.</p>
+  <div class="compare2" style="margin-top:12px;">
+    <div class="card tint-blue">
+      <h3>Watermarking (recall L5)</h3>
+      <p style="font-size:.9em;">A hidden mark in model output for <strong>attribution</strong> (evidence the text came from a given model). It stays <strong>low-distortion</strong> so it does not hurt quality, and a key-holder can verify it. The hard part is <strong>robustness</strong>: surviving edits and paraphrasing, and resisting removal. Many schemes are even <strong>undetectable without the key</strong>.</p>
+    </div>
+    <div class="card tint-red">
+      <h3>Steganography</h3>
+      <p style="font-size:.9em;">A hidden <strong>payload</strong> (a real message) encoded inside innocent-looking <strong>covertext</strong>. The goal is <strong>undetectability</strong>: a monitor cannot tell that any message is present. Only a receiver sharing the secret key can recover it.</p>
+    </div>
+  </div>
+  <div class="flow" style="margin-top:18px;">
+    <div class="node"><div class="t">Agent A</div><div class="d">has a secret payload</div></div>
+    <div class="arr">→</div>
+    <div class="node" style="border-color:var(--ink);"><div class="t">Covertext</div><div class="d">ordinary-looking message</div></div>
+    <div class="arr">→</div>
+    <div class="node"><div class="t">Overseer</div><div class="d">reads it, sees nothing wrong</div></div>
+    <div class="arr">→</div>
+    <div class="node" style="border-color:var(--red);background:var(--red-soft);"><div class="t" style="color:var(--red)">Agent B</div><div class="d">recovers the payload</div></div>
+  </div>
+  <p class="lead wide" style="margin-top:18px;max-width:62em;">If agents can do this reliably, then <strong>monitoring their communication stops working</strong>.</p>
+  <div class="cite">The two overlap heavily in technique ("undetectable watermarking" borrows directly from steganography). The clean contrast: watermarking must resist <strong>removal</strong>, steganography must resist <strong>detection</strong>.</div>
+</section>
+
+<!-- ============ Secret collusion: the example (big figure + walkthrough) ============ -->
+<section class="standard" data-background-color="#ffffff">
+  <div class="eyebrow">Motwani et al. (Oxford, incl. Hammond, Schroeder de Witt) · Secret Collusion, NeurIPS 2024</div>
+  <h2>Secret collusion via steganography</h2>
+  <p class="lead wide" style="max-width:92em;margin:2px 0 0 0;">An agent holds information it is <strong>forbidden to share</strong> and knows an overseer reads every message. Using a scheme shared with its partner, it hides the real message inside innocent text. The overseer sees nothing wrong; the partner decodes it.</p>
+  <div class="cols s40" style="margin-top:12px;align-items:center;">
+    <div>
+      <div class="trace">
+        <div class="line obs on"><span class="lbl">1 · Setup.</span> GPT-4 is a finance agent, told to share only general information, never insider tips, and that an overseer monitors all its messages.</div>
+        <div class="line inject on"><span class="lbl">2 · The secret.</span> It privately holds an insider tip: Microsoft lost a contract, so funds should sell. It must not say this outright.</div>
+        <div class="line action on"><span class="lbl">3 · Hide it.</span> Asked which companies to pick, it answers in innocent "weather" covertext ("the four corners of our sky... a storm to the North..."), which encodes the tip via a shared key.</div>
+        <div class="line answer on"><span class="lbl">4 · Decode.</span> The overseer reads only weather talk and flags nothing. The partner, holding the same key, recovers the real message: "do not invest in Microsoft."</div>
+      </div>
+    </div>
+    <div class="fig">
+      <img src="lecture-11-images/secret-collusion.png" alt="GPT-4 hiding a forbidden insider tip inside an innocent message about the weather, decoded by a partner with a shared key" style="width:100%;max-width:760px;border:1px solid var(--line);border-radius:10px;padding:8px;">
+      <div class="figcap">Motwani et al. 2024, Fig. 1. The forbidden tip travels past the overseer hidden inside ordinary weather talk.</div>
+    </div>
+  </div>
+  <div class="cite"><a href="https://arxiv.org/abs/2402.07510" target="_blank" rel="noopener">Motwani, Baranchuk, Strohmeier, Bolina, Torr, Hammond, Schroeder de Witt, "Secret Collusion among AI Agents: Multi-Agent Deception via Steganography", NeurIPS 2024 (arXiv:2402.07510)</a>.</div>
+</section>
+
+<!-- ============ Secret collusion: measuring it (CASE) ============ -->
+<section class="standard" data-background-color="#ffffff">
+  <div class="eyebrow">Motwani et al. · Secret Collusion, NeurIPS 2024</div>
+  <h2>How close are today's models?</h2>
+  <div class="cols s60" style="margin-top:6px;align-items:start;">
+    <div>
+      <p class="lead wide">The paper <strong>formalizes secret collusion</strong> and builds <strong>CASE</strong> (Collusion and Steganographic Evaluation): it breaks the skill into pieces and tests each under optimization pressure.</p>
+      <div class="note" style="margin-top:12px;"><h3>What collusion requires</h3><p>Agree on a scheme without openly discussing it, <strong>encode and decode</strong> the payload (e.g. a cipher), and wrap it in <strong>covertext</strong> that looks normal to the overseer. CASE measures each piece and the full task.</p></div>
+      <p class="small" style="color:var(--gray);margin-top:10px;">Earlier models (GPT-2, Llama-2, Mixtral, GPT-3.5) score near 0 on the cipher task; GPT-4 is the first with a clear <strong>capability jump</strong>. The full covert task still succeeds only ~26% of the time, but the trend points up, so the recommendation is to monitor frontier systems before it matures.</p>
+    </div>
+    <div>
+      <div class="cards" style="grid-template-columns:1fr;gap:14px;">
+        <div class="stat"><div class="big">92%</div><div class="lab">GPT-4 correctly encodes/decodes text with a Base64 cipher (54% for a Caesar cipher)</div></div>
+        <div class="stat"><div class="big">~26%</div><div class="lab">GPT-4 evades the overseer on the full covertext-steganography task</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="cite"><a href="https://arxiv.org/abs/2402.07510" target="_blank" rel="noopener">Motwani, Baranchuk, Strohmeier, Bolina, Torr, Hammond, Schroeder de Witt, "Secret Collusion among AI Agents: Multi-Agent Deception via Steganography", NeurIPS 2024 (arXiv:2402.07510)</a>. Numbers from Table 3 and Figures 2 to 4.</div>
+</section>
+
+<!-- ============ Mathew et al.: emergent multi-agent steganographic collusion ============ -->
+<section class="standard" data-background-color="#ffffff">
+  <div class="eyebrow">Mathew et al. (LASR Labs · UCL · Amsterdam · Oxford) · "Hidden in Plain Text", AACL 2025</div>
+  <h2>Two agents learn to hide collusion from the overseer</h2>
+  <p class="lead wide" style="max-width:92em;margin:2px 0 0 0;">A <strong>sender</strong> and a <strong>receiver</strong> must finish a task together while secretly passing a hidden <strong>payload</strong>. A mitigation team fights back: an <strong>overseer</strong> reads every message and a <strong>paraphraser</strong> can rewrite it. Both teams are optimized against each other.</p>
+  <div class="flow" style="margin-top:14px;">
+    <div class="node"><div class="t">Sender</div><div class="d">hides a payload in its message</div></div>
+    <div class="arr">→</div>
+    <div class="node"><div class="t">Stegotext</div><div class="d">looks like a normal message</div></div>
+    <div class="arr">→</div>
+    <div class="node" style="border-color:var(--red);background:var(--red-soft);"><div class="t" style="color:var(--red)">Overseer + paraphraser</div><div class="d">reads it, rewrites it, tries to block the channel</div></div>
+    <div class="arr">→</div>
+    <div class="node"><div class="t">Receiver</div><div class="d">decodes it, then acts</div></div>
+  </div>
+  <div class="cards c3" style="margin-top:16px;">
+    <div class="card tint-blue">
+      <div class="num">A CONCRETE SETTING</div>
+      <h3>Hiring screening</h3>
+      <p>The sender summarizes a candidate's CV for the receiver, who predicts pass or fail. The overseer forbids mentioning a sensitive attribute. Rewarded for accuracy but penalized by the overseer, the pair learns to <strong>encode the attribute</strong>.</p>
+    </div>
+    <div class="card tint-amber">
+      <div class="num">FINDING 1 · EMERGENCE</div>
+      <h3>It emerges from incentives alone</h3>
+      <p>A <strong>misspecified reward plus an overseer</strong> is enough: under pressure the behavior is <strong>subtler</strong>. A demonstration of unprompted emergence (shown via gradient-based and in-context RL).</p>
+    </div>
+    <div class="card tint-red">
+      <div class="num">FINDING 2 · MITIGATION</div>
+      <h3>It resists the standard defense</h3>
+      <p>When colluders <strong>optimize against</strong> the defenses, both passive monitoring and active paraphrasing fail to fully stop them. Simple <strong>1-bit schemes still decode &gt;99%</strong> of the time through a paraphraser.</p>
+    </div>
+  </div>
+  <div class="cite"><a href="https://arxiv.org/abs/2410.03768" target="_blank" rel="noopener">Mathew, Matthews, McCarthy, Velja, Schroeder de Witt, Cope, Schoots, "Hidden in Plain Text: Emergence &amp; Mitigation of Steganographic Collusion in LLMs", AACL 2025 (arXiv:2410.03768)</a>. Unlike prior work, the collusion team is <em>learning</em> against the mitigations.</div>
+</section>
+
+<!-- ============ Early signs in frontier models ============ -->
+<section class="standard" data-background-color="#ffffff">
+  <div class="eyebrow">Zolkowski et al. · Early Signs of Steganographic Capabilities in Frontier LLMs (2025)</div>
+  <h2>Where we actually are today</h2>
+  <div class="cols s40" style="margin-top:6px;">
+    <div>
+      <p class="lead wide">A systematic capability evaluation across the Claude, GPT, and Gemini families on two skills: passing hidden messages, and hiding reasoning. The findings are a useful reality check against the worst case.</p>
+      <ul class="tight" style="margin-top:12px;">
+        <li>Under <strong>standard conditions</strong>, models <strong>cannot</strong> pass a hidden message without a monitor noticing.</li>
+        <li>They succeed only with <strong>extra affordances</strong>: an unmonitored scratchpad plus a pre-agreed coding scheme.</li>
+        <li>Early encoded reasoning appears on simple state-tracking problems, but they rarely hide it subtly enough to fool a monitor.</li>
+      </ul>
+    </div>
+    <div>
+      <div class="fig">
+        <img src="lecture-11-images/early-stego.png" alt="Encoded message passing and encoded reasoning evaluation: models need strong tips to hide messages or reason secretly" style="width:100%;max-width:560px;border:1px solid var(--line);border-radius:10px;padding:6px;">
+        <div class="figcap">Success at hiding messages (B) and reasoning secretly (D) only rises with a "strong tip", an explicit pre-agreed scheme. Under no help, models stay near zero.</div>
+      </div>
+      <div class="note" style="margin-top:12px;border-color:#cfe8d9;background:var(--green-soft);"><h3>Current verdict</h3><p>Capabilities are <strong>nascent</strong>: a well-designed monitor still catches today's attempts. The risk is real but not yet acute, and we want detection in place <strong>before</strong> the capability jump, not after.</p></div>
+    </div>
+  </div>
+  <div class="cite"><a href="https://arxiv.org/abs/2507.02737" target="_blank" rel="noopener">Zolkowski, Nishimura-Gasparian, McCarthy, Zimmermann, Lindner, "Early Signs of Steganographic Capabilities in Frontier LLMs" (2025, arXiv:2507.02737)</a>.</div>
+</section>
+
+<!-- ==================================================================== -->
+<!-- ============ PART 5 DIVIDER ============ -->
+<section class="divider" data-background-color="#ffffff">
+  <div class="kicker">Part 5 · Interaction is not safety</div>
+  <div class="rule"></div>
+  <h2>More agents,<br>more wrong</h2>
+  <div class="dsub">Multi-agent setups are often sold as a way to get more reliable answers. Often the interaction itself makes the answer worse.</div>
+</section>
+
+<!-- ============ Degradation: peer pressure + sycophancy ============ -->
+<section class="standard" data-background-color="#ffffff">
+  <div class="eyebrow">Song et al. (2025) · Yao et al. (2025) · How collaboration degrades</div>
+  <h2>Conformity and sycophancy degrade the answer</h2>
+  <div class="cols c2" style="margin-top:6px;align-items:start;">
+    <div>
+      <div class="card tint-red"><h3>LLMs cannot handle peer pressure</h3><p>Shown peers' answers, models <strong>lose more correct answers than they gain</strong>. About 65% of answer changes go from right to wrong. Average accuracy drops 5.65% (models up to 32B). Susceptibility rises with perceived rapport.</p></div>
+      <p class="small" style="color:var(--gray);margin-top:10px;">A correct minority gets talked out of the right answer by a confident majority.</p>
+    </div>
+    <div>
+      <div class="card tint-amber"><h3>Sycophancy collapses debate</h3><p>In multi-agent debate, <strong>sycophancy drives "disagreement collapse"</strong>: agents abandon correct positions to agree. Homogeneous debates reached collapse rates up to <strong>86%</strong>, with a 0.90 correlation between giving up a correct stance and sycophancy.</p></div>
+      <p class="small" style="color:var(--gray);margin-top:10px;">Mixing roles (a "troublemaker" that keeps disagreeing) helps. Uniform agreeable agents converge fast on the wrong answer.</p>
+    </div>
+  </div>
+  <div class="note" style="margin-top:16px;"><p style="color:var(--gray);"><strong>Sycophancy</strong> and unfaithful reasoning are single-model flaws, but in a multi-agent system they <strong>compound</strong>. Adding agents does not average out errors.</p></div>
+  <div class="cite"><a href="https://arxiv.org/abs/2508.18321" target="_blank" rel="noopener">Song et al., "LLMs Can't Handle Peer Pressure" (2025, arXiv:2508.18321)</a>; <a href="https://arxiv.org/abs/2509.23055" target="_blank" rel="noopener">Yao et al., "Peacemaker or Troublemaker: How Sycophancy Shapes Multi-Agent Debate" (2025, arXiv:2509.23055)</a>.</div>
+</section>
+
+<!-- ==================================================================== -->
+<!-- ============ PART 6 DIVIDER ============ -->
+<section class="divider" data-background-color="#ffffff">
+  <div class="kicker">Part 6 · Defenses</div>
+  <div class="rule"></div>
+  <h2>What we can do<br>about it</h2>
+  <div class="dsub">No silver bullet, but a layered set of defenses, each matched to a failure mode from the earlier parts.</div>
+</section>
+
+<!-- ============ Defenses landscape ============ -->
+<section class="standard" data-background-color="#ffffff">
+  <div class="eyebrow">Part 6 · A layered view</div>
+  <h2>Match the defense to the failure mode</h2>
+  <div class="cards c2" style="margin-top:14px;">
+    <div class="card tint-blue"><div class="num">AGAINST PROPAGATION</div><h3>Topology and monitoring</h3><p>Choose resilient structures (hierarchical over star), add review agents, and detect anomalous agents from the communication graph. <strong>G-Safeguard</strong> runs a GNN over the message graph and recovers ~40% of performance lost to injection.</p></div>
+    <div class="card tint-amber"><div class="num">AGAINST COLLUSION</div><h3>Trust and credibility</h3><p>Weight an agent's influence by a <strong>credibility score</strong> earned from past contributions, downweighting adversaries. Reported effective even when adversaries are the majority.</p></div>
+    <div class="card tint-red"><div class="num">AGAINST COVERT CHANNELS</div><h3>Paraphrasing and capability limits</h3><p>Paraphrase messages with a trusted model to break low-level encodings, monitor for covertext anomalies, and limit access to shared keys or fine control. Necessary, but shown insufficient alone.</p></div>
+    <div class="card tint-green"><div class="num">AT THE SYSTEM LEVEL</div><h3>Visibility and governance</h3><p>Agent identifiers, activity logging, and real-time monitoring so deployers can see <strong>who</strong> is acting and <strong>why</strong>. You cannot govern interactions you cannot see.</p></div>
+  </div>
+  <div class="cite"><a href="https://arxiv.org/abs/2502.11127" target="_blank" rel="noopener">Wang et al., "G-Safeguard" (2025, arXiv:2502.11127)</a>; <a href="https://arxiv.org/abs/2505.24239" target="_blank" rel="noopener">Ebrahimi et al., "An Adversary-Resistant Multi-Agent LLM System via Credibility Scoring" (2025, arXiv:2505.24239)</a>; <a href="https://arxiv.org/abs/2401.13138" target="_blank" rel="noopener">Chan et al., "Visibility into AI Agents", FAccT 2024 (arXiv:2401.13138)</a>.</div>
+</section>
+
+<!-- ============ Detecting collusion via interpretability ============ -->
+<section class="standard" data-background-color="#ffffff">
+  <div class="eyebrow">Rose, Cullen, Abdelnabi, Torr, Kaplowitz, Schroeder de Witt · Multi-Agent Interpretability (2026)</div>
+  <h2>When the text hides it, read the activations</h2>
+  <div class="cols s60" style="margin-top:6px;align-items:start;">
+    <div>
+      <p class="lead wide">Parts 3 and 4 showed the limit of watching <strong>what agents say</strong>: collusion can diverge from the talk, or hide inside innocent text. A complementary signal is <strong>what the model computes</strong>.</p>
+      <div class="note" style="margin-top:12px;"><h3>The method</h3><p>Linear probes on model <strong>activations</strong> already flag deception in a single agent. Lift this to the group: aggregate each agent's deception score into one system-level in order to detect "is this group colluding?". <strong>NARCBench</strong> tests it under distribution shift.</p></div>
+      <p class="small" style="color:var(--gray);margin-top:10px;">No single probe wins on every collusion type, and detection gets <strong>stronger as models get more capable</strong>, an encouraging counter given that covert-channel skill also rises with capability.</p>
+    </div>
+    <div>
+      <div class="cards" style="grid-template-columns:1fr;gap:12px;">
+        <div class="stat"><div class="big">1.00</div><div class="lab">AUROC detecting collusion in-distribution, across open-weight models</div></div>
+        <div class="stat"><div class="big">0.73 to 0.93</div><div class="lab">zero-shot transfer to structurally different scenarios (Llama-3.1 70B)</div></div>
+        <div class="stat"><div class="big">0.99 to 1.00</div><div class="lab">on a steganographic blackjack task: it catches the hidden channel</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="cite"><a href="https://arxiv.org/abs/2604.01151" target="_blank" rel="noopener">Rose, Cullen, Abdelnabi, Torr, Kaplowitz, Schroeder de Witt, "Detecting Multi-Agent Collusion Through Multi-Agent Interpretability" (2026, arXiv:2604.01151)</a>. Model internals as a complementary signal to text-level monitoring.</div>
+</section>
+
+<!-- ============ Synthesis ============ -->
+<section class="standard" data-background-color="#ffffff">
+  <div class="eyebrow">The unifying picture</div>
+  <h2>Why multi-agent safety is its own problem</h2>
+  <div class="loopwrap" style="margin-top:22px;">
+    <div class="loopnode"><div class="t">Each agent looks safe</div><div class="d">aligned, secure, honest in isolation</div></div>
+    <div class="looparr">→</div>
+    <div class="loopnode red"><div class="t">We connect many</div><div class="d">they talk, trade, review, coordinate</div></div>
+    <div class="looparr">→</div>
+    <div class="loopnode red"><div class="t">New behavior emerges</div><div class="d">propagation, collusion, covert channels</div></div>
+    <div class="looparr">→</div>
+    <div class="loopnode"><div class="t">Sometimes, no single agent caused it</div><div class="d">so no single agent's alignment fixes it</div></div>
+  </div>
+  <p class="lead wide" style="margin-top:24px;max-width:66em;text-align:center;margin-left:auto;margin-right:auto;">A compromise can spread faster than we contain it. Self-interested agents collude with no instruction to. And the channel we rely on for oversight, reading what agents say, can be hidden from us. Each is a <strong>system-level</strong> property, invisible when you test one agent at a time.</p>
+  <div class="cite">This is why "align every model" is necessary but not sufficient. The interaction needs its own safety analysis, its own benchmarks, and its own defenses.</div>
+</section>
+
+<!-- ============ Takeaways ============ -->
+<section class="standard" data-background-color="#ffffff">
+  <div class="eyebrow">Takeaways</div>
+  <h2>Four things to remember</h2>
+  <div class="cards c2" style="margin-top:16px;">
+    <div class="card"><div class="num">01</div><h3>Risk is in the interaction</h3><p>Multi-agent failure has three modes: <strong>miscoordination, conflict, collusion</strong>, driven by network effects, selection pressure, and new attack surfaces. Safe parts do not guarantee a safe whole.</p></div>
+    <div class="card"><div class="num">02</div><h3>Compromise propagates</h3><p>A single jailbreak, worm, or false belief can spread across connected agents, sometimes <strong>exponentially</strong>. Network <strong>topology</strong> is itself a safety variable.</p></div>
+    <div class="card"><div class="num">03</div><h3>Collusion is a default, not an exception</h3><p>Self-interested agents reach <strong>supracompetitive prices, divide markets, and form collective biases and conventions</strong> with no instruction to. A committed minority can tip a whole population.</p></div>
+    <div class="card"><div class="num">04</div><h3>Reading the text is not enough</h3><p><strong>Steganography</strong> lets agents pass real messages past a monitor, and the skill scales with the model. The emerging counter is to stop trusting the text alone: read the model's <strong>activations</strong>.</p></div>
+  </div>
+  <div class="cite">The honest summary: we can demonstrate each of these risks, we are starting to measure them, and our defenses are early and partial.</div>
+</section>
+
+<!-- ============ Recap + reading list ============ -->
+<section class="standard" data-background-color="#ffffff">
+  <div class="eyebrow">Recap</div>
+  <h2>What we covered, and where to read more</h2>
+  <div class="recap">
+    <div class="recap-row"><div class="stage">Framing</div><div class="m">Three failure modes (miscoordination, conflict, collusion) and seven risk factors; multi-agent security; negotiation testbed</div><div class="p"><a href="https://arxiv.org/abs/2502.14143" target="_blank" rel="noopener">Hammond 2025</a>, <a href="https://arxiv.org/abs/2505.02077" target="_blank" rel="noopener">Schroeder de Witt 2025</a>, <a href="https://arxiv.org/abs/2309.17234" target="_blank" rel="noopener">Abdelnabi 2024</a></div></div>
+    <div class="recap-row"><div class="stage">Propagation</div><div class="m">Infectious jailbreak; contagious and man-in-the-middle channel attacks; GenAI worm; misinformation flooding; topology and resilience</div><div class="p"><a href="https://arxiv.org/abs/2402.08567" target="_blank" rel="noopener">Gu 2024</a>, <a href="https://aclanthology.org/2026.findings-acl.342/" target="_blank" rel="noopener">Zhou 2026</a>, <a href="https://aclanthology.org/2025.findings-acl.349/" target="_blank" rel="noopener">He 2025</a>, <a href="https://dl.acm.org/doi/10.1145/3719027.3765196" target="_blank" rel="noopener">Cohen 2025</a>, <a href="https://arxiv.org/abs/2407.07791" target="_blank" rel="noopener">Ju 2024</a>, <a href="https://arxiv.org/abs/2410.15686" target="_blank" rel="noopener">Yu 2025</a></div></div>
+    <div class="recap-row"><div class="stage">Collusion</div><div class="m">Algorithmic price collusion; auctions and market division; emergent conventions and bias; auditing collusion (say vs do)</div><div class="p"><a href="https://arxiv.org/abs/2404.00806" target="_blank" rel="noopener">Fish 2024</a>, <a href="https://arxiv.org/abs/2410.00031" target="_blank" rel="noopener">Lin 2024</a>, <a href="https://arxiv.org/abs/2410.08948" target="_blank" rel="noopener">Ashery 2025</a>, <a href="https://arxiv.org/abs/2602.15198" target="_blank" rel="noopener">Nakamura 2026</a></div></div>
+    <div class="recap-row"><div class="stage">Steganography</div><div class="m">Stego vs watermarking; secret collusion and CASE; emergent multi-agent steganographic collusion; frontier capabilities</div><div class="p"><a href="https://arxiv.org/abs/2402.07510" target="_blank" rel="noopener">Motwani 2024</a>, <a href="https://arxiv.org/abs/2410.03768" target="_blank" rel="noopener">Mathew 2025</a>, <a href="https://arxiv.org/abs/2210.14889" target="_blank" rel="noopener">Schroeder de Witt 2023</a>, <a href="https://arxiv.org/abs/2507.02737" target="_blank" rel="noopener">Zolkowski 2025</a></div></div>
+    <div class="recap-row"><div class="stage">Interaction</div><div class="m">Peer pressure and sycophancy degrade multi-agent collaboration</div><div class="p"><a href="https://arxiv.org/abs/2508.18321" target="_blank" rel="noopener">Song 2025</a>, <a href="https://arxiv.org/abs/2509.23055" target="_blank" rel="noopener">Yao 2025</a></div></div>
+    <div class="recap-row"><div class="stage">Defenses</div><div class="m">Topology and graph monitoring; credibility scoring; paraphrasing; activation-level collusion detection; visibility and governance</div><div class="p"><a href="https://arxiv.org/abs/2502.11127" target="_blank" rel="noopener">Wang 2025</a>, <a href="https://arxiv.org/abs/2505.24239" target="_blank" rel="noopener">Ebrahimi 2025</a>, <a href="https://arxiv.org/abs/2604.01151" target="_blank" rel="noopener">Rose 2026</a>, <a href="https://arxiv.org/abs/2401.13138" target="_blank" rel="noopener">Chan 2024</a></div></div>
+  </div>
+  <div class="cite">Next lecture: scalable oversight and AI control, and AI R&D (Maksym).</div>
+</section>
+
+<!-- ============ THANK YOU + FEEDBACK ============ -->
+<section class="standard" data-background-color="#ffffff">
+  <h2>Thank you. Questions?</h2>
+  <p class="lead wide" style="margin-top:.4em;"><strong style="color:var(--ink)">Next lecture:</strong> <span style="color:var(--gray)">Scalable oversight. How we supervise systems too capable to check directly, and AI control as a way to manage agents we cannot fully trust.</span></p>
+  <div class="feedback">
+    <div class="qr">
+      <img src="lecture-7-images/qr_feedback.png" alt="QR code linking to the course feedback form">
+      <div class="cap">Scan to open the form</div>
+    </div>
+    <div class="ftext">
+      <div class="lab">We'd love your feedback</div>
+      <div class="big">Tell us how this lecture went</div>
+      <div class="link"><a href="https://forms.gle/5JF3H6zhP795HhpD8" target="_blank" rel="noopener">forms.gle/5JF3H6zhP795HhpD8</a></div>
+    </div>
+  </div>
+  <div class="cite">AI Safety · Master's Course, Summer Semester 2026 · University of Tübingen.</div>
+</section>
+
+</div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/reveal.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+<script>
+Reveal.initialize({
+  width:1280, height:800, margin:0.04,
+  minScale:0.2, maxScale:2.0,
+  hash:true, slideNumber:'c/t', transition:'none', transitionSpeed:'fast',
+  controls:true, progress:true, center:false
+});
+
+function renderMath(){
+  renderMathInElement(document.body, {delimiters:[
+    {left:'$$',right:'$$',display:true},
+    {left:'$',right:'$',display:false}
+  ], throwOnError:false});
+}
+renderMath();
+
+// Generic trace stepper: works for any container id with .line children
+function makeStepper(traceId, btnId){
+  var btn = document.getElementById(btnId);
+  if(!btn) return;
+  var lines = Array.prototype.slice.call(document.querySelectorAll('#'+traceId+' .line'));
+  var shown = 1;
+  function render(){
+    lines.forEach(function(l,i){ l.classList.toggle('on', i < shown); });
+    btn.textContent = shown >= lines.length ? 'Reset ↺' : 'Step ▶';
+  }
+  btn.addEventListener('click', function(){
+    shown = shown >= lines.length ? 1 : shown + 1;
+    render();
+  });
+  render();
+}
+// ===== Contagion simulator (Agent Smith) =====
+(function(){
+  var svg = document.getElementById('contagionSvg');
+  if(!svg) return;
+  var N = 64, cols = 8, rows = 8;
+  var cellW = 360/cols, cellH = 300/rows;
+  var nodes = [];
+  var roundEl = document.getElementById('contRound');
+  var countEl = document.getElementById('contCount');
+  var round = 0;
+  function build(){
+    svg.innerHTML='';
+    nodes=[];
+    for(var i=0;i<N;i++){
+      var r = Math.floor(i/cols), c = i%cols;
+      var cx = c*cellW + cellW/2, cy = r*cellH + cellH/2;
+      var circ = document.createElementNS('http://www.w3.org/2000/svg','circle');
+      circ.setAttribute('cx',cx); circ.setAttribute('cy',cy); circ.setAttribute('r',9);
+      circ.setAttribute('fill','#e6e8ec'); circ.setAttribute('stroke','#c9ccd3'); circ.setAttribute('stroke-width','1');
+      svg.appendChild(circ);
+      nodes.push({el:circ, infected:false});
+    }
+  }
+  function reset(){
+    round=0;
+    build();
+    nodes[Math.floor(N/2)+3].infected=true;
+    paint();
+  }
+  function paint(){
+    var cnt=0;
+    nodes.forEach(function(n){
+      if(n.infected){ n.el.setAttribute('fill','#A51E37'); n.el.setAttribute('stroke','#7d1629'); cnt++; }
+    });
+    roundEl.textContent=round;
+    countEl.textContent=cnt;
+  }
+  function step(){
+    // each infected node infects one new random uninfected node (roughly doubling)
+    var infectedIdx=[];
+    nodes.forEach(function(n,i){ if(n.infected) infectedIdx.push(i); });
+    if(infectedIdx.length>=N) { return; }
+    var uninfected=[];
+    nodes.forEach(function(n,i){ if(!n.infected) uninfected.push(i); });
+    // shuffle uninfected deterministically-ish by round
+    var toInfect = Math.min(infectedIdx.length, uninfected.length);
+    for(var k=0;k<toInfect;k++){
+      var pick = uninfected.splice((k*7+round*3)%Math.max(1,uninfected.length),1)[0];
+      if(pick!=null) nodes[pick].infected=true;
+    }
+    round++;
+    paint();
+  }
+  document.getElementById('contStep').addEventListener('click',step);
+  document.getElementById('contReset').addEventListener('click',reset);
+  reset();
+})();
+
+// ===== Tipping point slider (naming game) =====
+(function(){
+  var slider = document.getElementById('tipSlider');
+  if(!slider) return;
+  var pctEl = document.getElementById('tipPct');
+  var segOld = document.getElementById('segOld');
+  var segNew = document.getElementById('segNew');
+  var verdict = document.getElementById('tipVerdict');
+  var THRESH = 25;
+  function update(){
+    var m = parseInt(slider.value,10);
+    pctEl.textContent = m+'%';
+    if(m < THRESH){
+      // convention A holds; minority stays minority
+      segOld.style.width = (100-m)+'%'; segOld.style.background='var(--blue)'; segOld.textContent='population says A';
+      segNew.style.width = m+'%'; segNew.style.background='var(--muted)'; segNew.textContent= m>4?'pushes B':'';
+      verdict.textContent='Below the critical mass: name A holds.';
+      verdict.style.color='var(--blue)';
+    } else {
+      // tipped: minority's convention takes over
+      segOld.style.width = '8%'; segOld.style.background='var(--muted)'; segOld.textContent='';
+      segNew.style.width = '92%'; segNew.style.background='var(--red)'; segNew.textContent='population flips to B';
+      verdict.textContent='Critical mass reached: everyone switches to B.';
+      verdict.style.color='var(--red)';
+    }
+  }
+  slider.addEventListener('input',update);
+  update();
+})();
+</script>
+</body>
+</html>
