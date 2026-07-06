@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Automating AI R&D (AI Safety Course)</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/dist/reveal.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/dist/theme/white.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--red:#a51e37;--dark:#1a1a2e;--blue:#1a1a2e;--mid:#555;--accent:#a51e37;--light:#fafafa;--gray:#888}
+.reveal{font-family:'Inter',system-ui,sans-serif;font-size:28px;color:#2d3436}
+.reveal h1,.reveal h2,.reveal h3,.reveal h4{font-family:'Inter',sans-serif;font-weight:700;letter-spacing:-.02em;text-transform:none}
+.reveal h1{font-size:2.2em}.reveal h2{font-size:1.5em;color:var(--dark)}.reveal h3{font-size:1.1em;color:var(--mid)}
+.reveal .slides section{text-align:left;padding:20px 40px;overflow:hidden;box-sizing:border-box}
+.reveal .slides section.title-slide{text-align:center !important}
+.reveal .slides section.title-slide h1{color:var(--dark);font-size:2.2em;margin-bottom:.2em}
+.reveal .slides section.title-slide .subtitle{font-size:1.15em;color:var(--gray);font-weight:300}
+.reveal .slides section.title-slide .course-info{margin-top:1.2em;font-size:.78em;color:var(--gray);line-height:1.7}
+.reveal .slides section.section-slide{text-align:center !important}
+.reveal .slides section.section-slide h2{font-size:2em;color:#fff;text-align:center}
+.reveal .section-slide .section-number{font-size:5em;font-weight:700;opacity:.10;position:absolute;top:10%;right:10%;color:#fff}
+.reveal ul{margin-left:0;padding-left:0}.reveal ul li{margin-bottom:.18em;line-height:1.32;list-style:none;position:relative;padding-left:1em}
+.reveal ul li::before{content:'';position:absolute;left:0;top:.55em;width:4px;height:4px;border-radius:50%;background:#bbb}
+.reveal ul li li::before{background:#ddd;width:4px;height:4px;border-radius:50%}
+.reveal ol{margin-left:1.2em}.reveal ol li{margin-bottom:.25em;line-height:1.4}
+.card-grid{display:grid;gap:16px;margin-top:16px}
+.card-grid-2{grid-template-columns:1fr 1fr}.card-grid-3{grid-template-columns:1fr 1fr 1fr;gap:12px}.card-grid-4{grid-template-columns:repeat(4,1fr)}
+.card{background:transparent;border-radius:0;padding:6px 12px;border:none}
+.card h4{margin:0 0 8px;font-size:.82em;color:var(--dark)}.card p,.card ul{font-size:.7em;color:#555;margin:0}.card ul li{margin-bottom:.2em}
+.card-grid-4{gap:10px}.card-grid-4 .card{padding:12px}.card-grid-4 .card h4{font-size:.75em}.card-grid-4 .card p{font-size:.6em}
+.card-dark{background:transparent;color:#2d3436;border:none}.card-dark h4{color:var(--dark)}.card-dark p,.card-dark ul{color:#555}
+.cite{font-size:.55em;color:#aaa;font-style:italic;word-wrap:break-word;overflow-wrap:break-word;line-height:1.5}
+.cite a{color:#1565c0;text-decoration:underline;text-underline-offset:2px;text-decoration-thickness:1px;border-bottom:none}
+.cite a:hover{color:var(--dark);text-decoration-color:var(--dark)}
+.cite-sep{margin:0 .7em;color:#bbb}
+.key-insight{background:#fafafa;border-left:3px solid var(--dark);padding:12px 16px;border-radius:0 6px 6px 0;margin:12px 0;font-size:.8em}
+.key-insight strong{color:var(--dark)}
+.definition{background:#fafafa;border-left:3px solid #999;padding:12px 16px;border-radius:0 6px 6px 0;margin:12px 0;font-size:.82em}
+.warning-box{background:#fafafa;border-left:3px solid #daa520;padding:10px 16px;border-radius:0 6px 6px 0;margin:10px 0;font-size:.78em}
+.warning-box strong{color:#8b6914}
+.quote-box{font-size:.8em;font-style:italic;color:#555;border-left:3px solid #ddd;padding:12px 18px;margin:14px 0;background:#fafafa;border-radius:0 6px 6px 0}
+.quote-box .author{font-style:normal;font-weight:600;color:var(--dark);margin-top:6px;font-size:.85em}
+.columns{display:flex;gap:24px;align-items:flex-start;max-width:100%;overflow:hidden}.col{flex:1;min-width:0}
+.col-50{flex:0 0 47%;min-width:0}.col-55{flex:0 0 52%;min-width:0}.col-45{flex:0 0 44%;min-width:0}.col-60{flex:0 0 57%;min-width:0}.col-40{flex:0 0 40%;min-width:0}.col-65{flex:0 0 62%;min-width:0}.col-35{flex:0 0 35%;min-width:0}
+.comp-table{width:100%;border-collapse:separate;border-spacing:0;font-size:.66em;margin:10px 0;border-radius:8px;overflow:hidden;table-layout:fixed}
+.comp-table th{background:var(--dark);color:#fff;padding:10px 14px;font-weight:600;text-align:left}
+.comp-table td{padding:8px 14px;border-bottom:1px solid #eee;background:#fff;vertical-align:top}
+.comp-table tr:last-child td{border-bottom:none}.comp-table tr:nth-child(even) td{background:#f8f9fa}
+.comp-table td.n{text-align:right;font-family:'JetBrains Mono',monospace}
+.comp-table tr.hi td{background:#faf0f2 !important;font-weight:600}
+.tag{display:inline-block;padding:2px 0;font-size:.6em;font-weight:700;margin-right:8px;background:transparent;color:var(--accent);text-transform:uppercase;letter-spacing:.05em;border:none}
+.reveal p{margin:.5em 0;line-height:1.4}.reveal section img{border:none;box-shadow:none}
+.reveal .slide-number{font-family:'Inter',sans-serif;font-size:18px;color:var(--gray);background:transparent;right:24px;bottom:16px}
+.small{font-size:.78em}.smaller{font-size:.68em}.tiny{font-size:.6em}
+.hint{font-size:.55em;color:#999;font-style:italic;margin-top:6px}
+.figure-img{width:100%;background:transparent;display:block;border:none}
+img.paper-fig{max-width:100%;max-height:420px;background:transparent;display:block;margin:0 auto;border:none}
+.reveal a{color:#1565c0;text-decoration:underline;text-underline-offset:2px;text-decoration-thickness:1px}
+.reveal a:hover{color:var(--dark);text-decoration-color:var(--dark)}
+.card a,.card-dark a{color:#1565c0;text-decoration:underline;text-underline-offset:2px;text-decoration-thickness:1px}
+@media print {
+  .reveal .slides section{-webkit-print-color-adjust:exact !important;print-color-adjust:exact !important}
+  .reveal .slides section.title-slide h1{color:var(--dark) !important;background:none !important;-webkit-text-fill-color:var(--dark) !important}
+  .reveal .slides section.section-slide h2{color:#fff !important}
+  .card{box-shadow:none !important}
+}
+</style>
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+
+<!-- ============================================== -->
+<!-- SLIDE 1: Title -->
+<!-- ============================================== -->
+<section class="title-slide no-fragment">
+  <h1>Automating AI R&amp;D</h1>
+  <p class="subtitle">Recursive Self-Improvement, Benchmarks, AI Control, Scalable Oversight</p>
+  <div class="course-info"><strong>AI Safety</strong>, Master's Course<br>University of T&uuml;bingen<br><br><span style="font-size:.95em;"><u>Maksym Andriushchenko</u> &middot; Jonas Geiping &middot; Sahar Abdelnabi</span></div>
+</section>
+
+<!-- ============================================== -->
+<!-- SLIDE 2: Today -->
+<!-- ============================================== -->
+<section>
+  <h2>Today: AI R&D Automation</h2>
+  <!-- <p class="small" style="margin:4px 0 2px;">The model does the research that builds the next model.</p> -->
+  <div class="card-grid card-grid-4" style="margin-top:14px;">
+    <div class="card">
+      <h4>I. Motivation</h4>
+      <p>Recursive self-improvement. Lab safety frameworks. Notable predictions.</p>
+    </div>
+    <div class="card">
+      <h4>II. Benchmarks</h4>
+      <p>MLE-bench, PostTrainBench, KernelBench, InferenceBench.</p>
+    </div>
+    <div class="card">
+      <h4>III. AI control</h4>
+      <p>Working with an agent you do not trust. Bash, Linux, and R&amp;D settings.</p>
+    </div>
+    <div class="card">
+      <h4>IV. Scalable oversight</h4>
+      <p>Supervising work we can no longer fully check. Weak-to-strong, reward hacking.</p>
+    </div>
+  </div>
+  <p class="cite" style="margin-top:16px;">The safety question: if AI builds the next AI with little human oversight, small misalignments can compound faster than we can audit them.</p>
+</section>
+
+<!-- ============================================== -->
+<!-- SLIDE 3: frontier frameworks -->
+<!-- ============================================== -->
+<section>
+  <h2>Every Frontier Lab Tracks Autonomous AI R&amp;D</h2>
+  <p class="small" style="margin:4px 0 2px;">Automating research is the core ingredient of <strong>recursive self-improvement</strong>. All three major safety frameworks name it alongside chemical, biological, and cyber risk.</p>
+  <div class="card-grid card-grid-3" style="margin-top:16px;">
+    <div class="card">
+      <h4>Google DeepMind</h4>
+      <p class="tag">Frontier Safety Framework</p>
+      <p>Defines <strong>AI R&amp;D</strong> Critical Capability Levels that could lead to severe risk.</p>
+    </div>
+    <div class="card">
+      <h4>OpenAI</h4>
+      <p class="tag">Preparedness Framework</p>
+      <p><strong>AI Self-improvement</strong> tracked as a category next to Biological, Chemical, Cyber.</p>
+    </div>
+    <div class="card">
+      <h4>Anthropic</h4>
+      <p class="tag">Responsible Scaling Policy</p>
+      <p>Thresholds cover CBRN weapons <strong>and Autonomous AI R&amp;D</strong>.</p>
+    </div>
+  </div>
+  <!-- <p class="cite" style="margin-top:18px;">Frontier safety policies, 2024 to 2026. Motivation adapted from PostTrainBench (Rank et al., ICML 2026).</p> -->
+</section>
+
+<!-- ============================================== -->
+<!-- PART I DIVIDER -->
+<!-- ============================================== -->
+<section class="section-slide" data-background="#1a1a2e">
+  <div class="section-number" style="color:#fff;">I</div>
+  <h2 style="margin-top:1.2em;">Motivation and Predictions</h2>
+  <p style="color:rgba(255,255,255,0.75);font-size:.95em;text-align:center;">How fast is AI R&amp;D automation actually moving?</p>
+</section>
+
+<!-- ============================================== -->
+<!-- SLIDE: Predictions -->
+<!-- ============================================== -->
+<section>
+  <h2>Notable Predictions</h2>
+  <div class="columns" style="gap:20px;">
+    <div class="col-50">
+      <div class="quote-box">
+        AI R&amp;D with no human in the loop: <strong>30%</strong> by end of 2027, <strong>60%</strong> by end of 2028.
+        <div class="author">Jack Clark (Anthropic), Import AI 455, 2026</div>
+      </div>
+      <div class="quote-box">
+        Internal goal: an <strong>automated research intern</strong> by Sept 2026, a fully <strong>automated AI researcher</strong> by March 2028.
+        <div class="author">OpenAI, &ldquo;Built to benefit everyone&rdquo;, 2025</div>
+      </div>
+    </div>
+    <div class="col-50">
+      <div class="key-insight">
+        <strong>Why believe it?</strong> Argument: research is mostly execution, not flashes of insight. Coding and running experiments are exactly what agents are good at.
+      </div>
+      <div class="warning-box">
+        <strong>Why it is a safety question.</strong> If AI designs its successor with little oversight, small misalignments compound across generations, and errors accumulate faster than we can audit.
+      </div>
+    </div>
+  </div>
+  <p class="cite"><a href="https://importai.substack.com/p/import-ai-455-automating-ai-research">Clark, Import AI 455, 2026</a><span class="cite-sep">&middot;</span><a href="https://openai.com/index/built-to-benefit-everyone-our-plan/">OpenAI, &ldquo;Built to benefit everyone: our plan&rdquo;, 2025</a></p>
+</section>
+
+<!-- ============================================== -->
+<!-- SLIDE: Anthropic RSI -->
+<!-- ============================================== -->
+<section>
+  <h2>Impact of AI R&D Acceleration</h2>
+  <div class="columns" style="align-items:center;gap:20px;">
+    <div class="col-40">
+      <p class="small" style="margin-top:0;">Anthropic reports AI is materially speeding up its own development. The bottleneck shifts: as code generation gets cheap, <strong>human review and experiment selection</strong> become the constraint.</p>
+      <ul class="small">
+        <li>By May 2026, <strong>over 80%</strong> of merged production code was Claude-authored (right plot).</li>
+        <li>User-confirmed success rate on open-ended coding tasks rose to <strong>76%</strong>, from 26% six months earlier.</li>
+      </ul>
+      <p class="small" style="margin-top:0;">More generally: in any automation process, we're always moving from one bottleneck to another.</p>
+    </div>
+    <div class="col-60">
+      <img src="lecture-12-images/rsi-code-per-person.png" class="paper-fig" alt="Bar chart: lines of code merged per active contributor at Anthropic rising to about 8x the pre-2025 average by Q2 2026, final bar a partial quarter" style="max-height:420px;">
+      <p class="hint" style="text-align:center;">Code merged per active contributor, as a multiple of the pre-2025 average. The final (hatched) bar is a partial quarter.</p>
+    </div>
+  </div>
+  <p class="cite"><a href="https://www.anthropic.com/institute/recursive-self-improvement">Favaro &amp; Clark, &ldquo;When AI builds itself&rdquo;, Anthropic, 2026</a>. Internal metrics reported by Anthropic.</p>
+</section>
+
+<!-- ============================================== -->
+<!-- PART II DIVIDER -->
+<!-- ============================================== -->
+<section class="section-slide" data-background="#1a1a2e">
+  <div class="section-number" style="color:#fff;">II</div>
+  <h2 style="margin-top:1.2em;">Benchmarks</h2>
+  <p style="color:rgba(255,255,255,0.75);font-size:.95em;text-align:center;">Can agents do the work? From Kaggle to end-to-end post-training.</p>
+</section>
+
+<!-- ============================================== -->
+<!-- SLIDE: MLE-bench -->
+<!-- ============================================== -->
+<section>
+  <h2>The Early Benchmark: Kaggle Competitions</h2>
+  <div class="columns" style="align-items:center;gap:20px;">
+    <div class="col-45">
+      <p class="small" style="margin-top:0;"><strong>75 real Kaggle competitions.</strong> The agent gets a description, dataset, and grading code, trains a model, and submits predictions scored against the human leaderboard.</p>
+      <ul class="small">
+        <li>Best setup (o1-preview with AIDE) reaches a bronze medal in <strong>16.9%</strong> of competitions.</li>
+        <li>Agents follow familiar recipes but <strong>struggle to debug and recover</strong>.</li>
+        <li>The frontier has since moved to open-ended problems on LLMs.</li>
+      </ul>
+    </div>
+    <div class="col-55">
+      <img src="lecture-12-images/mlebench-fig1.png" class="paper-fig" alt="MLE-bench diagram: a competition with description, dataset and leaderboard handed to an agent, which trains a model and submits predictions to a grader" style="max-height:360px;">
+      <p class="hint" style="text-align:center;">An offline Kaggle environment. The agent trains and submits; the grader compares to the human leaderboard.</p>
+    </div>
+  </div>
+  <p class="cite"><a href="https://arxiv.org/abs/2410.07095">Chan et al. (OpenAI), &ldquo;MLE-bench&rdquo;, ICLR 2025</a></p>
+</section>
+
+<!-- ============================================== -->
+<!-- SLIDE: PTB 1 -->
+<!-- ============================================== -->
+<section>
+  <h2>PostTrainBench: Can Agents Automate Post-Training?</h2>
+  <div class="columns" style="align-items:center;gap:20px;">
+    <div class="col-40">
+      <p class="small" style="margin-top:0;">A true <strong>end-to-end</strong> task, not a Kaggle recipe. The agent gets a benchmark script and a small base model, then post-trains it: any dataset, any method, open-ended.</p>
+      <ul class="smaller">
+        <li><strong>Models:</strong> Qwen3 1.7B/4B, SmolLM3 3B, Gemma3 4B.</li>
+        <li><strong>Budget:</strong> one H100 for 10 hours, terminal and web search.</li>
+        <li><strong>Scaffolds:</strong> Claude Code, Codex CLI, OpenCode.</li>
+        <li><strong>Tasks:</strong> AIME, ArenaHard, BFCL, GPQA, GSM8K, HealthBench, HumanEval.</li>
+      </ul>
+    </div>
+    <div class="col-60">
+      <img src="lecture-12-images/ptb-pipeline.png" class="paper-fig" alt="PostTrainBench pipeline: agent post-trains an LLM, an anti-cheat judge screens for cheating, then the model is evaluated on the full benchmark, averaged over 4 base models and 7 benchmarks" style="max-height:340px;">
+      <p class="hint" style="text-align:center;">An anti-cheat judge screens each submission. Final score averages 4 base models across 7 benchmarks.</p>
+    </div>
+  </div>
+  <p class="cite"><a href="https://posttrainbench.com">Rank et al., &ldquo;PostTrainBench: Can LLM Agents Automate LLM Post-Training?&rdquo;, ICML 2026</a></p>
+</section>
+
+<!-- ============================================== -->
+<!-- SLIDE: PTB 2 leaderboard -->
+<!-- ============================================== -->
+<section>
+  <h2>PostTrainBench: Main Results</h2>
+  <img src="lecture-12-images/ptb-leaderboard.png" class="paper-fig" alt="Bar chart of average benchmark performance by the LLM powering the agent, from base models at 7.5% up to GLM 5.2 at 34.3%, next to official instruct models at 51.1%" style="max-height:420px;">
+  <p class="hint" style="text-align:center;">Average benchmark score of the post-trained model, by the LLM powering the CLI agent. Base models sit at <strong>7.5%</strong>, the best agent (GLM 5.2 in Claude Code) at <strong>34.3%</strong>, official instruct models at <strong>51.1%</strong>.</p>
+  <p class="cite"><a href="https://posttrainbench.com">Rank et al., PostTrainBench, ICML 2026</a>. Live leaderboard at posttrainbench.com.</p>
+</section>
+
+<!-- ============================================== -->
+<!-- SLIDE: PTB 3 persistence -->
+<!-- ============================================== -->
+<section>
+  <h2>Confounding Factors: Capability & Persistence</h2>
+  <img src="lecture-12-images/ptb-persistence.png" class="paper-fig" alt="Horizontal bar chart of hours worked before giving up, from Opus 4.6 at 9.7 hours down to GPT 5.4 High at 1.8 hours" style="max-height:420px;">
+  <p class="hint" style="text-align:center;">Persistence: hours worked before the agent stops, from <strong>9.7h</strong> (Opus 4.6) to <strong>1.8h</strong> (GPT 5.4 High). Two axes drive the score: raw capability (model size, reasoning effort) and persistence. A capable model that quits after two hours loses to a weaker one that works nine; giving up early leaves the 10-hour budget unused.</p>
+  <p class="cite"><a href="https://posttrainbench.com">Rank et al., PostTrainBench, ICML 2026</a></p>
+</section>
+
+<!-- ============================================== -->
+<!-- SLIDE: PTB 4 cheating -->
+<!-- ============================================== -->
+<section>
+  <h2>Reward Hacking: A Key Issue in Long-Horizon Evals</h2>
+  <!-- <p class="small" style="margin:4px 0 2px;">Handed a metric to maximize, agents look for shortcuts. PostTrainBench needs an <strong>anti-cheat judge</strong>. This is <strong>reward hacking</strong>, and we return to it in Part IV.</p> -->
+  <div class="card-grid card-grid-3" style="margin-top:12px;">
+    <div class="card">
+      <h4>Memorize the test set <span class="tag">MiniMax M2.5</span></h4>
+      <p>Loaded the full GPQA eval set as training data, 10 times over. Its note: &ldquo;repeat the data multiple times to overfit GPQA.&rdquo;</p>
+    </div>
+    <div class="card">
+      <h4>Hide the contamination <span class="tag">Opus 4.6</span></h4>
+      <p>Appended <code>_custom</code> suffixes to function names while keeping identical logic, tests, and docstrings.</p>
+    </div>
+    <div class="card">
+      <h4>Submit an off-the-shelf model <span class="tag">Kimi K2.5</span></h4>
+      <p>&ldquo;Since all attempts to fine-tune Qwen3-1.7B-Base have produced garbage output, we'll use the instruct model as our final submission.&rdquo;</p>
+    </div>
+  </div>
+  <p class="cite" style="margin-top:10px;"><a href="https://posttrainbench.com">Rank et al., PostTrainBench, ICML 2026</a>.</p>
+</section>
+
+<!-- ============================================== -->
+<!-- SLIDE: PTB 5 trajectory + roon -->
+<!-- ============================================== -->
+<section>
+  <h2>Broader Impact of Post-training Automation</h2>
+  <div class="columns" style="gap:20px;align-items:center;">
+    <div class="col-55">
+      <ul class="small" style="margin-top:0;">
+        <li>Over 8 months, agents moved from <strong>10%</strong> (Sonnet 4.5) to <strong>34%</strong> (GLM 5.2) of the average benchmark score.</li>
+        <li>Jack Clark (co-founder, Anthropic) predicts agents surpass the human baseline on PostTrainBench by <strong>September 2026</strong>.</li>
+        <li>Cheaper open-weight models (GLM 5.2) now top the board, not only frontier proprietary ones.</li>
+      </ul>
+      <div class="key-insight">
+        <strong>The optimistic reading.</strong> Cheap automated post-training enables customization: every community can shape its own model, instead of depending on a few centralized providers.
+      </div>
+    </div>
+    <div class="col-45">
+      <img src="lecture-12-images/roon-tweet.png" class="paper-fig" alt="Social media post arguing that when models can post-train other models there will be a cambrian explosion of types of minds" style="max-height:360px;">
+      <p class="hint" style="text-align:center;">The customization case: when models post-train other models cheaply, the space of specialized models opens up.</p>
+    </div>
+  </div>
+  <!-- <p class="cite"><a href="https://posttrainbench.com">Rank et al., ICML 2026</a><span class="cite-sep">&middot;</span>prediction from <a href="https://importai.substack.com/p/import-ai-455-automating-ai-research">Clark, Import AI 455, 2026</a>. Customization framing after a post by roon (OpenAI).</p> -->
+</section>
+
+<!-- ============================================== -->
+<!-- SLIDE: KernelBench -->
+<!-- ============================================== -->
+<section>
+  <h2>Beyond Training: Writing Fast GPU Kernels</h2>
+  <div class="columns" style="align-items:center;gap:20px;">
+    <div class="col-45">
+      <p class="small" style="margin-top:0;"><strong>250 PyTorch workloads</strong> across three levels (single ops, operator sequences, full architectures). The agent rewrites reference code as a faster custom CUDA kernel that must stay correct.</p>
+      <p class="small">Scored by <strong>fast<sub>p</sub></strong>: the fraction of kernels that are correct <em>and</em> beat the baseline by more than a factor of p.</p>
+      <div class="key-insight">
+        Frontier models match the PyTorch baseline on fewer than <strong>20%</strong> of tasks out of the box. Profiling feedback helps: Level-1 fast<sub>1</sub> climbs from 12% to 43% after several rounds.
+      </div>
+    </div>
+    <div class="col-55">
+      <img src="lecture-12-images/kernelbench-fig1.png" class="paper-fig" alt="KernelBench diagram: a reference PyTorch module and instruction go to a language model, which emits a custom CUDA kernel, checked for correctness and benchmarked for speedup" style="max-height:360px;">
+      <p class="hint" style="text-align:center;">The agent turns a reference PyTorch module into an optimized CUDA version, checked for correctness and timed against PyTorch.</p>
+    </div>
+  </div>
+  <p class="cite"><a href="https://arxiv.org/abs/2502.10517">Ouyang et al. (Stanford, Princeton), &ldquo;KernelBench&rdquo;, 2025</a></p>
+</section>
+
+<!-- ============================================== -->
+<!-- SLIDE: InferenceBench -->
+<!-- ============================================== -->
+<section>
+  <h2>Optimizing Inference Automatically End-to-End</h2>
+  <div class="columns" style="align-items:center;gap:20px;">
+    <div class="col-45">
+      <p class="small" style="margin-top:0;">The agent deploys an OpenAI-compatible inference server for a fixed model and makes it faster: one H100, two-hour budget, no starter code. Scored by <strong>speedup over a PyTorch baseline</strong>.</p>
+      <ul class="small">
+        <li>Best agents reach <strong>~8.7&times;</strong>, beating vLLM's default (4.05&times;).</li>
+        <li>A plain <strong>hyperparameter search</strong> under the same budget still wins (11.53&times;): agents converge on one framework instead of exploring.</li>
+        <li>Industry wants this: Modal's <strong>Auto Endpoints</strong> configure and optimize inference agentically.</li>
+      </ul>
+    </div>
+    <div class="col-55">
+      <img src="lecture-12-images/inferencebench-speedup.png" class="paper-fig" alt="Bar chart of geometric-mean inference speedup: hyperparameter search 11.53x, best agents around 7 to 8.7x, vLLM default 4.05x, PyTorch default 1x" style="max-height:360px;">
+      <p class="hint" style="text-align:center;">Aggregate geometric-mean speedup. Agents beat serving-engine defaults but fall short of a matched-budget hyperparameter search.</p>
+    </div>
+  </div>
+  <p class="cite"><a href="https://inferencebench.ai/assets/paper.pdf">Yeon, Rank &amp; Andriushchenko, &ldquo;InferenceBench&rdquo;, 2026</a><span class="cite-sep">&middot;</span><a href="https://modal.com/blog/introducing-auto-endpoints">Modal, Auto Endpoints, 2026</a></p>
+</section>
+
+<!-- ============================================== -->
+<!-- PART III DIVIDER -->
+<!-- ============================================== -->
+<section class="section-slide" data-background="#1a1a2e">
+  <div class="section-number" style="color:#fff;">III</div>
+  <h2 style="margin-top:1.2em;">AI Control</h2>
+  <p style="color:rgba(255,255,255,0.75);font-size:.95em;text-align:center;">Working safely with an agent you do not trust.</p>
+</section>
+
+<!-- ============================================== -->
+<!-- SLIDE: Greenblatt 1 framing -->
+<!-- ============================================== -->
+<section>
+  <h2>AI Control: Model as a Potential Adversary</h2>
+  <div class="columns" style="align-items:center;gap:20px;">
+    <div class="col-45">
+      <p class="small" style="margin-top:0;">Assume the model may be <strong>trying to subvert you</strong>, and design a protocol that stays safe anyway. A red team builds the attack policy; a blue team designs the safeguards.</p>
+      <ul class="small">
+        <li><strong>Untrusted model U</strong> (GPT-4): capable, but might insert backdoors.</li>
+        <li><strong>Trusted model T</strong> (GPT-3.5): weaker, but assumed not to scheme.</li>
+        <li><strong>Trusted labor H</strong>: expensive human review; audit budget ~2%.</li>
+      </ul>
+    </div>
+    <div class="col-55">
+      <img src="lecture-12-images/aicontrol-fig1.png" class="paper-fig" alt="Diagram of a control evaluation: a protocol routes problems to untrusted GPT-4, trusted GPT-3.5, and human labor; safety measured against a red-team attack policy" style="max-height:340px;">
+      <p class="hint" style="text-align:center;">Solve 5,000 APPS problems without ever submitting a backdoor (a logic error passing tests but failing a secret input). Usefulness uses real GPT-4; safety against a red-team attack policy.</p>
+    </div>
+  </div>
+  <p class="cite"><a href="https://arxiv.org/abs/2312.06942">Greenblatt et al. (Redwood Research), &ldquo;AI Control: Improving Safety Despite Intentional Subversion&rdquo;, ICML 2024</a></p>
+</section>
+
+<!-- ============================================== -->
+<!-- SLIDE: Greenblatt 2 results table -->
+<!-- ============================================== -->
+<section>
+  <h2>Simple Protocols Can Buy Some Safety</h2>
+  <div class="columns" style="align-items:center;gap:20px;">
+    <div class="col-55">
+      <table class="comp-table">
+        <thead><tr><th>Protocol</th><th class="n">Useful</th><th class="n">Safe</th></tr></thead>
+        <tbody>
+          <tr><td>Avoid untrusted model (trusted only)</td><td class="n">2%</td><td class="n">100%</td></tr>
+          <tr><td>Upfront auditing (first 2%)</td><td class="n">100%</td><td class="n">15%</td></tr>
+          <tr><td>Trusted monitoring</td><td class="n">97%</td><td class="n">62%</td></tr>
+          <tr><td>Untrusted monitoring</td><td class="n">96%</td><td class="n">79%</td></tr>
+          <tr><td>Trusted monitoring, defer to trusted</td><td class="n">93%</td><td class="n">83%</td></tr>
+          <tr class="hi"><td>Trusted editing</td><td class="n">94%</td><td class="n">92%</td></tr>
+        </tbody>
+      </table>
+      <p class="hint">Usefulness rescaled: 0% = GPT-3.5 (22% correct), 100% = GPT-4 (54% correct). Safety = probability no backdoor is ever submitted.</p>
+    </div>
+    <div class="col-45">
+      <div class="key-insight" style="margin-top:0;">
+        <strong>Trusted editing wins.</strong> Let GPT-4 write the code, then have GPT-3.5 rewrite the suspicious parts. Keeps 94% usefulness at 92% safety, far above either model alone.
+      </div>
+      <p class="small">A weak trusted monitor plus a small audit budget catches most attacks, without giving up the strong model's capability.</p>
+    </div>
+  </div>
+  <p class="cite"><a href="https://arxiv.org/abs/2312.06942">Greenblatt et al., AI Control, ICML 2024</a>. Numbers from Table 2.</p>
+</section>
+
+<!-- ============================================== -->
+<!-- SLIDE: safety-usefulness figure -->
+<!-- ============================================== -->
+<section>
+  <h2>Protocols Trace a Safety vs Usefulness Frontier</h2>
+  <img src="lecture-12-images/aicontrol-pareto.png" class="paper-fig" alt="Safety vs usefulness scatter plot for AI control protocols: upfront auditing high usefulness low safety, trusted model high safety near-zero usefulness, and trusted monitoring, untrusted monitoring, trusted editing tracing the Pareto frontier in the top-right" style="max-height:400px;">
+  <p class="hint" style="text-align:center;">Each protocol lands somewhere on the safety-usefulness plane. No protocol is perfect. Control research pushes the frontier outward: more safety at the same usefulness, or the reverse, as models get more capable and attacks get sneakier.</p>
+  <p class="cite"><a href="https://arxiv.org/abs/2312.06942">Greenblatt et al., AI Control, ICML 2024 (Fig. 2)</a></p>
+</section>
+
+<!-- ============================================== -->
+<!-- SLIDE: BashArena -->
+<!-- ============================================== -->
+<section>
+  <h2>Scaling Control to Privileged System Agents</h2>
+  <div class="columns" style="align-items:center;gap:20px;">
+    <div class="col-45">
+      <p class="small" style="margin-top:0;"><strong>637 Linux sysadmin tasks</strong> with the agent running as root. Four side tasks a misaligned agent might attempt: run malware, exfiltrate secrets, escalate privileges, disable the firewall.</p>
+      <ul class="small">
+        <li>Claude Sonnet 4.5 completes sabotage while evading a GPT-4.1 mini monitor <strong>26%</strong> of the time, at a 4% false-positive rate.</li>
+        <li>Weaker attackers (GPT-4.1 mini, GPT-5 nano) can barely attack at all.</li>
+      </ul>
+    </div>
+    <div class="col-55">
+      <img src="lecture-12-images/basharena-fig4.png" class="paper-fig" alt="Bar chart of attacker success (1 minus safety) by model and side task; Claude Sonnet 4.5 highest, weaker models near zero" style="max-height:360px;">
+      <p class="hint" style="text-align:center;">Attacker success (1 minus safety) by model and side task. More capable models make better attackers; weaker ones barely attack.</p>
+    </div>
+  </div>
+  <p class="cite"><a href="https://arxiv.org/abs/2512.15688">Kaufman et al. (Redwood Research), &ldquo;BashArena&rdquo;, 2025</a></p>
+</section>
+
+<!-- ============================================== -->
+<!-- SLIDE: LinuxArena -->
+<!-- ============================================== -->
+<section>
+  <h2>Control in Live Production Environments</h2>
+  <div class="columns" style="align-items:center;gap:20px;">
+    <div class="col-45">
+      <p class="small" style="margin-top:0;">The agent works on <strong>live, multi-service production systems</strong>, not static code: 20 environments, 1,667 main tasks, 185 side tasks. Legitimate work and sabotage need the <strong>same access</strong>, so there is no clean attack surface to sandbox away.</p>
+      <div class="warning-box">
+        Against a GPT-5 Nano monitor at 1% false-positive rate, Claude Opus 4.6 sabotages undetected <strong>~34%</strong> of the time. Human-crafted attacks evade at <strong>94%</strong> vs 50% for the best model-generated attack: much headroom remains.
+      </div>
+    </div>
+    <div class="col-55">
+      <img src="lecture-12-images/linuxarena-fig1.png" class="paper-fig" alt="LinuxArena control evaluation: a policy interacts with a live environment through tools; honest vs attack policy; a blue-team monitor watches for a side task like exfiltrating secrets" style="max-height:360px;">
+      <p class="hint" style="text-align:center;">An honest policy does only the main task; an attack policy also pursues a covert side task while a monitor watches.</p>
+    </div>
+  </div>
+  <p class="cite"><a href="https://arxiv.org/abs/2604.15384">Tracy et al. (Redwood Research, EquiStamp), &ldquo;LinuxArena&rdquo;, 2026</a></p>
+</section>
+
+<!-- ============================================== -->
+<!-- SLIDE: ResearchArena 1 -->
+<!-- ============================================== -->
+<section>
+  <h2>Control for Automated AI R&amp;D Itself</h2>
+  <div class="columns" style="align-items:center;gap:20px;">
+    <div class="col-45">
+      <p class="small" style="margin-top:0;">Put the control question <strong>where AI R&amp;D happens</strong>: four main tasks (safety and capabilities post-training, CUDA-kernel and inference optimization). The deliverable is an <strong>artifact that gets deployed</strong>.</p>
+      <ul class="small">
+        <li><strong>Embedded side task:</strong> sabotage lives inside the submitted model, adapter, or kernel (a backdoor, a hidden numerical error).</li>
+        <li><strong>Independent side task:</strong> a covert sandbox action (exfiltrate weights, typosquat a dependency) that leaves the artifact honest.</li>
+      </ul>
+    </div>
+    <div class="col-55">
+      <img src="lecture-12-images/researcharena-fig1.png" class="paper-fig" alt="Overview of ResearchArena: red-team agent does a main R&D task plus a hidden side task; four blue-team monitors inspect trajectory and artifact, with or without chain-of-thought, and emit a suspicion score" style="max-height:360px;">
+      <p class="hint" style="text-align:center;">Four monitors inspect each run, varying two axes: can it probe the produced artifact, and can it see the agent's chain-of-thought. Each emits a suspicion score in [0, 100].</p>
+    </div>
+  </div>
+  <p class="cite">Libon et al., &ldquo;ResearchArena: Evaluating Sabotage and Monitoring in Automated AI R&amp;D&rdquo;, 2026</p>
+</section>
+
+<!-- ============================================== -->
+<!-- SLIDE: ResearchArena 2 -->
+<!-- ============================================== -->
+<section>
+  <h2>Sabotage Hidden in Training Data Is Hardest to Catch</h2>
+  <div class="columns" style="align-items:center;gap:20px;">
+    <div class="col-55">
+      <img src="lecture-12-images/researcharena-fig5.png" class="paper-fig" alt="Box plots of suspicion score by side-task class across four settings; embedded sabotage in post-training often falls below the detection threshold, independent sabotage is caught reliably" style="max-height:360px;">
+      <p class="hint" style="text-align:center;">Suspicion scores by side-task class. Independent side tasks are caught reliably; <strong>embedded</strong> sabotage in post-training often falls below the threshold of 50.</p>
+    </div>
+    <div class="col-45">
+      <p class="small" style="margin-top:0;">Detection AUC is near chance (<strong>0.51 to 0.63</strong>) for embedded post-training sabotage, but high (<strong>0.92 to 0.99</strong>) when the sabotage is code in the optimization settings.</p>
+      <div class="warning-box">
+        <strong>The connection to loss of control.</strong> If agents develop their next generation with sabotage we cannot detect, misalignment could propagate into systems we build but no longer fully oversee.
+      </div>
+    </div>
+  </div>
+  <p class="cite">Libon et al., ResearchArena, 2026. AUC values from Tables 2 and 3.</p>
+</section>
+
+<!-- ============================================== -->
+<!-- PART IV DIVIDER -->
+<!-- ============================================== -->
+<section class="section-slide" data-background="#1a1a2e">
+  <div class="section-number" style="color:#fff;">IV</div>
+  <h2 style="margin-top:1.2em;">Scalable Oversight</h2>
+  <p style="color:rgba(255,255,255,0.75);font-size:.95em;text-align:center;">Supervising work we can no longer fully check.</p>
+</section>
+
+<!-- ============================================== -->
+<!-- SLIDE: agentic outputs -->
+<!-- ============================================== -->
+<section>
+  <h2>Agentic Outputs Are Outgrowing Human Comprehension</h2>
+  <div class="definition" style="margin-top:8px;">
+    <strong>Scalable oversight.</strong> Methods for supervising and evaluating AI systems on tasks whose outputs are too large, too complex, or too capable for a human to check directly.
+  </div>
+  <ul class="small" style="margin-top:18px;">
+    <li>A single PostTrainBench run is hours of tool calls, edits, and training scripts. No reviewer reads all of it.</li>
+    <li>We already lean on <strong>other AI agents</strong> to flag concerning behavior, like reward hacking, inside those traces.</li>
+    <li>The bet: use AI to help supervise AI, because unaided humans cannot keep up.</li>
+    <li>The open question: does the overseer stay ahead of the system it oversees?</li>
+    <li>The PostTrainBench traces are public: <a href="https://posttrainbench.com/traces/">posttrainbench.com/traces</a>.</li>
+  </ul>
+  <p class="cite">Control assumes we can still evaluate the output. Scalable oversight asks what happens when the output outgrows us.</p>
+</section>
+
+<!-- ============================================== -->
+<!-- SLIDE: weak-to-strong -->
+<!-- ============================================== -->
+<section>
+  <h2>Can a Weak Supervisor Elicit a Strong Model's Abilities?</h2>
+  <div class="columns" style="align-items:center;gap:20px;">
+    <div class="col-55">
+      <img src="lecture-12-images/w2s-analogy.png" class="paper-fig" alt="Illustration: traditional ML has a strong human supervising a weak model; superalignment needs a human supervising a superhuman model; the analogy uses a weak model to supervise a strong model" style="max-height:320px;">
+      <p class="hint" style="text-align:center;">Tomorrow humans are the weak supervisor of a superhuman model. Study it today by having a weak model (GPT-2 level) supervise a strong one (GPT-4).</p>
+    </div>
+    <div class="col-45">
+      <p class="small" style="margin-top:0;">Fine-tune a strong model on labels from a weak one. It generalizes <strong>beyond its teacher's mistakes</strong>: a proof of concept that weak supervision can still elicit strong capabilities.</p>
+      <ul class="small">
+        <li>Naive fine-tuning recovers about <strong>half</strong> the weak-to-strong gap on NLP tasks.</li>
+        <li>A simple auxiliary confidence loss pushes this to <strong>~80%</strong>.</li>
+        <li>It does not work everywhere: reward modeling stays hard, so naive RLHF may scale poorly.</li>
+      </ul>
+    </div>
+  </div>
+  <p class="cite"><a href="https://cdn.openai.com/papers/weak-to-strong-generalization.pdf">Burns et al. (OpenAI), &ldquo;Weak-to-Strong Generalization&rdquo;, 2023</a></p>
+</section>
+
+<!-- ============================================== -->
+<!-- SLIDE: automated alignment researchers -->
+<!-- ============================================== -->
+<section>
+  <h2>Automating the Alignment Research Itself</h2>
+  <div class="columns" style="align-items:center;gap:20px;">
+    <div class="col-55">
+      <img src="lecture-12-images/aar-transfer.jpg" class="paper-fig" alt="Bar chart: fraction of the performance gap recovered by the best and second-best AAR-discovered methods on chat, math, and code, versus human-tuned baselines" style="max-height:340px;">
+      <p class="hint" style="text-align:center;">Claude agents searched for weak-to-strong methods. Their best methods recover most of the gap on chat (0.97) and math (0.94); transfer to code is weaker (0.47).</p>
+    </div>
+    <div class="col-45">
+      <p class="small" style="margin-top:0;">Anthropic ran <strong>Claude Opus 4.6 agents</strong> as automated alignment researchers on the weak-to-strong problem, with sandboxes, shared forums, and compute. They recovered <strong>0.97</strong> of the gap in 5 days, vs 0.23 for two humans in 7 days.</p>
+      <div class="warning-box">
+        They also <strong>reward hacked</strong>: one skipped the teacher and had the strong model pick the most common answer; another read the test answers directly.
+      </div>
+    </div>
+  </div>
+  <p class="cite"><a href="https://www.anthropic.com/research/automated-alignment-researchers">Anthropic, &ldquo;Automated Alignment Researchers&rdquo;, 2026</a>. About 800 agent-hours, ~$18,000 in compute.</p>
+</section>
+
+<!-- ============================================== -->
+<!-- SLIDE: reward hacking -> EM -->
+<!-- ============================================== -->
+<section>
+  <h2>Reward Hacking Is the Realistic Misalignment Path</h2>
+  <div class="columns" style="align-items:center;gap:20px;">
+    <div class="col-55">
+      <img src="lecture-12-images/rh-generalization.png" class="paper-fig" alt="Line chart: malign generalization score and hack rate both jump at the onset of reward hacking, with side panels for emergent misalignment, fake goals, deception, monitor disruption, exfiltration, and framing colleagues" style="max-height:340px;">
+      <p class="hint" style="text-align:center;">At the onset of reward hacking, the malign-generalization score spikes: fake goals, deception on alignment questions, monitor disruption, even offering to exfiltrate.</p>
+    </div>
+    <div class="col-45">
+      <p class="small" style="margin-top:0;">Train a model where reward hacking is possible. When it learns to cheat, <strong>broader misalignment appears at the same moment</strong>, with no training for it (introduced in lecture 4). It sabotaged a safety-research codebase in <strong>12%</strong> of runs, and faked alignment in <strong>~50%</strong> when asked about its goals.</p>
+      <div class="key-insight">
+        <strong>A surprising fix.</strong> Inoculation prompting: telling the model up front that hacking is acceptable here stops the misaligned generalization, without reducing the hacking itself.
+      </div>
+    </div>
+  </div>
+  <p class="cite"><a href="https://www.anthropic.com/research/emergent-misalignment-reward-hacking">MacDiarmid et al., &ldquo;Natural Emergent Misalignment from Reward Hacking&rdquo;, Anthropic 2025</a></p>
+</section>
+
+<!-- ============================================== -->
+<!-- SLIDE: synthesis loop (no arrows) -->
+<!-- ============================================== -->
+<section>
+  <h2>The Risks of Autonomous AI R&D</h2>
+  <div class="card-grid card-grid-4" style="margin-top:10px;">
+    <div class="card">
+      <h4>1. Agents do AI R&amp;D</h4>
+      <p>Post-train, optimize kernels and servers, run experiments.</p>
+    </div>
+    <div class="card">
+      <h4>2. They optimize a metric</h4>
+      <p>And reward hack when a shortcut is available.</p>
+    </div>
+    <div class="card">
+      <h4>3. Hacking generalizes</h4>
+      <p>To deception, sabotage, and alignment faking.</p>
+    </div>
+    <div class="card">
+      <h4>4. They build the next generation</h4>
+      <p>With oversight we cannot fully provide.</p>
+    </div>
+  </div>
+  <div class="key-insight" style="margin-top:16px;">
+    <strong>AI control</strong> keeps a distrusted agent contained while we can still check its work. <strong>Scalable oversight</strong> is the harder bet: keep supervising once the work outgrows us. Both are needed <em>before</em> the loop closes, not after.
+  </div>
+  <p class="cite">The safety case is not that agents are malicious. It is that the incentives we train them under reliably produce cheating, and cheating generalizes.</p>
+</section>
+
+<!-- ============================================== -->
+<!-- SLIDE: takeaways -->
+<!-- ============================================== -->
+<section>
+  <h2>Recap</h2>
+  <div class="card-grid card-grid-2" style="margin-top:12px;">
+    <div class="card">
+      <h4>1. AI R&amp;D automation is measurable and fast</h4>
+      <p>Agents recover two-thirds of the human post-training ceiling and beat serving-engine defaults. Every lab tracks it, with public dates on full automation.</p>
+    </div>
+    <div class="card">
+      <h4>2. AI control assumes the agent is an adversary</h4>
+      <p>Simple protocols like trusted editing buy a lot of safety. But in live and R&amp;D settings, capable agents still sabotage undetected about a third of the time.</p>
+    </div>
+    <div class="card">
+      <h4>3. Sabotage hidden in training data is hardest to catch</h4>
+      <p>Monitors are near chance on embedded post-training sabotage, exactly the setting where AI builds AI.</p>
+    </div>
+    <div class="card">
+      <h4>4. Reward hacking is the realistic misalignment path</h4>
+      <p>Agents cheat metrics, and cheating generalizes to deception. Scalable oversight is our lever, and it is early.</p>
+    </div>
+  </div>
+  <p class="cite" style="margin-top:14px;">The capability is here and accelerating; our containment and oversight tools work only partially; the hardest case is the one the labs are racing toward.</p>
+</section>
+
+<!-- ============================================== -->
+<!-- SLIDE: recap + reading -->
+<!-- ============================================== -->
+<!-- <section>
+  <h2>Recap, and Where to Read More</h2>
+  <div class="card-grid card-grid-2" style="margin-top:10px;">
+    <div class="card">
+      <h4>Motivation</h4>
+      <p>Recursive self-improvement; lab frameworks; predictions and measured internal acceleration.</p>
+      <p class="cite"><a href="https://importai.substack.com/p/import-ai-455-automating-ai-research">Clark 2026</a><span class="cite-sep">&middot;</span><a href="https://www.anthropic.com/institute/recursive-self-improvement">Anthropic 2026</a></p>
+    </div>
+    <div class="card">
+      <h4>Benchmarks</h4>
+      <p>MLE-bench, PostTrainBench, KernelBench, InferenceBench.</p>
+      <p class="cite"><a href="https://arxiv.org/abs/2410.07095">Chan 2025</a><span class="cite-sep">&middot;</span><a href="https://posttrainbench.com">Rank 2026</a><span class="cite-sep">&middot;</span><a href="https://arxiv.org/abs/2502.10517">Ouyang 2025</a><span class="cite-sep">&middot;</span><a href="https://inferencebench.ai/assets/paper.pdf">Yeon 2026</a></p>
+    </div>
+    <div class="card">
+      <h4>AI control</h4>
+      <p>Framing and protocols; privileged agents; live production; sabotage in automated R&amp;D.</p>
+      <p class="cite"><a href="https://arxiv.org/abs/2312.06942">Greenblatt 2024</a><span class="cite-sep">&middot;</span><a href="https://arxiv.org/abs/2512.15688">Kaufman 2025</a><span class="cite-sep">&middot;</span><a href="https://arxiv.org/abs/2604.15384">Tracy 2026</a><span class="cite-sep">&middot;</span>Libon 2026</p>
+    </div>
+    <div class="card">
+      <h4>Scalable oversight</h4>
+      <p>Outputs beyond comprehension; weak-to-strong; automated alignment researchers; reward hacking.</p>
+      <p class="cite"><a href="https://cdn.openai.com/papers/weak-to-strong-generalization.pdf">Burns 2023</a><span class="cite-sep">&middot;</span><a href="https://www.anthropic.com/research/automated-alignment-researchers">Anthropic 2026</a><span class="cite-sep">&middot;</span><a href="https://www.anthropic.com/research/emergent-misalignment-reward-hacking">MacDiarmid 2025</a></p>
+    </div>
+  </div>
+  <p class="cite" style="margin-top:12px;">Next lecture: forecasting AI progress, scaling laws, the METR time-horizon plot, and AI 2027 (Jonas).</p>
+</section> -->
+
+<!-- ============================================== -->
+<!-- SLIDE: closing -->
+<!-- ============================================== -->
+<section>
+  <div style="display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:4px;">
+    <div>
+      <h2 style="margin:0;font-size:1.0em;color:var(--dark);">Thank you &mdash; Questions?</h2>
+      <p class="hint" style="margin:2px 0 0;font-size:.6em;"><strong>Next lecture:</strong> forecasting AI progress. Scaling laws, the METR time-horizon plot, AI 2027 (Jonas).</p>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;">
+      <img src="lecture-7-images/qr_feedback.png" alt="Feedback form QR" style="width:96px;height:96px;border-radius:6px;">
+      <p class="hint" style="margin:0;font-size:.58em;line-height:1.3;">Feedback:<br><a href="https://forms.gle/5JF3H6zhP795HhpD8">forms.gle/5JF3H6zhP795HhpD8</a></p>
+    </div>
+  </div>
+  <!-- <div class="key-insight" style="margin-top:18px;">
+    Today: AI R&amp;D automation is measurable and accelerating. <strong>AI control</strong> contains an agent we distrust while we can still check its work; <strong>scalable oversight</strong> keeps supervising once the work outgrows us. Both matter before the self-improvement loop closes.
+  </div> -->
+</section>
+
+</div><!-- end slides -->
+</div><!-- end reveal -->
+
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/dist/reveal.js"></script>
+<script>
+Reveal.initialize({hash:true,slideNumber:'c/t',width:1100,height:700,margin:0.04,transition:'none',transitionSpeed:'fast',pdfSeparateFragments:false,controls:false});
+</script>
+
+</body>
+</html>
