@@ -74,8 +74,6 @@ Lecture recordings can be found [here](https://drive.google.com/drive/folders/1P
 | 13 | 13.07 | Jonas     | **Forecasting AI progress.** Scaling laws, the METR time-horizon plot, AI 2027             |
 | 14 | 20.07 | —         | **Final presentations** &nbsp;*— Final project due*                                        |
 
-> *The schedule is tentative and may change during the semester. Guest lectures may also be added.*
-
 ---
 
 ## Viewing Lecture Slides
