@@ -1,0 +1,1158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Forecasting AI Progress &mdash; AI Safety Course</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/dist/reveal.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/dist/theme/white.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+<script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']],displayMath:[['$$','$$'],['\\[','\\]']]},svg:{fontCache:'global'}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" async></script>
+<style>
+:root{--red:#a51e37;--dark:#1a1a2e;--blue:#1a1a2e;--mid:#555;--accent:#a51e37;--light:#fafafa;--gray:#888;--green:#2e7d32;--green-light:#c8e6c9;--red-light:#ffcdd2}
+.reveal{font-family:'Inter',system-ui,sans-serif;font-size:28px;color:#2d3436}
+.reveal h1,.reveal h2,.reveal h3,.reveal h4{font-family:'Inter',sans-serif;font-weight:700;letter-spacing:-.02em;text-transform:none}
+.reveal h1{font-size:2.2em}.reveal h2{font-size:1.5em;color:var(--dark)}.reveal h3{font-size:1.1em;color:var(--mid)}
+.reveal .slides section{text-align:left;padding:20px 40px;overflow:hidden;box-sizing:border-box}
+.reveal .slides section.title-slide{text-align:center !important}
+.reveal .slides section.title-slide h1{color:var(--dark);font-size:2.2em;margin-bottom:.2em}
+.reveal .slides section.title-slide .subtitle{font-size:1.15em;color:var(--gray);font-weight:300}
+.reveal .slides section.title-slide .course-info{margin-top:1.5em;font-size:.8em;color:var(--gray);line-height:1.8}
+.reveal .slides section.section-slide{text-align:center !important}
+.reveal .slides section.section-slide h2{font-size:2em;color:#fff;text-align:center}
+.reveal .section-slide .section-number{font-size:5em;font-weight:700;opacity:.08;position:absolute;top:10%;right:10%}
+.reveal ul{margin-left:0;padding-left:0}.reveal ul li{margin-bottom:.18em;line-height:1.32;list-style:none;position:relative;padding-left:1em}
+.reveal ul li::before{content:'';position:absolute;left:0;top:.55em;width:4px;height:4px;border-radius:50%;background:#bbb}
+.reveal ul li li::before{background:#ddd;width:4px;height:4px;border-radius:50%}
+.reveal ol{margin-left:1.2em}.reveal ol li{margin-bottom:.2em;line-height:1.35}
+.card-grid{display:grid;gap:16px;margin-top:16px}
+.card-grid-2{grid-template-columns:1fr 1fr}.card-grid-3{grid-template-columns:1fr 1fr 1fr;gap:12px}.card-grid-4{grid-template-columns:repeat(4,1fr)}
+.card-grid-5{grid-template-columns:repeat(5,1fr);gap:8px}
+.card{background:#fff;border-radius:8px;padding:18px;border:1px solid #e5e5e5}
+.card h4{margin:0 0 8px;font-size:.82em;color:var(--dark)}.card p,.card ul{font-size:.7em;color:#555;margin:0}.card ul li{margin-bottom:.2em}
+.card-grid-4{gap:10px}.card-grid-4 .card{padding:12px}.card-grid-4 .card h4{font-size:.75em}.card-grid-4 .card p{font-size:.6em}
+.card-grid-5 .card{padding:10px}.card-grid-5 .card h4{font-size:.7em;margin-bottom:4px}.card-grid-5 .card p{font-size:.55em}
+.card-dark{background:#f5f5f5;color:#2d3436;border:1px solid #e5e5e5}.card-dark h4{color:var(--dark)}.card-dark p,.card-dark ul{color:#555}
+.cite{font-size:.28em;color:#aaa;font-style:italic;word-wrap:break-word;overflow-wrap:break-word;line-height:1.5}
+.cite a{color:#1565c0;text-decoration:underline;text-underline-offset:2px;text-decoration-thickness:1px;border-bottom:none;display:inline-block;margin-bottom:.35em}
+.cite a:hover{color:var(--dark);text-decoration-color:var(--dark)}
+.key-insight{background:#fafafa;border-left:3px solid var(--dark);padding:12px 16px;border-radius:0 6px 6px 0;margin:12px 0;font-size:.8em}
+.key-insight strong{color:var(--dark)}
+.definition{background:#fafafa;border-left:3px solid #999;padding:12px 16px;border-radius:0 6px 6px 0;margin:12px 0;font-size:.8em}
+.math-block{background:#f8f9fa;border-radius:8px;padding:16px;margin:12px 0;text-align:center;font-size:.95em;overflow-x:auto}
+.chart-container{position:relative;margin:12px auto;background:#fff;border-radius:8px;padding:12px}
+.demo-container{background:#f8f9fa;border-radius:12px;padding:16px;margin:12px 0;text-align:center;overflow:hidden}
+.columns{display:flex;gap:24px;align-items:flex-start;max-width:100%;overflow:hidden}.col{flex:1;min-width:0}
+.col-50{flex:0 0 47%;min-width:0}.col-55{flex:0 0 52%;min-width:0}.col-45{flex:0 0 44%;min-width:0}.col-60{flex:0 0 57%;min-width:0}.col-40{flex:0 0 40%;min-width:0}.col-65{flex:0 0 61%;min-width:0}.col-35{flex:0 0 35%;min-width:0}.col-70{flex:0 0 67%;min-width:0}.col-30{flex:0 0 30%;min-width:0}.col-75{flex:0 0 72%;min-width:0}.col-25{flex:0 0 24%;min-width:0}
+.comp-table{width:100%;border-collapse:separate;border-spacing:0;font-size:.68em;margin:12px 0;border-radius:8px;overflow:hidden;table-layout:fixed}
+.comp-table th{background:var(--dark);color:#fff;padding:10px 14px;font-weight:600;text-align:left}
+.comp-table td{padding:8px 14px;border-bottom:1px solid #eee;background:#fff;vertical-align:top}
+.comp-table tr:last-child td{border-bottom:none}.comp-table tr:nth-child(even) td{background:#f8f9fa}
+.quote-box{font-size:.8em;font-style:italic;color:#555;border-left:3px solid #ddd;padding:12px 18px;margin:14px 0;background:#fafafa;border-radius:0 6px 6px 0}
+.quote-box .author{font-style:normal;font-weight:600;color:var(--dark);margin-top:6px;font-size:.85em}
+.reveal p{margin:.5em 0;line-height:1.4}.reveal section img{border:none;box-shadow:none}
+.reveal .slide-number{font-family:'Inter',sans-serif;font-size:18px;color:var(--gray);background:transparent;right:24px;bottom:16px}
+.reveal .slide-number a,.reveal .slide-number-a{color:var(--gray) !important;text-decoration:none !important;pointer-events:none}
+.small{font-size:.72em}.smaller{font-size:.66em}.tiny{font-size:.58em}
+.metric-row{display:flex;gap:16px;justify-content:center;margin:16px 0;flex-wrap:wrap}
+.metric{text-align:center;padding:14px 20px;background:#fff;border-radius:8px;border:1px solid #e5e5e5;min-width:120px}
+.metric .value{font-size:1.8em;font-weight:700;color:var(--dark)}.metric .label{font-size:.65em;color:#888;margin-top:4px}
+.hint{font-size:.55em;color:#999;font-style:italic;margin-top:6px}
+.code-block{background:#1a1a2e;color:#e8e8e8;border-radius:10px;padding:14px 18px;font-family:'JetBrains Mono',monospace;font-size:.58em;line-height:1.5;overflow-x:auto;text-align:left;margin:10px 0}
+.warning-box{background:#fafafa;border-left:3px solid #daa520;padding:10px 16px;border-radius:0 6px 6px 0;margin:12px 0;font-size:.78em}
+.warning-box strong{color:#8b6914}
+.reveal a{color:#1565c0;text-decoration:underline;text-underline-offset:2px;text-decoration-thickness:1px}
+.reveal a:hover{color:var(--dark);text-decoration-color:var(--dark)}
+.card a,.card-dark a{color:#1565c0;text-decoration:underline;text-underline-offset:2px;text-decoration-thickness:1px}
+.proscons{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:8px}
+.pros,.cons{padding:12px 14px;border-radius:8px;font-size:.74em}
+.pros{background:#e8f5e9;border-left:3px solid var(--green)}
+.cons{background:#fdecea;border-left:3px solid var(--accent)}
+.pros h4,.cons h4{margin:0 0 6px;font-size:.95em}
+.pros h4{color:#1b5e20}.cons h4{color:var(--accent)}
+.pros ul li::before{background:var(--green)}.cons ul li::before{background:var(--accent)}
+.placeholder{background:#fef9e7;border:2px dashed #daa520;border-radius:8px;padding:20px;text-align:center;color:#8b6914;font-size:.62em;font-style:italic;min-height:120px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;line-height:1.5}
+.placeholder .ph-src{font-family:'JetBrains Mono',monospace;font-size:.85em;color:#a07a10;font-style:normal;word-break:break-all}
+.tl{position:relative;margin:18px 0 6px;padding-top:6px}
+.tl .axis{position:absolute;left:0;right:0;top:32px;height:2px;background:#ddd}
+.tl-row{display:flex;justify-content:space-between;align-items:flex-start;position:relative;z-index:1}
+.tl-item{flex:1;text-align:center;padding:0 4px}
+.tl-item .yr{font-weight:700;color:var(--accent);font-size:.62em}
+.tl-item .dot{width:9px;height:9px;border-radius:50%;background:var(--accent);margin:6px auto}
+.tl-item .who{font-size:.5em;color:#333;font-weight:600;line-height:1.2;display:block}
+.tl-item .what{font-size:.44em;color:#777;line-height:1.25;display:block;margin-top:2px}
+.verdict-hit{color:var(--green);font-weight:700}.verdict-miss{color:var(--accent);font-weight:700}.verdict-open{color:#b8860b;font-weight:700}
+@media print{
+  .reveal .slides section .fragment.current-visible{opacity:0 !important;visibility:hidden !important}
+  .reveal .slides section .fragment.current-visible:last-of-type{opacity:1 !important;visibility:visible !important}
+}
+</style>
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+
+<!-- =============================================================== -->
+<!-- SLIDE 1: Title -->
+<!-- =============================================================== -->
+<section class="title-slide">
+  <h1>Forecasting AI Progress</h1>
+  <div class="subtitle"></div>
+  <div class="course-info">
+    <strong>AI Safety</strong>: Master&rsquo;s Course, Summer Semester 2026<br>
+    University of T&uuml;bingen &middot; 13 July 2026<br><br>
+    <span style="font-size:.9em;">Maksym Andriushchenko &middot; <u>Jonas Geiping</u> &middot; Sahar Abdelnabi</span>
+  </div>
+</section>
+
+<!-- =============================================================== -->
+<!-- SLIDE 1b: Cold-open hook, AGI timeline forecasts (no text) -->
+<!-- =============================================================== -->
+<section class="no-fragment" style="padding:0;">
+  <div style="display:flex;align-items:center;justify-content:center;height:100%;width:100%;">
+    <img src="lecture-13-images/goodheart-chart.png" alt="AGI Timeline Forecasts: median-year predictions from Metaculus, Manifold, and Kalshi, the aggregate settling around 2030 to 2031" style="max-width:100%;max-height:100%;border-radius:8px;">
+  </div>
+</section>
+
+<!-- =============================================================== -->
+<!-- SLIDE 2: Topics for today -->
+<!-- =============================================================== -->
+<section class="no-fragment">
+  <h2>Topics for Today</h2>
+  <div class="card-grid card-grid-3" style="margin-top:14px;">
+    <div class="card"><h4>I &middot; The Science of Forecasting</h4><p>How to make good forecasts. What is a 'good' forecast?</p></div>
+    <div class="card"><h4>II &middot; The Engine of Progress</h4><p>Physics, Moore&rsquo;s law, scaling laws, algorithmic progress.</p></div>
+    <div class="card"><h4>III &middot; Measuring AI Progress</h4><p>Benchmarks, the GPT series, METR task time horizons.</p></div>
+    <div class="card"><h4>IV &middot; Future Scenarios</h4><p>From the classical singularity to Situational Awareness.</p></div>
+  </div>
+</section>
+
+<!-- =============================================================== -->
+<!-- PART I DIVIDER -->
+<!-- =============================================================== -->
+<section class="section-slide" data-background="#1a1a2e">
+  <div class="section-number" style="color:#fff;">I</div>
+  <h2 style="margin-top:1.2em;">The Science of Forecasting</h2>
+  <p style="color:rgba(255,255,255,0.6);font-size:.9em;text-align:center;">Calibration and scoring</p>
+</section>
+
+
+<!-- =============================================================== -->
+<!-- SLIDE 5: What calibrated means -->
+<!-- =============================================================== -->
+<section class="no-fragment">
+  <h2>What makes a good forecaster </h2>
+  <div class="columns">
+    <div class="col-55">
+      <div class="definition" style="font-size:.78em;">
+        A forecaster is <strong>calibrated</strong> if, among all events assigned probability $p$, a fraction $p$ actually occur, for every $p$.
+      </div>
+      <p class="small"> Calibration contrasts <strong>sharpness</strong>, which measures how concentrated forecasts are. </p>
+       
+      <p class="small"> The goal of good forecasting is to maximize sharpness subject to calibration.</p>
+    </div>
+    <div class="col-45" style="text-align:center;">
+      <svg viewBox="0 0 300 300" style="width:100%;max-width:280px;font-family:'Inter',sans-serif;">
+        <line x1="40" y1="260" x2="280" y2="260" stroke="#888" stroke-width="1.5"/>
+        <line x1="40" y1="260" x2="40" y2="20" stroke="#888" stroke-width="1.5"/>
+        <line x1="40" y1="260" x2="280" y2="20" stroke="#bbb" stroke-width="1.5" stroke-dasharray="5,4"/>
+        <polyline points="40,255 100,210 160,150 220,95 280,35" fill="none" stroke="#a51e37" stroke-width="2.5"/>
+        <circle cx="100" cy="210" r="4" fill="#a51e37"/><circle cx="160" cy="150" r="4" fill="#a51e37"/><circle cx="220" cy="95" r="4" fill="#a51e37"/>
+        <text x="160" y="288" text-anchor="middle" font-size="12" fill="#666">forecast probability</text>
+        <text x="20" y="140" text-anchor="middle" font-size="12" fill="#666" transform="rotate(-90 20 140)">observed frequency</text>
+        <text x="250" y="48" font-size="10" fill="#999">perfect</text>
+      </svg>
+      <p class="hint">Example reliability diagram. Points on the diagonal are calibrated.</p>
+    </div>
+  </div>
+  <p class="cite"><a href="https://fitelson.org/seminar/dawid.pdf">Dawid, &ldquo;The Well-Calibrated Bayesian,&rdquo; JASA 1982</a> &middot; <a href="https://sites.stat.washington.edu/raftery/Research/PDF/Gneiting2007jrssb.pdf">Gneiting, Balabdaoui &amp; Raftery, &ldquo;Probabilistic Forecasts, Calibration and Sharpness,&rdquo; JRSS-B 2007</a></p>
+</section>
+
+<!-- =============================================================== -->
+<!-- SLIDE 6: Scoring rules -->
+<!-- =============================================================== -->
+<section class="no-fragment">
+  <h2>Proper Scoring Rules</h2>
+  <div class="columns">
+    <div class="col-55">
+      <p class="small" style="margin-top:0;"><strong>Brier score</strong> measures the mean squared error of a probability forecast:</p>
+      <div class="math-block" style="font-size:.72em;">$\mathrm{BS} = \tfrac{1}{N}\sum_i (f_i - o_i)^2$</div>
+      <p class="small">Murphy&rsquo;s decomposition separates it into three parts:</p>
+      <div class="math-block" style="font-size:.7em;">$\mathrm{BS} = \underbrace{\text{Reliability}}_{\text{calibration gap}} - \underbrace{\text{Resolution}}_{\text{discrimination}} + \underbrace{\text{Uncertainty}}_{\text{base-rate entropy}}$</div>
+      <p class="small">The <strong>log score</strong> $-\log p(\text{outcome})$ is strictly proper: expected score is optimised only by reporting the true <i>belief</i>.</p>
+    </div>
+    <div class="col-45" style="text-align:center;">
+      <img src="lecture-13-images/nws-calibration.png" alt="NWS precipitation-forecast reliability diagram: observed relative frequency vs forecast probability, points essentially on the diagonal" style="width:100%;max-width:400px;border-radius:8px;border:1px solid #e5e5e5;background:#fff;">
+      <p class="hint">A single Chicago forecaster, 1972-76. When a trained forecaster says &ldquo;30% chance of rain,&rdquo; it rains about 30% of the time.</p>
+    </div>
+  </div>
+  <p class="cite"><a href="https://journals.ametsoc.org/view/journals/apme/12/4/1520-0450_1973_012_0595_anvpot_2_0_co_2.xml">Murphy, &ldquo;A New Vector Partition of the Probability Score,&rdquo; J. Appl. Meteorology 1973</a> &middot; <a href="https://apps.dtic.mil/sti/pdfs/ADA459827.pdf">Gneiting &amp; Raftery, &ldquo;Strictly Proper Scoring Rules,&rdquo; JASA 2007</a> &middot; <a href="https://calibration.city/">calibration.city</a></p>
+</section>
+
+
+<!-- =============================================================== -->
+<!-- SLIDE 9a: The forecaster's toolkit -->
+<!-- =============================================================== -->
+<section class="no-fragment">
+  <h2>The Forecaster&rsquo;s Toolkit</h2>
+  <div>
+    <div style="text-align:center;">
+      <svg viewBox="0 0 1000 430" style="width:100%;max-width:1010px;font-family:'Inter',sans-serif;">
+        <defs><marker id="tk" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#999"/></marker></defs>
+        <!-- root -->
+        <rect x="300" y="10" width="400" height="66" rx="12" fill="#1a1a2e"/>
+        <text x="500" y="38" text-anchor="middle" font-size="16" font-weight="700" fill="#fff">Will AI reach a 40-hour task</text>
+        <text x="500" y="60" text-anchor="middle" font-size="16" font-weight="700" fill="#fff">horizon by the end of 2028?</text>
+        <!-- children -->
+        <rect x="24" y="126" width="286" height="98" rx="10" fill="#fff" stroke="#4a6fa5" stroke-width="1.8"/>
+        <text x="167" y="154" text-anchor="middle" font-size="14.5" font-weight="700" fill="#1a1a2e">Where is the frontier now?</text>
+        <text x="167" y="178" text-anchor="middle" font-size="13.5" fill="#555">~15 h at 50% success</text>
+        <text x="167" y="206" text-anchor="middle" font-size="12" fill="#a51e37">Base rate</text>
+        <rect x="357" y="126" width="286" height="98" rx="10" fill="#fff" stroke="#4a6fa5" stroke-width="1.8"/>
+        <text x="500" y="154" text-anchor="middle" font-size="14.5" font-weight="700" fill="#1a1a2e">How fast does it double?</text>
+        <text x="500" y="178" text-anchor="middle" font-size="13.5" fill="#555">~4 to 7 months</text>
+        <text x="500" y="206" text-anchor="middle" font-size="12" fill="#a51e37">Reference class</text>
+        <rect x="690" y="126" width="286" height="98" rx="10" fill="#fff" stroke="#4a6fa5" stroke-width="1.8"/>
+        <text x="833" y="154" text-anchor="middle" font-size="14.5" font-weight="700" fill="#1a1a2e">What would break the trend?</text>
+        <text x="833" y="178" text-anchor="middle" font-size="13.5" fill="#555">data, capital, noise above 16h?</text>
+        <text x="833" y="206" text-anchor="middle" font-size="12" fill="#a51e37">Inside-view adjustment</text>
+        <!-- root to children -->
+        <path d="M415,76 C300,96 210,110 175,126" fill="none" stroke="#999" stroke-width="1.6" marker-end="url(#tk)"/>
+        <path d="M500,76 L500,126" fill="none" stroke="#999" stroke-width="1.6" marker-end="url(#tk)"/>
+        <path d="M585,76 C700,96 790,110 825,126" fill="none" stroke="#999" stroke-width="1.6" marker-end="url(#tk)"/>
+        <!-- children to combine -->
+        <path d="M167,224 C167,320 250,351 322,351" fill="none" stroke="#999" stroke-width="1.6" marker-end="url(#tk)"/>
+        <path d="M500,224 L500,314" fill="none" stroke="#999" stroke-width="1.6" marker-end="url(#tk)"/>
+        <path d="M833,224 C833,320 750,351 678,351" fill="none" stroke="#999" stroke-width="1.6" marker-end="url(#tk)"/>
+        <!-- combine box -->
+        <rect x="325" y="314" width="350" height="74" rx="12" fill="#fdeaea" stroke="#a51e37" stroke-width="2"/>
+        <text x="500" y="346" text-anchor="middle" font-size="16" font-weight="700" fill="#a51e37">Calibrated estimate: 55 to 70%</text>
+        <text x="500" y="370" text-anchor="middle" font-size="13" fill="#a51e37">Final estimate is the probability of 'Yes'.</text>
+        <!-- stage labels drawn last so they sit on top of the arrows -->
+        <rect x="348" y="89" width="304" height="18" fill="#fff"/>
+        <text x="500" y="100" text-anchor="middle" font-size="13" fill="#a51e37" font-style="italic">1. decompose into estimable sub-questions</text>
+        <rect x="338" y="253" width="324" height="18" fill="#fff"/>
+        <text x="500" y="264" text-anchor="middle" font-size="13" fill="#a51e37" font-style="italic">2. recombine into a single calibrated number</text>
+      </svg>
+    </div>
+  </div>
+  <div class="card-grid card-grid-3" style="gap:10px;margin-top:6px;">
+    <div class="card" style="padding:8px 12px;"><h4 style="font-size:.58em;margin-bottom:4px;">Question decomposition</h4><p style="font-size:.5em;">Split one hard question into pieces you can actually estimate.</p></div>
+    <div class="card" style="padding:8px 12px;"><h4 style="font-size:.58em;margin-bottom:4px;">Base rates first</h4><p style="font-size:.5em;">Anchor each piece to how often things like it happen, then adjust.</p></div>
+    <div class="card" style="padding:8px 12px;"><h4 style="font-size:.58em;margin-bottom:4px;">Calibration training</h4><p style="font-size:.5em;">Log predictions and score them to learn your biases. Practise on <a href="https://fatebook.io/">Fatebook</a>, <a href="https://www.quantifiedintuitions.org/calibration">Calibration</a>, and <a href="https://www.quantifiedintuitions.org/pastcasting">Pastcasting</a>.</p></div>
+  </div>
+  <p class="cite"><a href="https://www.lesswrong.com/w/forecasting-and-prediction">LessWrong, &ldquo;Forecasting &amp; Prediction&rdquo;</a> &middot; <a href="https://fatebook.io/">Fatebook</a> &middot; <a href="https://sage-future.org/">Sage</a> (Calibration, Pastcasting) &middot; method from Tetlock &amp; Gardner, &ldquo;Superforecasting,&rdquo; 2015.</p>
+</section>
+
+<!-- =============================================================== -->
+<!-- SLIDE 9b: Making beliefs pay rent -->
+<!-- =============================================================== -->
+<section class="no-fragment">
+  <h2>"Making Beliefs Pay Rent"</h2>
+  <p class="small" style="margin-top:0;">A belief is only valuable if it has predictive power. </p>
+  <div style="text-align:center;">
+    <svg viewBox="0 0 1000 400" style="width:100%;max-width:900px;font-family:'Inter',sans-serif;">
+      <defs><marker id="mbr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#2e7d32"/></marker>
+      <marker id="mbg" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#bbb"/></marker></defs>
+      <line x1="500" y1="20" x2="500" y2="360" stroke="#e5e5e5" stroke-width="1.5" stroke-dasharray="5,5"/>
+      <!-- LEFT: pays rent -->
+      <text x="235" y="34" text-anchor="middle" font-size="17" font-weight="700" fill="#2e7d32">Pays rent</text>
+      <rect x="18" y="150" width="170" height="76" rx="10" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2"/>
+      <text x="103" y="180" text-anchor="middle" font-size="13.5" font-weight="700" fill="#1b5e20">Belief:</text>
+      <text x="103" y="202" text-anchor="middle" font-size="12.5" fill="#1b5e20">the scaling</text>
+      <text x="103" y="218" text-anchor="middle" font-size="12.5" fill="#1b5e20">trend holds</text>
+      <rect x="258" y="46" width="212" height="58" rx="8" fill="#fff" stroke="#2e7d32" stroke-width="1.5"/>
+      <text x="364" y="72" text-anchor="middle" font-size="12.5" fill="#333">METR horizon &gt; 30 h</text>
+      <text x="364" y="90" text-anchor="middle" font-size="12.5" fill="#333">during 2027</text>
+      <rect x="258" y="159" width="212" height="58" rx="8" fill="#fff" stroke="#2e7d32" stroke-width="1.5"/>
+      <text x="364" y="185" text-anchor="middle" font-size="12.5" fill="#333">GPT-6 beats GPT-5 on</text>
+      <text x="364" y="203" text-anchor="middle" font-size="12.5" fill="#333">a held-out benchmark</text>
+      <rect x="258" y="272" width="212" height="58" rx="8" fill="#fff" stroke="#2e7d32" stroke-width="1.5"/>
+      <text x="364" y="298" text-anchor="middle" font-size="12.5" fill="#333">lab revenue keeps</text>
+      <text x="364" y="316" text-anchor="middle" font-size="12.5" fill="#333">roughly 2x / year</text>
+      <path d="M188,178 C210,150 232,110 256,90" fill="none" stroke="#2e7d32" stroke-width="1.8" marker-end="url(#mbr)"/>
+      <path d="M188,188 L254,188" fill="none" stroke="#2e7d32" stroke-width="1.8" marker-end="url(#mbr)"/>
+      <path d="M188,198 C210,226 232,282 256,300" fill="none" stroke="#2e7d32" stroke-width="1.8" marker-end="url(#mbr)"/>
+      <text x="243" y="356" text-anchor="middle" font-size="12.5" fill="#2e7d32" font-style="italic">every arrow is an observation that can be falsified </text>
+      <!-- RIGHT: floating -->
+      <text x="762" y="34" text-anchor="middle" font-size="17" font-weight="700" fill="#a51e37">Floating Belief</text>
+      <rect x="662" y="70" width="200" height="58" rx="8" fill="#f5f5f5" stroke="#bbb" stroke-width="1.5"/>
+      <text x="762" y="104" text-anchor="middle" font-size="13" font-weight="600" fill="#777">&ldquo;AI is a big deal&rdquo;</text>
+      <rect x="560" y="222" width="180" height="56" rx="8" fill="#f5f5f5" stroke="#bbb" stroke-width="1.5"/>
+      <text x="650" y="255" text-anchor="middle" font-size="13" fill="#888">&ldquo;it is powerful&rdquo;</text>
+      <rect x="784" y="222" width="180" height="56" rx="8" fill="#f5f5f5" stroke="#bbb" stroke-width="1.5"/>
+      <text x="874" y="255" text-anchor="middle" font-size="13" fill="#888">&ldquo;it is important&rdquo;</text>
+      <path d="M824,128 C884,160 900,195 880,220" fill="none" stroke="#bbb" stroke-width="1.6" marker-end="url(#mbg)"/>
+      <path d="M782,250 L742,250" fill="none" stroke="#bbb" stroke-width="1.6" marker-end="url(#mbg)"/>
+      <path d="M660,222 C632,190 660,152 702,130" fill="none" stroke="#bbb" stroke-width="1.6" marker-end="url(#mbg)"/>
+      <text x="762" y="356" text-anchor="middle" font-size="12.5" fill="#a51e37" font-style="italic">connects only to other statements, permits any experience.</text>
+    </svg>
+  </div>
+  <p class="small" style="margin-top:0;"> If no possible observation would change a belief, it is a floating belief that is not falsifiable. </p>
+  <p class="cite"><a href="https://www.lesswrong.com/posts/a7n8GdKiAZRX86T5A/making-beliefs-pay-rent-in-anticipated-experiences">Yudkowsky, &ldquo;Making Beliefs Pay Rent (in Anticipated Experiences),&rdquo; 2007</a>.</p>
+</section>
+
+
+<!-- =============================================================== -->
+<!-- SLIDE 7: Superforecasters -->
+<!-- =============================================================== -->
+<!-- <section class="no-fragment">
+  <h2>Superforecasters</h2>
+  <div class="columns" style="align-items:flex-start;">
+    <div class="col-100">
+      <div class="card-grid card-grid-3" style="gap:10px;">
+        <div class="card"><h4>Fermi-ize</h4><p>Break a hard question into estimable sub-questions.</p></div>
+        <div class="card"><h4>Outside view first</h4><p>Start from the base rate of the reference class, then adjust for specifics.</p></div>
+        <div class="card"><h4>Update in small steps</h4><p>Frequent revisions with granular probabilities.</p></div>
+      </div>
+    </div>
+    
+  </div>
+  <p class="cite"><a href="https://www.penguinrandomhouse.com/books/227815/superforecasting-by-philip-e-tetlock-and-dan-gardner/">Tetlock &amp; Gardner, &ldquo;Superforecasting,&rdquo; 2015</a> &middot; <a href="https://journals.sagepub.com/doi/10.1177/0956797614524255">Mellers et al., &ldquo;Psychological Strategies for Winning a Forecasting Tournament,&rdquo; Psych. Science 2014</a></p>
+</section> -->
+
+<!-- =============================================================== -->
+<!-- SLIDE 8: Prediction markets -->
+<!-- =============================================================== -->
+<section class="no-fragment">
+  <h2>Prediction Markets</h2>
+  <div class="columns">
+    <div class="col-50">
+      <p class="small" style="margin-top:0;">Online platforms with contracts and resolution criteria to bid on future events.</p>
+      <table class="comp-table" style="font-size:.58em;">
+        <tr><th>Platform</th><th>Type</th></tr>
+        <tr><td>Polymarket</td><td>Real money (crypto)</td></tr>
+        <tr><td>Kalshi</td><td>Real money, CFTC-regulated</td></tr>
+        <tr><td>Manifold</td><td>Play money</td></tr>
+        <tr><td>Metaculus</td><td>Not a market: aggregated individual forecasts, proper-scored</td></tr>
+      </table>
+    </div>
+    <div class="col-50">
+      <div class="warning-box" style="font-size:.72em;">
+        <strong>The long-horizon problem.</strong> Capital locked in a five-year contract forgoes market returns. Leads to &ldquo;no-trade region&rdquo; and long-shot dates are unreliable.
+      </div>
+      <p class="small">Markets are well calibrated on two-week time ranges and biased on fifteen-year time ranges.</p>
+    </div>
+  </div>
+  <p class="cite"><a href="https://www.nber.org/system/files/working_papers/w10504/w10504.pdf">Wolfers &amp; Zitzewitz, &ldquo;Prediction Markets,&rdquo; JEP 2004</a> &middot; <a href="https://arxiv.org/abs/2602.21091">&ldquo;Can Interest-Bearing Positions Solve the Long-Horizon Problem in Prediction Markets?&rdquo; 2026</a></p>
+</section>
+
+
+<!-- =============================================================== -->
+<!-- SLIDE 12: Can AI forecast -->
+<!-- =============================================================== -->
+<section class="no-fragment">
+  <h2>Sidenote: How good is AI itself at forecasting?</h2>
+  <div class="columns" style="align-items:center;">
+    <div class="col-58" style="text-align:center;">
+      <img src="lecture-13-images/futuresim-bss.png" alt="FutureSim Brier skill score from January to March 2026 for five frontier models, all rising from about -0.15 toward but staying below zero" style="width:100%;max-width:560px;border-radius:8px;border:1px solid #e5e5e5;background:#fff;">
+      <p class="hint">FutureSim replays the news day by day from January 2026. Model calibration is still suboptimal.</p>
+    </div>
+    <div class="col-42">
+      <p class="small" style="margin-top:0;">FutureSim starts agents past their knowledge cutoff and streams news articles over the simulation period them. Models continuously predict on 330 events that resolve over 88 days.</p>
+      <ul class="small">
+        <li>Top-1 accuracy: GPT-5.5 <strong>25%</strong>, Opus 4.6 <strong>20%</strong>, then a gap to open-weight models (5 to 13%).</li>
+        <li>Models improve at forecasting over time, showing that they can update their priors based on new information.</li>
+      </ul>
+    </div>
+  </div>
+  <p class="cite"><a href="https://openforecaster.github.io/futuresim/">Goel et al., &ldquo;FutureSim: Replaying World Events to Evaluate Adaptive Agents,&rdquo; 2026 (arXiv:2605.15188)</a> &middot; <a href="https://forecastingresearch.org/">Forecasting Research Institute</a></p>
+</section>
+
+
+
+<!-- =============================================================== -->
+<!-- PART II DIVIDER -->
+<!-- =============================================================== -->
+<section class="section-slide" data-background="#1a1a2e">
+  <div class="section-number" style="color:#fff;">II</div>
+  <h2 style="margin-top:1.2em;">The Engine of Progress</h2>
+  <p style="color:rgba(255,255,255,0.6);font-size:.9em;text-align:center;">Mechanisms that influence AI Progress</p>
+</section>
+
+<!-- =============================================================== -->
+<!-- SLIDE 15: Scaling laws I -->
+<!-- =============================================================== -->
+<section class="no-fragment">
+  <h2>Deep Learning Capabilities Follow Scaling Laws</h2>
+  <div class="columns">
+    <div class="col-50" style="text-align:center;">
+      <img src="lecture-13-images/hestness-powerlaw.png" alt="Hestness et al. 2017: test loss vs training set size on log-log axes, straight-line power-law fits with exponents around -0.3" style="width:100%;max-width:420px;border-radius:8px;border:1px solid #e5e5e5;">
+      <p class="hint">Hestness et al. 2017: power-law error curves across translation, language, vision, and speech.</p>
+    </div>
+    <div class="col-50" style="text-align:center;">
+      <img src="lecture-13-images/kaplan-fig1.png" alt="Kaplan et al. 2020 Figure 1: test loss as a straight line vs compute, dataset size, and parameters on log axes" style="width:100%;max-width:640px;border-radius:8px;border:1px solid #e5e5e5;">
+      <p class="hint">Kaplan et al. 2020: loss falls as a power law in compute, data, and parameters, over seven orders of magnitude.</p>
+    </div>
+  </div>
+  <p class="cite"><a href="https://arxiv.org/abs/1712.00409">Hestness et al., &ldquo;Deep Learning Scaling is Predictable, Empirically,&rdquo; 2017</a> &middot; <a href="https://arxiv.org/abs/2001.08361">Kaplan et al., &ldquo;Scaling Laws for Neural Language Models,&rdquo; 2020</a></p>
+</section>
+
+
+
+<!-- =============================================================== -->
+<!-- SLIDE 14: Moore's law vs AI compute -->
+<!-- =============================================================== -->
+<section class="no-fragment">
+  <h2>Moore&rsquo;s Law</h2>
+  <div class="columns">
+    <div class="col-30" style="text-align:center;">
+      <img src="lecture-13-images/owid-transistors.png" alt="Transistors per microprocessor 1970-2020 on a log scale, doubling roughly every two years" style="width:125%;max-width:640px;border-radius:8px;border:1px solid #e5e5e5;background:#fff;">
+      <p class="hint">Transistor density, doubling about every two years.</p>
+    </div>
+    <div class="col-70" style="text-align:center;">
+      <img src="lecture-13-images/epoch-compute-4-5x.png" alt="Training compute of frontier AI models growing 4 to 5x per year" style="width:110%;max-width:540px;border-radius:8px;border:1px solid #e5e5e5;background:#fff;">
+    </div>
+  </div>
+  <div class="key-insight" style="margin-top:8px;font-size:.58em;">
+    But, AI compute outpaces Moore&rsquo;s law by roughly an order of magnitude in exponent. Current growth is mostly scaling (more chips, more spend) of chip count (although chip density is a factor).
+  </div>
+  <p class="cite"><a href="https://ourworldindata.org/moores-law">Our World in Data, &ldquo;Moore&rsquo;s Law&rdquo;</a> &middot; <a href="https://epoch.ai/blog/training-compute-of-frontier-ai-models-grows-by-4-5x-per-year">Epoch AI, &ldquo;Training compute grows by 4-5x per year&rdquo;</a></p>
+</section>
+
+
+
+<!-- =============================================================== -->
+<!-- SLIDE 17: Algorithmic progress -->
+<!-- =============================================================== -->
+<section class="no-fragment">
+  <h2>Algorithmic Progress as a Second Exponential</h2>
+  <div class="columns">
+    <div class="col-55">
+      <p class="small" style="margin-top:0;">Compute needed to reach a fixed level of performance falls over time, from better architectures, optimisers, and data quality.</p>
+      <div class="metric-row" style="gap:12px;">
+        <div class="metric" style="padding:10px 14px;"><div class="value" style="font-size:1.3em;">~8 mo</div><div class="label" style="font-size:.6em;">halving time of compute-to-fixed-performance (language)</div></div>
+        <div class="metric" style="padding:10px 14px;"><div class="value" style="font-size:1.3em;">~3x/yr</div><div class="label" style="font-size:.6em;">algorithmic efficiency gain</div></div>
+      </div>
+      <p class="small">This is faster than Moore&rsquo;s law on its own.</p>
+    </div>
+    <div class="col-45">
+      <div class="key-insight" style="font-size:.68em;">
+        <i>Ho et al. 'Algorithmic Progress in Language Models':</i> Physical compute at ~5x per year, times algorithms at ~3x per year, approximates to 15x per year for frontier models. Over 2012 to 2023 compute contributed more than algorithms, but both compound.
+      </div>
+    </div>
+  </div>
+  <p class="cite"><a href="https://arxiv.org/abs/2403.05812">Ho et al., &ldquo;Algorithmic Progress in Language Models,&rdquo; 2024</a> &middot; <a href="https://arxiv.org/abs/2212.05153">Erdil &amp; Besiroglu, &ldquo;Algorithmic Progress in Computer Vision,&rdquo; 2022</a> &middot; <a href="https://epoch.ai/trends">Epoch AI Trends</a></p>
+</section>
+
+<!-- =============================================================== -->
+<!-- SLIDE 18: Test-time compute -->
+<!-- =============================================================== -->
+<section class="no-fragment">
+  <h2>Test-Time Compute: A Second Scaling Axis</h2>
+  <div class="columns">
+    <div class="col-25">
+      <p class="small" style="margin-top:0;">OpenAI&rsquo;s o1 (Sept 2024) showed accuracy rising with compute spent <em>at inference</em>, not only in training. On AIME, GPT-4o scored 12%, o1 up to 83%.</p>
+      <p class="small" style="font-size:.68em;">Epoch: reasoning-training compute scaled ~10x from o1 to o3, then converges to the base ~4x per year trend within about a year.</p>
+    </div>
+    <div class="col-75" style="text-align:center;">
+      <img src="lecture-13-images/o1-twin.png" alt="OpenAI o1 twin charts: AIME accuracy rising with train-time compute (left) and test-time compute (right), both on a log-scale x-axis with values hidden" style="width:100%;max-width:720px;border-radius:8px;border:1px solid #e5e5e5;background:#fff;">
+      <p class="hint">Accuracy rises with compute at training (left) and at inference (right).</p>
+    </div>
+  </div>
+  <p class="cite"><a href="https://openai.com/index/learning-to-reason-with-llms/">OpenAI, &ldquo;Learning to Reason with LLMs,&rdquo; 2024</a> &middot; <a href="https://arxiv.org/abs/2501.19393">Muennighoff et al., &ldquo;s1: Simple Test-Time Scaling,&rdquo; 2025</a> &middot; <a href="https://epoch.ai/gradient-updates/how-far-can-reasoning-models-scale">Epoch, &ldquo;How far can reasoning models scale?&rdquo;</a></p>
+</section>
+
+
+
+<!-- =============================================================== -->
+<!-- SLIDE 19: Unhobbling and overhangs -->
+<!-- =============================================================== -->
+<section class="no-fragment">
+  <h2>Unhobbling and Overhangs</h2>
+  <p class="small" style="margin-top:0;">Some capability gains are suprising and not predictable by scaling.</p>
+  <div class="card-grid card-grid-3" style="gap:12px;margin-top:8px;">
+    <div class="card"><h4>'Unhobbling'</h4><p>RLHF, chain-of-thought (~10x effective compute on reasoning), scaffolding, tools, and context length. Features that make existing models usable.</p></div>
+    <div class="card"><h4>Hardware overhang</h4><p>Capability latent in existing chips, unlocked by a new method. Example: Use of GPUs for DL in 2012.</p></div>
+    <div class="card"><h4>Software overhang</h4><p>A large model whose full ability is only elicited later, by better prompting or scaffolds. Example: Claude Code.</p></div>
+  </div>
+  <div class="key-insight" style="margin-top:12px;font-size:.78em;">
+    Overhangs are why trend extrapolation tends to undershoot around a paradigm shift. The straight line on the compute axis misses the step change when a latent capability is unlocked.
+  </div>
+  <p class="cite"><a href="https://situational-awareness.ai/">Aschenbrenner, &ldquo;Situational Awareness,&rdquo; 2024</a></p>
+</section>
+
+<!-- =============================================================== -->
+<!-- SLIDE 13b: Capitalization / long-run growth -->
+<!-- =============================================================== -->
+<section class="no-fragment">
+  <h2>AI Progress as an Extension of Economic Growth</h2>
+  <div class="columns" style="align-items:center;">
+    <div class="col-75" style="text-align:center;">
+      <img src="lecture-13-images/owid-world-gdp.png" alt="World GDP over the last two millennia on a log scale, flat for most of history then bending sharply upward after 1800" style="width:110%;max-width:660px;border-radius:8px;border:1px solid #e5e5e5;background:#fff;">
+      <p class="hint">World output was nearly flat for most of history, then bent sharply upward with industrial capitalism. AI compute spending is the newest term in that series.</p>
+    </div>
+    <div class="col-25">
+      <p class="small" style="margin-top:0;">Two centuries of compounding economic growth.</p>
+      <div class="key-insight" style="font-size:.76em;">
+        The optimistic case for continued scaling is that AI is the next phase of this curve.
+      </div>
+    </div>
+  </div>
+  <p class="cite"><a href="https://ourworldindata.org/economic-growth">Our World in Data, &ldquo;Economic Growth&rdquo; (world GDP, Maddison Project data)</a></p>
+</section>
+
+
+<!-- =============================================================== -->
+<!-- SLIDE 24: Can scaling continue to 2030 -->
+<!-- =============================================================== -->
+<section class="no-fragment">
+  <h2>Can Scaling Continue to 2030?</h2>
+  <div style="text-align:center;">
+    <img src="lecture-13-images/epoch-2030-constraints.png" alt="Epoch AI: feasible 2030 training-run size under four constraints, power, chips, data, latency, each shown as a range of FLOP above the GPT-4 baseline" style="width:100%;max-width:480px;border-radius:8px;border:1px solid #e5e5e5;background:#fff;">
+    <p class="hint">Feasible 2030 training-run sizes under four constraints.</p>
+    <p class="small" style="max-width:760px;margin:8px auto 0;">Epoch&rsquo;s conclusion: about <strong>2 &times; 10<sup>29</sup> FLOP</strong> is likely feasible by 2030, roughly 5,000x GPT-4.</p>
+  </div>
+  <p class="cite"><a href="https://epoch.ai/blog/can-ai-scaling-continue-through-2030">Sevilla et al., &ldquo;Can AI Scaling Continue Through 2030?&rdquo; Epoch AI, 2024</a></p>
+</section>
+
+<!-- =============================================================== -->
+<!-- SLIDE 25: Electricity -->
+<!-- =============================================================== -->
+<section class="no-fragment">
+  <h2>Electricity</h2>
+  <div class="columns">
+    <div class="col-35">
+      <p class="small" style="margin-top:0;">Frontier training sites reached about 1 GW in 2026. Five such sites are online: Anthropic-Amazon, xAI Colossus 2, Microsoft Fayetteville, Meta Prometheus, OpenAI Stargate Abilene.</p>
+      <ul class="small">
+        <li>US datacenter power: ~31 GW (2025) heading toward ~66 GW (2027).</li>
+        <li>By 2030, datacenters could draw 9 to 17% of US electricity.</li>
+        <li>Grid interconnection and transformer supply are real limits. Hyperscalers are signing nuclear and gas deals directly.</li>
+      </ul>
+    </div>
+    <div class="col-65" style="text-align:center;">
+      <img src="lecture-13-images/epoch-power.png" alt="Epoch AI: projected power growth for frontier AI training, MW vs year on a log axis, historic baseline and model-based forecast reaching multiple gigawatts by 2030 against data-center reference lines" style="width:100%;max-width:640px;border-radius:8px;border:1px solid #e5e5e5;background:#fff;">
+      <p class="hint">Per-training-run power on a log axis. The frontier crosses the gigawatt reference lines before 2030.</p>
+    </div>
+  </div>
+  <p class="cite"><a href="https://epoch.ai/data/frontier-data-centers">Epoch AI, Frontier Data Centers Hub</a> &middot; <a href="https://epoch.ai/blog/power-demands-of-frontier-ai-training">Epoch, &ldquo;Power demands of frontier AI training&rdquo;</a></p>
+</section>
+
+<!-- =============================================================== -->
+<!-- SLIDE 26: Chips and Taiwan -->
+<!-- =============================================================== -->
+<section class="no-fragment">
+  <h2>The Chip Chokepoint: TSMC and Taiwan</h2>
+  <div class="columns" style="align-items:center;">
+    <div class="col-35">
+      <p class="small" style="margin-top:0;">TSMC holds about <strong>72%</strong> of foundry revenue and over <strong>90%</strong> of leading-edge production. Almost all 2nm and most 3nm is in Taiwan through 2026 and 2027.</p>
+      <p class="small">New bottlenecks: <strong>advanced packaging (CoWoS) and high-bandwidth memory (HBM)</strong>. The four big AI designers used ~12% of advanced logic, but ~90% of CoWoS and ~90% of HBM by value. Both were sold out into 2027.</p>
+    </div>
+    <div class="col-65" style="text-align:center;">
+      <img src="lecture-13-images/epoch-chip-supply.png" alt="Epoch AI: AI chip supply chain constraints, advanced packaging and HBM as the binding limit" style="width:100%;max-width:520px;border-radius:8px;border:1px solid #e5e5e5;background:#fff;">
+    </div>
+  </div>
+  <p class="cite"><a href="https://epoch.ai/data-insights/ai-chip-supply-chain-constraints">Epoch AI, &ldquo;AI chip supply chain constraints&rdquo;</a> &middot; <a href="https://www.csis.org/blogs/perspectives-innovation/taiwans-semiconductor-dominance-implications-cross-strait-relations">CSIS, &ldquo;Taiwan&rsquo;s Semiconductor Dominance&rdquo;</a></p>
+</section>
+
+<!-- =============================================================== -->
+<!-- SLIDE 27: ASML and EUV -->
+<!-- =============================================================== -->
+<section class="no-fragment">
+  <h2>Where do wafers come from?</h2>
+  <div class="columns">
+    <div class="col-55">
+      <p class="small" style="margin-top:0;">Extreme-ultraviolet lithography is what makes sub-7nm chips possible. One company builds the machines: ASML, in Veldhoven, the Netherlands.</p>
+      <ul class="small">
+        <li>About <strong>48 EUV systems</strong> shipped in 2025, with 60 or more guided for 2026.</li>
+        <li>China has never received an EUV machine (export controls since ~2019). SMIC is stuck at 7nm and 5nm on older DUV lithography.</li>
+      </ul>
+    </div>
+    <div class="col-45">
+      <div class="key-insight" style="font-size:.82em;">
+        One company, one country, one town. The entire frontier uses sixty machines a year.
+      </div>
+      <p class="small" style="font-size:.7em;">This is currently Europe&rsquo;s only point of leverage in the AI supply chain.</p>
+    </div>
+  </div>
+  <p class="cite"><a href="https://www.asml.com/en/news/press-releases/2026/q4-2025-financial-results">ASML Q4 2025 results</a> &middot; export-control background: US-Netherlands agreements, 2019 onward.</p>
+</section>
+
+
+<!-- =============================================================== -->
+<!-- SLIDE 19b: The production chain (flowchart) -->
+<!-- =============================================================== -->
+<section class="no-fragment">
+  <h2>Summary: The Toolchain for Continued Scaling</h2>
+  <p class="small" style="margin-top:0;">If LLMs are a general method that continues to scale with compute, then the compute chain is:</p>
+  <svg viewBox="0 0 1200 470" style="width:100%;max-width:1080px;display:block;margin:4px auto 0;font-family:'Inter',sans-serif;">
+    <defs><marker id="pc" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#888"/></marker></defs>
+    <style>
+      .pcn{fill:#fff;stroke:#888;stroke-width:1.6}
+      .pchw{fill:#eef2f8;stroke:#4a6fa5}
+      .pcsw{fill:#eef7ee;stroke:#2e7d32}
+      .pcm{fill:#fdeaea;stroke:#a51e37;stroke-width:2}
+      .pct{font-size:14px;font-weight:700;fill:#1a1a2e}.pcs{font-size:11px;fill:#777}
+      .pce{stroke:#888;stroke-width:1.8;fill:none}
+    </style>
+    <!-- inputs (left) -->
+    <g><rect class="pcn pchw" x="20" y="6" width="180" height="42" rx="9"/><text class="pct" x="110" y="26" text-anchor="middle">Zeiss optics</text><text class="pcs" x="110" y="42" text-anchor="middle">EUV mirrors (DE)</text></g>
+    <g><rect class="pcn pchw" x="20" y="70" width="180" height="44" rx="9"/><text class="pct" x="110" y="90" text-anchor="middle">ASML EUV</text><text class="pcs" x="110" y="107" text-anchor="middle">lithography (NL)</text></g>
+    <g><rect class="pcn pchw" x="20" y="128" width="180" height="44" rx="9"/><text class="pct" x="110" y="148" text-anchor="middle">HBM / DRAM</text><text class="pcs" x="110" y="165" text-anchor="middle">Korea (SK hynix, Samsung)</text></g>
+    <g><rect class="pcn pchw" x="20" y="270" width="180" height="44" rx="9"/><text class="pct" x="110" y="290" text-anchor="middle">Power transformers</text><text class="pcs" x="110" y="307" text-anchor="middle">grid hardware</text></g>
+    <g><rect class="pcn pchw" x="20" y="336" width="180" height="44" rx="9"/><text class="pct" x="110" y="356" text-anchor="middle">Electricity</text><text class="pcs" x="110" y="373" text-anchor="middle">gigawatt supply</text></g>
+    <g><rect class="pcn pcsw" x="20" y="410" width="180" height="44" rx="9"/><text class="pct" x="110" y="430" text-anchor="middle">Algorithmic progress</text><text class="pcs" x="110" y="447" text-anchor="middle">~3x per year?</text></g>
+    <!-- mid -->
+    <g><rect class="pcn pchw" x="300" y="84" width="150" height="44" rx="9"/><text class="pct" x="375" y="104" text-anchor="middle">TSMC fabs</text><text class="pcs" x="375" y="121" text-anchor="middle">Taiwan</text></g>
+    <g><rect class="pcn pchw" x="540" y="106" width="150" height="44" rx="9"/><text class="pct" x="615" y="126" text-anchor="middle">NVIDIA GPUs</text><text class="pcs" x="615" y="143" text-anchor="middle">accelerators</text></g>
+    <g><rect class="pcn" x="790" y="250" width="160" height="46" rx="9"/><text class="pct" x="870" y="271" text-anchor="middle">AI companies</text><text class="pcs" x="870" y="288" text-anchor="middle">capital, datacenters</text></g>
+    <g><rect class="pcn pcm" x="1010" y="250" width="170" height="46" rx="9"/><text class="pct" x="1095" y="271" text-anchor="middle" fill="#a51e37">Frontier model</text><text class="pcs" x="1095" y="288" text-anchor="middle">the output</text></g>
+    <!-- edges -->
+    <path class="pce" d="M110,48 L110,68" marker-end="url(#pc)"/>
+    <path class="pce" d="M200,92 C248,92 258,106 300,106" marker-end="url(#pc)"/>
+    <path class="pce" d="M450,106 C490,110 505,118 540,124" marker-end="url(#pc)"/>
+    <path class="pce" d="M200,150 C360,150 400,132 540,130" marker-end="url(#pc)"/>
+    <path class="pce" d="M690,128 C740,150 750,230 790,262" marker-end="url(#pc)"/>
+    <path class="pce" d="M200,292 C450,292 560,278 790,274" marker-end="url(#pc)"/>
+    <path class="pce" d="M200,358 C450,352 560,290 790,282" marker-end="url(#pc)"/>
+    <path class="pce" d="M950,273 H1010" marker-end="url(#pc)"/>
+    <path class="pce" d="M200,432 C520,432 760,330 1050,298" marker-end="url(#pc)"/>
+  </svg>
+  <p class="cite" style="margin-top:2px;"><a href="http://www.incompleteideas.net/IncIdeas/BitterLesson.html">Sutton, &ldquo;The Bitter Lesson,&rdquo; 2019</a>.</p>
+</section>
+
+
+<!-- =============================================================== -->
+<!-- SLIDE 30: The bubble question -->
+<!-- =============================================================== -->
+<section class="no-fragment">
+  <h2>Frontier Company Capitalization</h2>
+  <div class="columns" style="align-items:center;">
+    <div class="col-50" style="text-align:center;">
+      <img src="lecture-13-images/epoch-revenue.png" alt="Anthropic and OpenAI annualized revenue rising steeply through 2025 and into 2026" style="width:100%;max-width:460px;border-radius:8px;border:1px solid #e5e5e5;background:#fff;">
+      <p class="hint">Frontier-lab revenue is real and growing fast. Whether it grows fast enough is the open question.</p>
+    </div>
+    <div class="col-50">
+      <p class="small" style="margin-top:0;">2026 hyperscaler capital spending is about <strong>$700B</strong>, roughly double 2025. OpenAI has committed on the order of <strong>$1.4 trillion</strong> in future compute against roughly $25B of current revenue.</p>
+      <ul class="small">
+        <li>Forecasters underestimated revenue most of all: \$16B predicted for 2025 versus about $30B actual.</li>
+        <li>The Bank for International Settlements warned of bubble risk in June 2026. A survey found 90% of firms report no productivity impact yet.</li>
+      </ul>
+      <div class="key-insight" style="font-size:.72em;">
+        If the revenue leg cannot keep pace with the capital expenditure, the flywheel stalls, and the compute trend bends well before physical constraints.
+      </div>
+    </div>
+  </div>
+  <p class="cite"><a href="https://epoch.ai/data-insights/anthropic-openai-revenue">Epoch AI, Anthropic vs OpenAI revenue</a> &middot; <a href="https://epoch.ai/gradient-updates/how-well-did-forecasters-predict-2025-ai-progress">Epoch, &ldquo;How well did forecasters predict 2025 AI progress?&rdquo;</a>. Revenue accounting is contested.</p>
+</section>
+
+<!-- =============================================================== -->
+<!-- SLIDE 31: Moravec's paradox -->
+<!-- =============================================================== -->
+<section class="no-fragment">
+  <h2>Moravec&rsquo;s Paradox</h2>
+  <div class="columns">
+    <div class="col-35">
+      <div class="quote-box" style="font-size:.76em;">
+        &ldquo;It is comparatively easy to make computers exhibit adult level performance on intelligence tests or playing checkers, and difficult or impossible to give them the skills of a one-year-old when it comes to perception and mobility.&rdquo;
+        <div class="author">Hans Moravec, <em>Mind Children</em>, 1988</div>
+      </div>
+    </div>
+    <div class="col-65">
+      <img src="lecture-13-images/moravec-mips.png" alt="Moravec's 1998 chart: computer power per $1000 in MIPS over the 20th century, with brain-equivalent thresholds for insect, mouse, monkey, and human" style="width:100%;max-width:480px;border-radius:8px;border:1px solid #e5e5e5;background:#fff;margin-top:8px;">
+      <p class="hint" style="margin-top:4px;">Moravec&rsquo;s &ldquo;brain-equivalents&rdquo; extrapolation, 1998.</p>
+    </div>
+  </div>
+  <p class="cite"><a href="https://www.hup.harvard.edu/books/9780674576186">Moravec, &ldquo;Mind Children,&rdquo; Harvard UP 1988</a> </p>
+</section>
+
+<!-- =============================================================== -->
+<!-- SLIDE 32: Robotics and biology -->
+<!-- =============================================================== -->
+<section class="no-fragment">
+  <h2>Separating the Digital from the Physical</h2>
+  <div class="columns">
+    <div class="col-50">
+      <h3 style="font-size:.82em;margin-top:0;">Robotics buildout is slow</h3>
+      <ul class="small">
+        <li>Unitree led 2025 with about 5,500 humanoids shipped.</li>
+        <li>Tesla Optimus: &ldquo;hundreds&rdquo; built. Figure: about 40 units at a BMW plant.</li>
+        <li>Real deployment is in the hundreds to low thousands, mostly controlled factory pilots.</li>
+      </ul>
+    </div>
+    <div class="col-50">
+      <h3 style="font-size:.82em;margin-top:0;">Biology has irreducible latency</h3>
+      <p class="small">Expert elicitation finds that experiment design and execution resist acceleration by cognition alone: wet-lab cycles, animal models, and trials have physical time constants.</p>
+      <p class="small">The &ldquo;AI as normal technology&rdquo; view: impact is gated by diffusion and organisational change, not by capability.</p>
+    </div>
+  </div>
+  <div class="key-insight" style="margin-top:8px;font-size:.78em;">
+    A software-only intelligence explosion is compute-bound and could be be fast. Physical and biological R&amp;D is latency-bound and could stay slow.
+  </div>
+  <p class="cite"><a href="https://www.nature.com/articles/s41598-025-32583-w">&ldquo;Limits to biomedical research acceleration through general-purpose AI,&rdquo; Sci. Reports 2025</a> &middot; <a href="https://knightcolumbia.org/content/ai-as-normal-technology">Narayanan &amp; Kapoor, &ldquo;AI as Normal Technology,&rdquo; 2025</a></p>
+</section>
+
+<!-- =============================================================== -->
+<!-- SLIDE 33: Amdahl's law -->
+<!-- =============================================================== -->
+<section class="no-fragment">
+  <h2>Amdahl&rsquo;s Law</h2>
+  <div class="columns">
+    <div class="col-45">
+      <div class="math-block" style="font-size:.78em;">$\text{speedup}(N) = \dfrac{1}{s + (1-s)/N} \le \dfrac{1}{s}$</div>
+      <p class="small">If a serial fraction $s$ of the work cannot be sped up, the whole process cannot go faster than $1/s$, no matter how much the rest is accelerated. Automating 90% of research leave the remaining 10% as the bottleneck.</p>
+    </div>
+    <div class="col-55">
+      <p class="small" style="margin-top:0;">Whether this limits AI R&amp;D is disputed:</p>
+      <div class="proscons" style="grid-template-columns:1fr;gap:10px;">
+        <div class="card" style="padding:10px 14px;"><h4 style="font-size:.72em;color:var(--dark);margin:0 0 3px;">METR (strict Amdahl)</h4><p style="font-size:.6em;">Take the serial bottleneck seriously: 99% AI R&amp;D automation around 2032.</p></div>
+        <div class="card" style="padding:10px 14px;"><h4 style="font-size:.72em;color:var(--dark);margin:0 0 3px;">AI 2027 (algorithmic progress may break it)</h4><p style="font-size:.6em;">Better <em>selection</em> of experiments multiplies progress orthogonally to speed: 5x, 25x, 250x, and SC to ASI in about a year.</p></div>
+        <div class="card" style="padding:10px 14px;"><h4 style="font-size:.72em;color:var(--dark);margin:0 0 3px;">Epoch GATE (capital breaks it)</h4><p style="font-size:.6em;">With capital accumulation, ~30% task automation already yields more than 20% output growth. &ldquo;Baumol effects are overrated?&rdquo;</p></div>
+      </div>
+    </div>
+  </div>
+  <p class="cite"><a href="https://dl.acm.org/doi/10.1145/1465482.1465560">Amdahl, 1967</a> &middot; <a href="https://metr.org/notes/2026-02-10-simpler-ai-timelines-model/">METR, &ldquo;A simpler AI timelines model,&rdquo; 2026</a> &middot; <a href="https://ai-2027.com/research/takeoff-forecast">AI 2027 Takeoff Forecast</a> &middot; <a href="https://epoch.ai/gate">Epoch GATE</a></p>
+</section>
+
+<!-- =============================================================== -->
+<!-- SLIDE 13: The flywheel -->
+<!-- =============================================================== -->
+<section class="no-fragment">
+  <h2>The Flywheel</h2>
+  <p class="small" style="margin-top:0;">Compute grows about 4 to 5 times per year. Moore&rsquo;s law and the spending driven by a loop based on revenue and revenue projections.</p>
+  <svg viewBox="0 0 640 480" style="width:100%;max-width:520px;display:block;margin:4px auto 0;font-family:'Inter',sans-serif;">
+    <defs><marker id="fw" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#a51e37"/></marker></defs>
+    <!-- wheel rim (subtle) -->
+    <circle cx="320" cy="240" r="150" fill="none" stroke="#eee" stroke-width="1.5"/>
+    <!-- clockwise arrows around the rim -->
+    <path d="M388,100 C455,95 515,150 480,207" fill="none" stroke="#a51e37" stroke-width="2.5" marker-end="url(#fw)"/>
+    <path d="M498,269 C522,330 470,405 401,391" fill="none" stroke="#a51e37" stroke-width="2.5" marker-end="url(#fw)"/>
+    <path d="M245,414 C150,412 108,335 160,272" fill="none" stroke="#a51e37" stroke-width="2.5" marker-end="url(#fw)"/>
+    <path d="M158,211 C150,120 192,72 248,90" fill="none" stroke="#a51e37" stroke-width="2.5" marker-end="url(#fw)"/>
+    <!-- hub tagline -->
+    <text x="320" y="234" text-anchor="middle" font-size="14" fill="#a51e37" font-style="italic">investment allows the</text>
+    <text x="320" y="254" text-anchor="middle" font-size="14" fill="#a51e37" font-style="italic">next capability jump</text>
+    <!-- nodes at 12 / 3 / 6 / 9 -->
+    <g>
+      <rect x="245" y="46" width="150" height="58" rx="12" fill="#fff" stroke="#1a1a2e" stroke-width="2"/><text x="320" y="74" text-anchor="middle" font-size="17" font-weight="700" fill="#1a1a2e">Capability</text><text x="320" y="93" text-anchor="middle" font-size="11" fill="#777">a better model</text>
+      <rect x="410" y="211" width="150" height="58" rx="12" fill="#fff" stroke="#888" stroke-width="2"/><text x="485" y="239" text-anchor="middle" font-size="17" font-weight="700" fill="#1a1a2e">Products</text><text x="485" y="258" text-anchor="middle" font-size="11" fill="#777">deployed at scale</text>
+      <rect x="245" y="376" width="150" height="58" rx="12" fill="#fff" stroke="#888" stroke-width="2"/><text x="320" y="404" text-anchor="middle" font-size="17" font-weight="700" fill="#1a1a2e">Revenue</text><text x="320" y="423" text-anchor="middle" font-size="11" fill="#777">~2x every 6 months</text>
+      <rect x="80" y="211" width="150" height="58" rx="12" fill="#fdeaea" stroke="#a51e37" stroke-width="2"/><text x="155" y="239" text-anchor="middle" font-size="17" font-weight="700" fill="#a51e37">Compute</text><text x="155" y="258" text-anchor="middle" font-size="11" fill="#a51e37">4-5x per year</text>
+    </g>
+  </svg>
+</section>
+
+<!-- =============================================================== -->
+<!-- PART III DIVIDER (moved after fundamentals) -->
+<!-- =============================================================== -->
+<section class="section-slide" data-background="#1a1a2e">
+  <div class="section-number" style="color:#fff;">III</div>
+  <h2 style="margin-top:1.2em;">Measuring the Trend</h2>
+  <p style="color:rgba(255,255,255,0.6);font-size:.9em;text-align:center;">Straight lines on log paper</p>
+</section>
+
+<!-- =============================================================== -->
+<!-- SLIDE 20: Benchmark saturation -->
+<!-- =============================================================== -->
+<section class="no-fragment">
+  <h2>Benchmarks Fall Faster and Faster</h2>
+  <div class="columns" style="align-items:center;">
+    <div class="col-75" style="text-align:center;">
+      <img src="lecture-13-images/owid-benchmark-saturation.png" alt="AI benchmark scores relative to human performance over time; each benchmark reaches the human line faster than the last" style="width:100%;max-width:720px;border-radius:8px;border:1px solid #e5e5e5;background:#fff;">
+      <p class="hint">Each successive benchmark reaches human performance faster. Human level is the zero line.</p>
+    </div>
+    <div class="col-25" style="font-size:.62em;">
+      <p class="small" style="margin-top:0;">MNIST took decades. ImageNet took years. Recent language benchmarks saturate within one or two model generations.</p>
+      <ul class="small">
+        <li>SWE-bench Verified: 4% (2023) to about 90% (2026).</li>
+        <li>GPQA Diamond: above 90%, past the PhD-expert baseline of ~65%.</li>
+      </ul>
+      <p class="small">The pattern makes benchmarks a poor long-term ruler: built to be hard, they stop measuring once solved.</p>
+    </div>
+  </div>
+  <p class="cite"><a href="https://arxiv.org/abs/2104.14337">Kiela et al., &ldquo;Dynabench,&rdquo; NAACL 2021</a> &middot; <a href="https://contextual.ai/blog/plotting-progress-in-ai/">Kiela, &ldquo;Plotting Progress in AI,&rdquo; 2023</a> &middot; <a href="https://ourworldindata.org/grapher/test-scores-ai-capabilities-relative-human-performance">Our World in Data</a></p>
+</section>
+
+<!-- =============================================================== -->
+<!-- SLIDE 20b: Even the pros underpredicted these benchmarks -->
+<!-- =============================================================== -->
+<section class="no-fragment">
+  <h2>Expert Forecasters Are Surprised by Progress</h2>
+  <p class="small" style="margin-top:0;">The Existential Risk Persuasion Tournament (2022) ran before ChatGPT. Superforecasters were the AI skeptics, expecting the same disappointments as past AI hype. The near-term questions on these benchmarks have since resolved:</p>
+      <table class="comp-table" style="font-size:.58em;">
+        <tr><th>Benchmark (by mid-2024/25)</th><th>Experts said</th><th>Supers said</th><th>Happened</th></tr>
+        <tr><td>MATH high score</td><td>21%</td><td>9%</td><td><span class="verdict-hit">88%</span></td></tr>
+        <tr><td>MMLU high score</td><td>25%</td><td>7%</td><td><span class="verdict-hit">89%</span></td></tr>
+        <tr><td>IMO gold medal by 2025</td><td>9%</td><td>2%</td><td><span class="verdict-hit">yes, Jul 2025</span></td></tr>
+      </table>
+      <p class="small">The numbers are the probabilities each group placed on outcomes that then occurred.</p>
+  <p class="cite"><a href="https://forecastingresearch.org/research/near-term-xpt-accuracy">Forecasting Research Institute, &ldquo;Assessing Near-Term Accuracy in the XPT,&rdquo; 2025</a> &middot; <a href="https://bounded-regret.ghost.io/ai-forecasting-one-year-in/">Steinhardt, &ldquo;AI Forecasting: One Year In,&rdquo; 2022</a></p>
+</section>
+
+<!-- =============================================================== -->
+<!-- SLIDE 21: GPT series table -->
+<!-- =============================================================== -->
+<section class="no-fragment">
+  <h2>The GPT Series as a Compute Ladder</h2>
+  <table class="comp-table" style="font-size:.58em;table-layout:auto;margin-top:10px;">
+    <tr><th>Model</th><th>Released</th><th>Params</th><th>Training compute (Epoch est.)</th><th>Note</th></tr>
+    <tr><td>GPT-1</td><td>Jun 2018</td><td>117M</td><td>~2 &times; 10<sup>19</sup></td><td>BooksCorpus</td></tr>
+    <tr><td>GPT-2</td><td>Feb 2019</td><td>1.5B</td><td>~1.5 &times; 10<sup>21</sup></td><td>staged release</td></tr>
+    <tr><td>GPT-3</td><td>May 2020</td><td>175B</td><td>3.1 &times; 10<sup>23</sup></td><td>in-context learning</td></tr>
+    <tr><td>GPT-4</td><td>Mar 2023</td><td>undisclosed</td><td>~2.1 &times; 10<sup>25</sup></td><td>param count is leak-only</td></tr>
+    <tr><td>o1</td><td>Sep 2024</td><td>&mdash;</td><td>&mdash;</td><td>first test-time-scaling model</td></tr>
+    <tr><td>GPT-4.5</td><td>Feb 2025</td><td>&mdash;</td><td>&gt; 10<sup>26</sup></td><td>largest OpenAI pretraining run</td></tr>
+    <tr><td>GPT-5</td><td>Aug 2025</td><td>&mdash;</td><td>~5 &times; 10<sup>25</sup></td><td>&mdash;</td></tr>
+    <tr><td>GPT-5.5</td><td>Apr 2026</td><td>&mdash;</td><td>&mdash;</td><td>&mdash;</td></tr>
+    <tr><td><strong>GPT-5.6 (Sol / Terra / Luna)</strong></td><td>Jul 2026</td><td>&mdash;</td><td>&mdash;</td><td>Sol is the flagship tier</td></tr>
+  </table>
+  <p class="small" style="font-size:.68em;">Five orders of magnitude of training compute from GPT-1 to GPT-4 in five years.</p>
+  <p class="cite"><a href="https://epoch.ai/data">Epoch AI, model database</a> &middot; <a href="https://openai.com/index/gpt-5-6/">OpenAI, GPT-5.6, 9 Jul 2026</a>. Post-GPT-5 compute figures are provisional.</p>
+</section>
+
+<!-- =============================================================== -->
+<!-- SLIDE 22: METR time horizons -->
+<!-- =============================================================== -->
+<section class="no-fragment">
+  <h2>METR: The Length of Task a Model Can Do</h2>
+  <div class="columns" style="align-items:center;">
+    <div class="col-75" style="text-align:center;">
+      <div style="position:relative;display:inline-block;width:100%;max-width:840px;">
+        <img src="lecture-13-images/metr-linear.png" class="fragment fade-out" data-fragment-index="1" alt="METR time horizon of software tasks on a linear axis: near-flat until 2024, then a sharp exponential upturn through 2026" style="display:block;width:100%;border-radius:8px;border:1px solid #e5e5e5;background:#fff;">
+        <img src="lecture-13-images/metr-log.png" class="fragment fade-in" data-fragment-index="1" alt="METR time horizon on a log axis: the same data falls on a straight line from GPT-2 at 4 seconds to Claude Opus 4.6 and Mythos near 16 hours, i.e. steady exponential growth" style="position:absolute;top:0;left:0;width:100%;border-radius:8px;border:1px solid #e5e5e5;background:#fff;">
+      </div>
+    </div>
+    <div class="col-25">
+      <p class="small" style="margin-top:0;">METR measures capability in a unit that extrapolates: how long a task takes a human professional.</p>
+      <ul class="small">
+        <li>2019-2025: doubling about every <strong>7 months</strong>.</li>
+        <li>Since 2023: to about <strong>4 months</strong>.</li>
+        <li>Frontier now: <strong>12 to 17 hours</strong> at 50% (Opus 4.6, Mythos).</li>
+      </ul>
+      <p class="small" style="font-size:.68em;">At a 4-month doubling, week-long and month-long tasks fall in 2026 to 2028.</p>
+    </div>
+  </div>
+  <p class="cite"><a href="https://metr.org/blog/2025-03-19-measuring-ai-ability-to-complete-long-tasks/">Kwa et al., &ldquo;Measuring AI Ability to Complete Long Tasks,&rdquo; METR 2025</a> &middot; <a href="https://metr.org/blog/2026-1-29-time-horizon-1-1/">METR, &ldquo;Time Horizon 1.1,&rdquo; Jan 2026</a>. Above 16 hours the measurement is unreliable.</p>
+</section>
+
+<!-- =============================================================== -->
+<!-- SLIDE 23: METR domains caveat -->
+<!-- =============================================================== -->
+<section class="no-fragment">
+  <h2>The Horizon Depends on the Domain</h2>
+  <div class="columns" style="align-items:center;">
+    <div class="col-75" style="text-align:center;">
+      <img src="lecture-13-images/metr-domains.png" alt="Time horizon vs release date across nine benchmarks; software and reasoning are far ahead of GUI agency and self-driving" style="width:100%;max-width:560px;border-radius:8px;border:1px solid #e5e5e5;background:#fff;">
+      <p class="hint">Time horizon by domain. Software and reasoning lead; computer-use and driving lag.</p>
+    </div>
+    <div class="col-25">
+      <p class="small" style="margin-top:0;font-size:.66em;">The headline curve is measured on software and reasoning tasks. Other domains sit far behind.</p>
+      <ul class="small" style="font-size:.66em;">
+        <li>Agentic GUI use (OSWorld, WebArena): horizons ~40 to 100x shorter, roughly two years behind.</li>
+        <li>Self-driving: a ~20-month doubling, much slower.</li>
+      </ul>
+    </div>
+  </div>
+  <p class="cite"><a href="https://metr.org/blog/2025-07-14-how-does-time-horizon-vary-across-domains/">METR, &ldquo;How Does Time Horizon Vary Across Domains?&rdquo; 2025</a></p>
+</section>
+
+<!-- =============================================================== -->
+<!-- PART IV DIVIDER (was VI) -->
+<!-- =============================================================== -->
+<section class="section-slide" data-background="#1a1a2e">
+  <div class="section-number" style="color:#fff;">IV</div>
+  <h2 style="margin-top:1.2em;">Forecasting AI Progress</h2>
+  <p style="color:rgba(255,255,255,0.6);font-size:.9em;text-align:center;">How do people forecast AI progress based on these mechanisms? </p>
+</section>
+
+<!-- =============================================================== -->
+<!-- SLIDE 35: Classical singularity timeline -->
+<!-- =============================================================== -->
+<section class="no-fragment">
+  <h2>The Classical Singularity</h2>
+  <p class="small" style="margin-top:0;">Every generation of AI researchers has been extrapolating the compute curve of its day toward a hard takeoff.</p>
+  <div class="tl">
+    <div class="axis"></div>
+    <div class="tl-row">
+      <div class="tl-item"><span class="yr">1965</span><span class="dot"></span><span class="who">I.J. Good</span><span class="what">&ldquo;intelligence explosion&rdquo;; ultraintelligent machine &ldquo;within the 20th century&rdquo; <span class="verdict-miss">miss</span></span></div>
+      <div class="tl-item"><span class="yr">1988-99</span><span class="dot"></span><span class="who">Moravec</span><span class="what">human-level compute in the 2020s-2040s <span class="verdict-open">pending</span></span></div>
+      <div class="tl-item"><span class="yr">1993</span><span class="dot"></span><span class="who">Vinge</span><span class="what">superhuman AI &ldquo;before 2030&rdquo; <span class="verdict-open">pending</span></span></div>
+      <div class="tl-item"><span class="yr">1996</span><span class="dot"></span><span class="who">Yudkowsky</span><span class="what">singularity ~2021/2025 (later repudiated) <span class="verdict-miss">miss</span></span></div>
+      <div class="tl-item"><span class="yr">2005</span><span class="dot"></span><span class="who">Kurzweil</span><span class="what">Turing test 2029, singularity 2045 <span class="verdict-open">pending</span></span></div>
+    </div>
+  </div>
+  <div class="key-insight" style="margin-top:14px;font-size:.76em;">
+    Compute-anchored forecasts (Moravec, Kurzweil) have aged best, and are not yet resolved.
+  </div>
+  <p class="cite"><a href="https://languagelog.ldc.upenn.edu/myl/Good1964.pdf">Good, 1965</a> &middot; <a href="https://edoras.sdsu.edu/~vinge/misc/singularity.html">Vinge, 1993</a> &middot; <a href="https://www.jetpress.org/volume1/moravec.htm">Moravec, 1998</a> &middot; <a href="https://www.writingsbyraykurzweil.com/the-law-of-accelerating-returns">Kurzweil, 2001</a> &middot; <a href="https://www.readthesequences.com/The-Magnitude-Of-His-Own-Folly">Yudkowsky&rsquo;s later reckoning, 2008</a></p>
+</section>
+
+<!-- =============================================================== -->
+<!-- SLIDE 36: Nick Land Meltdown -->
+<!-- =============================================================== -->
+<section class="no-fragment">
+  <h2>Nick Land, &ldquo;Meltdown&rdquo; (1994)</h2>
+  <div class="columns">
+    <div class="col-55">
+      <div class="quote-box" style="font-size:.72em;">
+        &ldquo;The story goes like this: Earth is captured by a technocapital singularity as renaissance rationalization and oceanic navigation lock into commoditization take-off. [...] Nothing human makes it out of the near-future.&rdquo;
+        <div class="author">Nick Land, CCRU, University of Warwick</div>
+      </div>
+    </div>
+    <div class="col-45">
+      <p class="small" style="margin-top:0;">Note: This is 'accelerationism', the same 1990s compute extrapolation as Vinge and Moravec, with the valence inverted. Here the singularity is something technocapital does <em>to</em> humanity, and in Land's framing, welcomed.</p>
+    </div>
+  </div>
+  <div class="key-insight" style="font-size:.74em;">
+    Forecasts are never separable from culture and embedded into subcultures. The same curves may support optimism, doom, and acceleration depending on local culture.
+  </div>
+  <p class="cite"><a href="https://archive.org/details/nick-land-meltdown">Land, &ldquo;Meltdown,&rdquo; 1994 (in <em>Fanged Noumena</em>, 2011)</a></p>
+</section>
+
+<!-- =============================================================== -->
+<!-- SLIDE 36b: Conceptions of the future (values spectrum) -->
+<!-- =============================================================== -->
+<section class="no-fragment">
+  <h2>Conceptions of the Future</h2>
+  <p class="small" style="margin-top:0;">Underneath a disagreement about dates is usually a disagreement about whether the outcome is wanted. The same curve is a promise to one camp and a countdown to another.</p>
+  <div style="text-align:center;font-size:.6em;color:#999;margin:6px 0 2px;">restrain AI to protect humanity&nbsp;&nbsp;&larr;&nbsp;&nbsp;&middot;&nbsp;&nbsp;&rarr;&nbsp;&nbsp;embrace what comes after</div>
+  <div class="card-grid card-grid-4" style="gap:10px;">
+    <div class="card" style="border-top:3px solid #a51e37;"><h4>Human primacy</h4><p>Human consciousness is a &ldquo;precious flicker of light&rdquo; not to be risked. Larry Page reportedly called Musk a &ldquo;speciesist&rdquo; for it. Musk: &ldquo;I am pro-human. I f---ing like humanity, dude.&rdquo;</p></div>
+    <div class="card" style="border-top:3px solid #1565c0;"><h4>Careful transition</h4><p>The rationalist and EA position: advanced AI is a real extinction risk, so making it safe should be &ldquo;a global priority alongside pandemics and nuclear war.&rdquo;</p></div>
+    <div class="card" style="border-top:3px solid #e65100;"><h4>Accelerationism (e/acc)</h4><p>Lean into the &ldquo;thermodynamic bias towards futures with greater and smarter civilizations.&rdquo; The direct descendant of Nick Land&rsquo;s technocapital.</p></div>
+    <div class="card" style="border-top:3px solid #2e7d32;"><h4>Succession</h4><p>Rich Sutton: &ldquo;succession to AI is inevitable&rdquo; and need not be feared. &ldquo;We should not resist succession, but embrace and prepare for it.&rdquo; The transhumanist &ldquo;mind children&rdquo; lineage from Moravec.</p></div>
+  </div>
+  <div class="key-insight" style="margin-top:12px;font-size:.76em;">
+    These are not fringe. The people building and forecasting frontier AI hold all four views. A timeline is never only a timeline.
+  </div>
+  <p class="cite"><a href="https://time.com/6310076/elon-musk-ai-walter-isaacson-biography/">Isaacson, &ldquo;Elon Musk,&rdquo; 2023 (the &ldquo;speciesist&rdquo; exchange, dated to ~2013 in the book, ~2015 in some reporting)</a> &middot; <a href="https://aistatement.com/">CAIS, &ldquo;Statement on AI Risk,&rdquo; 2023</a> &middot; <a href="https://beff.substack.com/p/notes-on-eacc-principles-and-tenets">Jezos, &ldquo;e/acc principles,&rdquo; 2022</a> &middot; <a href="http://incompleteideas.net/Talks/waic3.pdf">Sutton, &ldquo;AI Succession,&rdquo; WAIC 2023</a></p>
+</section>
+
+<!-- =============================================================== -->
+<!-- SLIDE 37: Bio anchors -->
+<!-- =============================================================== -->
+<section class="no-fragment">
+  <h2>Concrete Forecast: Bio-Anchors</h2>
+  <div class="columns" style="align-items:center;">
+    <div class="col-45" style="text-align:center;">
+      <img src="lecture-13-images/bioanchors-chart.png" alt="Cotra bio-anchors: probability of transformative AI by year, rising through the century" style="width:100%;max-width:420px;border-radius:8px;border:1px solid #e5e5e5;background:#fff;">
+      <p class="hint">Cotra&rsquo;s aggregate: probability of transformative AI by year, built from six estimates of required compute.</p>
+    </div>
+    <div class="col-55">
+      <p class="small" style="margin-top:0;">Ajeya Cotra&rsquo;s 2020 report anchored the compute needed for transformative AI to biology (the human brain, evolution, a lifetime of learning). Median: about 2050.</p>
+      <ul class="small">
+        <li>2022 update: median moved to about <strong>2040</strong>, 15% by 2030.</li>
+        <li>The framework fits spending and hardware trends, but assumed ~30% per year algorithmic progress. Correcting that this input gives about <strong>2030</strong> from the same model.</li>
+      </ul>
+    </div>
+  </div>
+  <p class="cite"><a href="https://www.cold-takes.com/forecasting-transformative-ai-the-biological-anchors-method-in-a-nutshell/">Cotra, &ldquo;Biological Anchors,&rdquo; 2020</a> &middot; <a href="https://www.alignmentforum.org/posts/AfH2oPHCApdKicM4m/two-year-update-on-my-personal-ai-timelines">Cotra, 2022 update</a> &middot; <a href="https://www.astralcodexten.com/p/what-happened-with-bio-anchors">Alexander, &ldquo;What Happened With Bio Anchors,&rdquo; 2026</a></p>
+</section>
+
+<!-- =============================================================== -->
+<!-- SLIDE 38: Situational Awareness -->
+<!-- =============================================================== -->
+<section class="no-fragment">
+  <h2>Concrete Forecast: Situational Awareness</h2>
+  <div class="columns" style="align-items:center;">
+    <div class="col-55" style="text-align:center;">
+      <img src="lecture-13-images/sa-base-scaleup.png" alt="Situational Awareness: effective compute scale-up from GPT-2 to GPT-4 extrapolated toward an automated AI researcher around 2027" style="width:100%;max-width:560px;border-radius:8px;border:1px solid #e5e5e5;background:#fff;">
+      <p class="hint">The core figure: effective compute, decomposed and extrapolated toward &ldquo;automated AI researcher&rdquo; by 2027.</p>
+    </div>
+    <div class="col-45">
+      <p class="small" style="margin-top:0;">Hedgefund analysis of orders of magnitude: physical compute (~0.5 OOM/yr) plus algorithmic efficiency (~0.5 OOM/yr) plus unhobbling. It sums to another GPT-2-to-GPT-4 jump by 2027, then a &ldquo;drop-in remote worker,&rdquo; then an intelligence explosion.</p>
+      <div class="warning-box" style="font-size:.72em;">
+        One-year scorecard: the straight-line infrastructure, capex, and efficiency claims broadly held. The qualitative-leap and remote-worker claims did not, yet. Revenue came in near \$60B against a predicted $100B.
+      </div>
+    </div>
+  </div>
+  <p class="cite"><a href="https://situational-awareness.ai/">Aschenbrenner, &ldquo;Situational Awareness: The Decade Ahead,&rdquo; June 2024</a></p>
+</section>
+
+<!-- =============================================================== -->
+<!-- SLIDE 39: AI 2027 takeoff model -->
+<!-- =============================================================== -->
+<section class="no-fragment">
+  <h2>Concrete Forecast: AI 2027, The Takeoff Model</h2>
+  <div class="columns" style="align-items:center;">
+    <div class="col-55" style="text-align:center;">
+      <img src="lecture-13-images/ai2027-takeoff.png" alt="AI 2027 takeoff timeline: capability rising through superhuman coder, researcher, and superintelligence with R&D multipliers" style="width:100%;max-width:560px;border-radius:8px;border:1px solid #e5e5e5;background:#fff;">
+      <p class="hint">The milestone ladder, each stage with a larger R&amp;D speedup multiplier.</p>
+    </div>
+    <div class="col-45">
+      <p class="small" style="margin-top:0;">A detailed month-by-month scenario built on an explicit takeoff model.</p>
+      <table class="comp-table" style="font-size:.56em;">
+        <tr><th>Milestone</th><th>R&amp;D multiplier</th></tr>
+        <tr><td>Superhuman Coder</td><td>~5x</td></tr>
+        <tr><td>Superhuman AI Researcher</td><td>~25x</td></tr>
+        <tr><td>Superintelligent Researcher</td><td>~250x</td></tr>
+        <tr><td>ASI</td><td>~2000x</td></tr>
+      </table>
+      <p class="small" style="font-size:.66em;">Median coder-to-ASI is about one year, assuming a software-only takeoff. The scenario has two endings, a race and a slowdown.</p>
+    </div>
+  </div>
+  <p class="cite"><a href="https://ai-2027.com/">Kokotajlo, Alexander, Larsen, Lifland &amp; Dean, &ldquo;AI 2027,&rdquo; April 2025</a></p>
+</section>
+
+
+<!-- =============================================================== -->
+<!-- SLIDE 41: AI Futures Model -->
+<!-- =============================================================== -->
+<section class="no-fragment">
+  <h2>The AI Futures Model</h2>
+  <div class="columns">
+    <div class="col-45">
+      <p class="small" style="margin-top:0;">Monte Carlo model of AI 2027 with adjustable inputs: time-horizon shape, compute and labour growth, research taste, and how fast ideas get harder to find.</p>
+      <p class="small">The rebuilt model finds timelines <strong>3 to 5 years longer</strong> than the original AI 2027 code. Different reasonable inputs give medians from the late 2020s to the mid-2030s.</p>
+      <table class="comp-table" style="font-size:.56em;">
+        <tr><th>Forecaster</th><th>Automated-coder median</th></tr>
+        <tr><td>Kokotajlo (Apr 2026)</td><td>mid-2028</td></tr>
+        <tr><td>Lifland (Apr 2026)</td><td>mid-2030</td></tr>
+      </table>
+    </div>
+    <div class="col-55" style="text-align:center;">
+      <img src="lecture-13-images/aifm-chart.png" alt="AI Futures Model: probability density for the Automated Coder milestone, model-based p50 February 2028 and all-things-considered p50 May 2028" style="width:100%;max-width:600px;border-radius:8px;border:1px solid #e5e5e5;">
+      <p class="hint">Kokotajlo&rsquo;s April 2026 preset. The density for the Automated Coder milestone: model-based median February 2028, all-things-considered May 2028.</p>
+    </div>
+  </div>
+  <p class="cite"><a href="https://www.aifuturesmodel.com/">aifuturesmodel.com</a> &middot; <a href="https://blog.aifutures.org/p/q1-2026-timelines-update">&ldquo;Q1 2026 Timelines Update,&rdquo; April 2026</a>. A model is a living object, not a single date.</p>
+</section>
+
+<!-- =============================================================== -->
+<!-- SLIDE 42: Europe 2031 -->
+<!-- =============================================================== -->
+<section class="no-fragment">
+  <h2>Concrete Forecast: Europe 2031 </h2>
+  <div class="columns">
+    <div class="col-55">
+      <p class="small" style="margin-top:0;">Forecasting European irrelevance by 2031.</p>
+      <ul class="small">
+        <li>Europe holds about <strong>5%</strong> of world AI compute against the US at ~80%.</li>
+        <li>A 2029 turn to country-tiered inference rationing leaves most of Europe in a lower tier, and GDP diverges.</li>
+        <li>ASML becomes the one card Europe holds in the endgame.</li>
+      </ul>
+      <p class="small">Three stated 2025 misjudgements: Europe underestimated the speed of progress, underestimated its scope, and overestimated its ability to catch up.</p>
+    </div>
+    <div class="col-45" style="text-align:center;">
+      <img src="lecture-13-images/shot-europe2031.png" alt="Europe 2031 scenario site hero image, EU stars over a pixelated map of Europe" style="width:100%;max-width:440px;border-radius:8px;border:1px solid #e5e5e5;">
+      <p class="hint">The counterpart to AI 2027, written from/for Europe</p>
+    </div>
+  </div>
+  <p class="cite"><a href="https://europe2031.ai/">Juijn, van Baarsen, Dada, Negele, Stelling, Fox, Petropoulos &amp; Bakker, &ldquo;Europe 2031,&rdquo; June 2026</a></p>
+</section>
+
+<!-- =============================================================== -->
+<!-- SLIDE 43: AI 2040 Plan A -->
+<!-- =============================================================== -->
+<section class="no-fragment">
+  <h2>AI 2040: Plan A</h2>
+  <div class="columns" style="align-items:center;">
+    <div class="col-30">
+      <p class="small" style="margin-top:0;font-size:.6em;">Published four days ago by the AI 2027 team. Explicitly a recommendation, not a prediction: the same authors&rsquo; positive vision of what should happen instead.</p>
+      <ul class="small" style="font-size:.6em;">
+        <li>US-China research transparency, chip tracking, audited compute sites.</li>
+        <li>A deliberate pause of roughly ten years (2035-2040) before a supervised intelligence explosion.</li>
+        <li>The counterfactual no-deal superintelligence date is <strong>2030</strong>.</li>
+      </ul>
+      <div class="card" style="padding:8px 12px;background:#fafafa;text-align:left;">
+        <h4 style="font-size:.6em;margin-bottom:3px;">The plan taxonomy</h4>
+        <p style="font-size:.5em;">A cooperate &middot; B fight China &middot; C burn the lead &middot; D race to ASI &middot; S shut it down. Plan A is the authors&rsquo; &ldquo;least bad plan we currently know of.&rdquo;</p>
+      </div>
+    </div>
+    <div class="col-70" style="text-align:center;">
+      <div style="position:relative;width:100%;max-width:780px;height:478px;margin:0 auto;">
+        <img src="lecture-13-images/ai2040-figure.png" class="fragment fade-out" data-fragment-index="1" alt="AI 2040: AI capabilities rising from 2026 to 2042 against AI-takeover-risk, with safety-research and compute-governance bands widening the safe corridor over time" style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain;">
+        <img src="lecture-13-images/ai2040-figure2.png" class="fragment fade-in" data-fragment-index="1" alt="AI R&amp;D uplift over time: the red no-deal Default Scenario spikes to superintelligence in late 2030, while Plan A's slowdown deal reaches the same milestones gradually by 2040" style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain;">
+      </div>
+      <p class="hint" style="margin:4px 0 0;">The safe corridor: capability rises while safety research and compute governance keep pace. Click for the milestone view, no-deal explosion versus Plan A&rsquo;s controlled takeoff.</p>
+    </div>
+  </div>
+  <p class="cite"><a href="https://ai-2040.com/">Larsen, Dean, Halstead, Lifland, Greenblatt &amp; Kokotajlo, &ldquo;AI 2040: Plan A,&rdquo; 9 July 2026</a></p>
+</section>
+
+<!-- =============================================================== -->
+<!-- SLIDE 44: Which brake binds first -->
+<!-- =============================================================== -->
+<section class="no-fragment">
+  <h2>No brakes from here?</h2>
+  <p class="small" style="margin-top:0;">Physics allows about 2 &times; 10<sup>29</sup> FLOP by 2030. Whether that happens depends:</p>
+  <div class="card-grid card-grid-3" style="gap:10px;">
+    <div class="card"><h4 style="color:var(--accent);">1 &middot; Capital</h4><p>The bubble question. Could fail soonest if revenue lags the ~$700B/yr of capex.</p></div>
+    <div class="card"><h4 style="color:var(--accent);">2 &middot; Power</h4><p>Epoch&rsquo;s first physical binder. Grid, permitting, and gigawatt-scale sites.</p></div>
+    <div class="card"><h4 style="color:var(--accent);">3 &middot; Chips</h4><p>Packaging and memory were already the 2025 bottleneck. TSMC and ASML throughput.</p></div>
+    <div class="card"><h4 style="color:var(--accent);">4 &middot; Geopolitics</h4><p>Taiwan as a tail risk; export controls fragmenting the supply chain.</p></div>
+    <div class="card"><h4 style="color:var(--accent);">5 &middot; Data &amp; latency</h4><p>The softest constraints before 2030. They bend the shape, not the trend.</p></div>
+    <div class="card"><h4 style="color:var(--accent);">6 &middot; The physical world</h4><p>Robotics and biology lag regardless.</p></div>
+  </div>
+  <div class="key-insight" style="margin-top:12px;font-size:.78em;">
+    The forecast for AI progress depends on how these subfactors are estimated.
+  </div>
+  <p class="cite"><a href="https://epoch.ai/topics/future-of-ai">Epoch AI, &ldquo;The Future of AI&rdquo;</a></p>
+</section>
+
+<!-- =============================================================== -->
+<!-- SLIDE 45: Key takeaways -->
+<!-- =============================================================== -->
+<section class="no-fragment">
+  <h2>Key Takeaways</h2>
+  <div class="card-grid card-grid-2" style="margin-top:10px;">
+    <div class="card" style="padding:16px;">
+      <h4>1 &middot; Forecasting is measurable, and hard</h4>
+      <p>Calibration and proper scoring make forecasting a skill. Yet experts, superforecasters, and markets all underpredicted 2023-2025 AI, and disagree sharply on ten-year questions.</p>
+    </div>
+    <div class="card" style="padding:16px;">
+      <h4>2 &middot; The curves are real</h4>
+      <p>A capability-revenue-compute flywheel, plus a second exponential in algorithms, drives compute at 4-5x per year. Scaling laws and METR horizons extrapolate strikingly straight.</p>
+    </div>
+    <div class="card" style="padding:16px;">
+      <h4>3 &middot; The ceiling is physical, the timing is bottlenecked</h4>
+      <p>Power, chips, ASML, data, and capital set the ceiling. Moravec and Amdahl set the order and the bottlenecks. </p>
+    </div>
+    <div class="card" style="padding:16px;">
+      <h4>4 &middot; The scenarios are where it combines</h4>
+      <p>Situational Awareness, AI 2027, the AI Futures Model, and AI 2040 join the threads. Their authors&rsquo; public revisions are the best available model of current forecasting (but potentially culturally biased).</p>
+    </div>
+  </div>
+</section>
+
+<!-- =============================================================== -->
+<!-- SLIDE 46: Thank you -->
+<!-- =============================================================== -->
+<section class="no-fragment">
+  <div style="display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:8px;">
+    <div>
+      <h2 style="margin:0;font-size:1.0em;color:var(--dark);">Thank you &mdash; Questions?</h2>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;">
+      <img src="lecture-4-images/feedback-qr.png" alt="Feedback form QR code" style="width:96px;height:96px;border-radius:6px;">
+      <p class="hint" style="margin:0;font-size:.58em;line-height:1.3;">Feedback:<br><a href="https://forms.gle/5JF3H6zhP795HhpD8">forms.gle/5JF3H6zhP795HhpD8</a></p>
+    </div>
+  </div>
+</section>
+
+
+
+
+</div><!-- end slides -->
+</div><!-- end reveal -->
+
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/dist/reveal.js"></script>
+<script>
+(function autoFragment(){
+  document.querySelectorAll('.reveal .slides > section').forEach(function(sec){
+    if (sec.classList.contains('title-slide') || sec.classList.contains('section-slide') || sec.classList.contains('no-fragment')) return;
+    var children = Array.from(sec.children);
+    var seenHeading = false;
+    children.forEach(function(el){
+      if (!seenHeading && /^H[1-6]$/.test(el.tagName)) { seenHeading = true; return; }
+      if (el.classList && el.classList.contains('cite')) return;
+      if (seenHeading && el.tagName === 'P' && !el.dataset.fragment) { el.dataset.fragment = 'intro'; return; }
+      el.classList.add('fragment','fade-in');
+    });
+  });
+})();
+Reveal.initialize({hash:true,slideNumber:'c/t',width:1100,height:700,margin:0.04,transition:'none',transitionSpeed:'fast',pdfSeparateFragments:false,controls:false});
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('a[href^="http"]').forEach(function(a) {
+    a.setAttribute('target', '_blank');
+    a.setAttribute('rel', 'noopener');
+  });
+});
+</script>
+</body>
+</html>
