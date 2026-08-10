@@ -24,7 +24,7 @@
 | **Location**     | Hörsaal A1 (A-206), Cyber Valley Campus, Maria-von-Linden-Str. 1 |
 | **Start date**   | 13 April 2026                                       |
 | **Final exam**   | 27 July 2026, 16:00 – 18:00, Hörsaal N07 (Hörsaalzentrum Morgenstelle) |
-| **Re-exam**   | 5 October 2026, 15:00 – 17:00, MvL1 ground floor lecture halls |
+| **Re-exam**   | 6 October 2026, 17:00 – 19:00, Hörsaal A1 (A-206), Cyber Valley Campus, Maria-von-Linden-Str. 1 |
 
 
 The exercise slot alternates between **office hours** and **mini-project presentations**. Mini-project presentations give an opportunity to receive direct feedback on your work and earn bonus points that count towards the exam admission.
