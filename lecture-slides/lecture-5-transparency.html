@@ -1540,7 +1540,7 @@ input[type="text"],textarea{font-family:'JetBrains Mono',monospace;font-size:.7e
       <p class="small" style="margin-top:0;">Watermarks need to inject signal somewhere in the sampling. Before we saw KGW biasing, but signals can also be encoded into the draw of the sampler:</p>
       <div class="math-block" style="font-size:.74em;">
         $r_v = \mathrm{PRF}(\text{key},\, \text{ctx}, v) \in (0,1)\ \ \forall\, v \in V$<br><br>
-        $w_t \;=\; \displaystyle\arg\max_{v \in V}\, r_v^{\,1/p_v}\;\equiv\;\arg\max_v\, \tfrac{\log r_v}{\log p_v}$
+        $w_t \;=\; \displaystyle\arg\max_{v \in V}\, r_v^{\,1/p_v}\;\equiv\;\arg\max_v\, \tfrac{\log r_v}{p_v}$
       </div>
       <p class="small"><strong>Detection.</strong> Sum a one-statistic over emitted tokens:</p>
       <div class="math-block" style="font-size:.56em;">
