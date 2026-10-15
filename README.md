@@ -2,7 +2,7 @@
 
 **Lecturers**: [Maksym Andriushchenko](https://www.andriushchenko.me), [Jonas Geiping](https://jonasgeiping.github.io/), and [Sahar Abdelnabi](https://s-abdelnabi.github.io/).
 
-**Teaching assistants**: Hardik Bhatnagar, Katharina Deckenbach, Shashwat Goel, Johannes Koch, Lena Libon, Luca Morlok, Alexander Panfilov, Ben Rank, Jeanne Salle, David Schmotz, Jehyeok (Tommy) Yeon, Yuchen Zhang.
+**Teaching assistants**: Hardik Bhatnagar, Katharina Deckenbach, Shashwat Goel, Johannes Koch, Changling Li, Lena Libon, Luca Morlok, Alexander Panfilov, Ben Rank, Jeanne Salle, David Schmotz, Jehyeok (Tommy) Yeon, Yuchen Zhang.
 
 **HPC support**: Michael Tiemann.
 
